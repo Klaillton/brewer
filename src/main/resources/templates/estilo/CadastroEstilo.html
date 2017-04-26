@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="'layout/LayoutPadrao'">
+
+<head>
+<title>Cadastro de Estilos</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/stylesheets/vendors/bootstrap-switch.min.css}" />
+
+
+</head>
+
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<h1>Cadastro de estilos</h1>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<form method="post" th:object="${cerveja}"
+				class="form-vertical  js-form-loading">
+
+				<div class="row">
+					
+					<div class="col-sm-12  form-group">
+
+						<label for="nome">Nome</label> <input id="nome" type="text"
+							class="form-control" />
+
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<button class="btn  btn-primary" type="submit">Salvar</button>
+
+				</div>
+
+			</form>
+		</div>
+	</section>
+
+	
+
+</body>
+
+</html>

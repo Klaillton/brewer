@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="'layout/LayoutPadrao'">
+
+<head>
+<title>Cadastro de Cliente</title>
+</head>
+
+<body>
+	<section layout:fragment="conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<h1>Cadastro de cliente</h1>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<form method="post" th:object="${cerveja}"
+				class="form-vertical  js-form-loading">
+
+				<div class="row">
+
+					<div class="col-sm-12  form-group">
+
+						<label for="nome">Nome</label> <input id="nome" type="text"
+							class="form-control" />
+
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-lg-3  col-sm-6  form-group">
+						<label for="tipoPessoa">Tipo Pessoa</label>
+						<div>
+							<div class="radio radio-inline">
+								<input type="radio" name="tipoPessoa"> <label>Fisica</label>
+							</div>
+							<div class="radio radio-inline">
+								<input type="radio" name="tipoPessoa"> <label>Juridica</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-lg-9  col-sm-6  form-group">
+
+						<label for="cpfcnpj">CPF/CNPJ</label> <input id="cpfcnpj"
+							type="text" class="form-control " />
+
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-3  form-group">
+						<label for="telefone">Telefone</label> <input id="telefone"
+							type="text" class="form-control  js-telefone" />
+
+
+					</div>
+					<div class="col-sm-9  form-group">
+						<label for="email">E-Mail</label> <input id="email" type="text"
+							class="form-control" />
+
+
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-7  form-group">
+						<label for="logradouro">Logradouro</label> <input id="logradouro"
+							type="text" class="form-control" />
+					</div>
+					<div class="col-sm-2  form-group">
+						<label for="numero">Número</label> <input id="numero" type="text"
+							class="form-control" />
+					</div>
+					<div class="col-sm-3  form-group">
+						<label for="complemento">Complemento</label> <input
+							id="complemento" type="text" class="form-control" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-3  form-group">
+						<label for="cep">CEP</label> <input id="cep" type="text"
+							class="form-control  js-cep" />
+					</div>
+					<div class="col-sm-4  form-group">
+						<label for="estado">Estado</label> <select id="Estado"
+							class="form-control">
+							<option value="">Selecione o estado</option>
+							<option value="1">Minas Gerais</option>
+						</select>
+					</div>
+					<div class="col-sm-5  form-group">
+						<label for="cidade">Cidade</label> <select id="cidade"
+							class="form-control">
+							<option value="">Selecione a cidade</option>
+							<option value="1">Montes Claros</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<button class="btn  btn-primary" type="submit">Salvar</button>
+
+				</div>
+
+
+
+			</form>
+		</div>
+	</section>
+
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/vendors/jquery.mask.min.js}"></script>
+
+		<script>
+			$('.js-telefone').mask('(00) 90000-0000');
+			
+			$('.js-cep').mask('00.000-000');
+
+			var options = {
+				onKeyPress : function(cep, e, field, options) {
+					var masks = [ '000.000.000-00', '00.000.000/0000-00' ];
+					mask = (cep.length >= 11) ? masks[1] : masks[0];
+					$('#cpfcnpj').mask(mask, options);
+				}
+			};
+
+// 			$('#cpfcnpj').mask('09999999999999', options);
+		</script>
+
+	</th:block>
+</body>
+
+</html>
