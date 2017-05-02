@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
+
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>com.algaworks</groupId>
 	<artifactId>brewer</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	
+
 	<packaging>war</packaging>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -16,27 +16,42 @@
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 
 		<java.version>1.8</java.version>
+
 		<maven-compiler-pluging.version>3.2</maven-compiler-pluging.version>
-		
+
+		<flyway-maven-plugin.version>4.1.2</flyway-maven-plugin.version>
+
+		<mariadb-connector-java.version>2.0.0-RC</mariadb-connector-java.version>
+
 		<!-- Spring MVC -->
 		<spring-framework.version>4.3.0.RELEASE</spring-framework.version>
-		
+
 		<!-- Servlet API -->
 		<servlet.version>3.1.0</servlet.version>
-		
+
 		<!-- ThymeLeaf -->
 		<thymeleaf.version>3.0.5.RELEASE</thymeleaf.version>
-		
+
 		<!-- Bean Validation / Hibernate Validator -->
 		<hibernate-validator.version>5.4.1.Final</hibernate-validator.version>
-		
+
 		<!-- Thymeleaf - Layout dialect -->
 		<thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
-	
+
 		<!-- logging -->
 		<log4j.version>2.6</log4j.version>
 		<jcl-over-slf4j.version>1.7.21</jcl-over-slf4j.version>
-		
+
+		<!-- JPA / Hibernate -->
+		<hibernate.version>5.2.10.Final</hibernate.version>
+
+		<!-- Spring Data JPA -->
+		<spring-data-jpa.version>1.10.10.RELEASE</spring-data-jpa.version>
+
+
+		<!-- Jackson - JSON -->
+		<jackson-core.version>2.9.0.pr3</jackson-core.version>
+		<!-- <jackson-core.version>2.7.5</jackson-core.version> -->
 	</properties>
 
 	<build>
@@ -49,6 +64,16 @@
 					<target>${java.version}</target>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>${flyway-maven-plugin.version}</version>
+				<configuration>
+					<driver>org.mariadb.jdbc.Driver</driver>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
@@ -77,7 +102,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!-- Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -85,7 +110,7 @@
 			<version>${servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- Thymeleaf -->
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
@@ -100,44 +125,89 @@
 			<version>${thymeleaf.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<!-- Bean Validation / Hibernate Validator -->
-  		<dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
-            <scope>compile</scope>
-         </dependency>
-         
-         <!-- Thymeleaf - layout dialect -->
-         <dependency>
-         	<groupId>nz.net.ultraq.thymeleaf</groupId>
-         	<artifactId>thymeleaf-layout-dialect</artifactId>
-         	<version>${thymeleaf-layout-dialect.version}</version>
-         </dependency>
-         
-		 <!-- Logging -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- Thymeleaf - layout dialect -->
+		<dependency>
+			<groupId>nz.net.ultraq.thymeleaf</groupId>
+			<artifactId>thymeleaf-layout-dialect</artifactId>
+			<version>${thymeleaf-layout-dialect.version}</version>
+		</dependency>
+
+		<!-- Logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${jcl-over-slf4j.version}</version>
 		</dependency>
-         
+
+		<!-- JPA / Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- Hibernate - Java 8 support -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>${hibernate.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+		<dependency>
+			<groupId>org.mariadb.jdbc</groupId>
+			<artifactId>mariadb-java-client</artifactId>
+			<version>${mariadb-connector-java.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+			<version>${spring-data-jpa.version}</version>
+		</dependency>
+
+		<!-- Jackson - JSON -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson-core.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+
+
+
 	</dependencies>
-	
+
 </project>
