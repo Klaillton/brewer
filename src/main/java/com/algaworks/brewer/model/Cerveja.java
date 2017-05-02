@@ -11,6 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
@@ -74,6 +77,11 @@ public class Cerveja {
 	@JoinColumn(name = "codigo_estilo")
 	@NotNull(message = "O estilo é obrigatório")
 	private Estilo estilo;
+	
+	@PrePersist @PreUpdate @PostLoad
+	private void prePersistUpdate() {
+		sku = sku.toUpperCase();
+	}
 	
 	public String getSku() {
 		return sku;

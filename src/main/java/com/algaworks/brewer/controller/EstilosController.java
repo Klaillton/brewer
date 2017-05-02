@@ -45,7 +45,12 @@ public class EstilosController {
 		} catch (NomeEstiloJaCadastradoException e) {
 			result.rejectValue("nome", e.getMessage(), e.getMessage());
 			return novo(estilo);
-		}
+		} 
+		/* Tratamento dessa exceção do try-catch()
+		 *  este metodo não pode ser tratado com um handler pois ele retorna 
+		 * toda uma view; este metodo faz um foward (redirect) limpando a view
+		 * para usar no handler tem que fazer todo o tratamento como está no
+		 * catch o que acaba misturando os propositos do codigo */
 
 		attributes.addFlashAttribute("mensagem", "Estilo salvo com sucesso!");
 
@@ -60,11 +65,8 @@ public class EstilosController {
 			return ResponseEntity.badRequest().body(result.getFieldError("nome").getDefaultMessage());
 		}
 		
-		try {
-			estilo = cadastroEstiloService.salvar(estilo);
-		} catch (NomeEstiloJaCadastradoException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
+		estilo = cadastroEstiloService.salvar(estilo);
+		/* esta exceção foi tratada em controller.handler */
 		
 		return ResponseEntity.ok(estilo);
 
