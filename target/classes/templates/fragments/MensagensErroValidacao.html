@@ -3,7 +3,7 @@
 	xmlns:th="http://www.thymeleaf.org">
 
 <div class="alert alert-danger alert-dismissile" role="alert"
-	th:if="${#fields.hasErrors()}">
+	th:if="${#fields.hasErrors()}" th:fragment="alert">
 	<button type="button" class="close" data-dismiss="alert">
 		<span aria-hidde="true">&times;</span>
 	</button>
