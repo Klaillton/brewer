@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.Service.CadastroEstiloService;
-import com.algaworks.brewer.Service.Exception.NomeEstiloJaCadastradoException;
+import com.algaworks.brewer.Service.exception.NomeEstiloJaCadastradoException;
 import com.algaworks.brewer.model.Estilo;
 
 @Controller

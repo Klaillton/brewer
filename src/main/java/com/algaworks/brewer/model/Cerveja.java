@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.validation.SKU;
 
@@ -78,6 +79,27 @@ public class Cerveja {
 	@NotNull(message = "O estilo é obrigatório")
 	private Estilo estilo;
 	
+	private String foto;
+	
+	@Column(name="content_type")
+	private String contentType;
+	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
 	@PrePersist @PreUpdate @PostLoad
 	private void prePersistUpdate() {
 		sku = sku.toUpperCase();
@@ -169,6 +191,10 @@ public class Cerveja {
 
 	public void setEstilo(Estilo estilo) {
 		this.estilo = estilo;
+	}
+	
+	public String getFotoOuMock(){
+		return !StringUtils.isEmpty(foto) ? foto : "cerveja-mock.png";
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.algaworks.brewer.Service.Exception;
+package com.algaworks.brewer.Service.exception;
 
 public class NomeEstiloJaCadastradoException extends RuntimeException {
 

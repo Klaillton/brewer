@@ -52,6 +52,10 @@
 		<!-- Jackson - JSON -->
 		<jackson-core.version>2.9.0.pr3</jackson-core.version>
 		<!-- <jackson-core.version>2.7.5</jackson-core.version> -->
+
+		<!-- thumbnailator - Gerar Thumbnail -->
+		<!-- https://github.com/coobird/thumbnailator -->
+		<thumbnailator.version>0.4.8</thumbnailator.version>
 	</properties>
 
 	<build>
@@ -205,6 +209,13 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- thumbnailator - Gerar Thumbnail -->
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>${thumbnailator.version}</version>
+			<scope>compile</scope>
+		</dependency>
 
 
 
