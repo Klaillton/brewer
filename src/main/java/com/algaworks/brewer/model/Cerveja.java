@@ -16,7 +16,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -48,7 +47,6 @@ public class Cerveja {
 	
 	@NotNull(message = "Valor é obrigatório")
 	@DecimalMax(value = "9999999.99", message = "O valor deve ser menor que R$ 9.999.999,99")
-	@DecimalMin(value = "0.00", message = "Não deve ser utilizado um valor menor R$ 0,00")
 	private BigDecimal valor;
 	
 	@Column(name = "teor_alcoolico")

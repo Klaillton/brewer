@@ -38,12 +38,13 @@
 
 			<form method="POST" th:object="${cerveja}"
 				class="form-vertical  js-form-loading">
+				
 				<brewer:message />
 
 				<div class="row">
 					<div class="col-sm-2  form-group  bw-required" brewer:classforerror="sku">
-						<label for="sku" class="control-label">SKU</label> <input id="sku"
-							type="text" class="form-control" th:field="*{sku}" />
+						<label for="sku" class="control-label">SKU</label> 
+						<input id="sku" type="text" class="form-control" th:field="*{sku}" />
 					</div>
 
 					<div class="col-sm-10  form-group  bw-required" brewer:classforerror="nome">
