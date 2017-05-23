@@ -1,13 +1,17 @@
 package com.algaworks.brewer.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,11 +21,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.Service.CadastroEstiloService;
 import com.algaworks.brewer.Service.exception.NomeEstiloJaCadastradoException;
+import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.model.Estilo;
+import com.algaworks.brewer.repository.Estilos;
+import com.algaworks.brewer.repository.filter.EstiloFilter;
 
 @Controller
 @RequestMapping("/estilos")
 public class EstilosController {
+	
+	@Autowired
+	private Estilos estilos;
 	
 	@Autowired
 	private CadastroEstiloService cadastroEstiloService;
@@ -70,6 +80,19 @@ public class EstilosController {
 		
 		return ResponseEntity.ok(estilo);
 
+	}
+	
+	@GetMapping
+	public ModelAndView pesquisar(EstiloFilter estiloFilter, BindingResult result, 
+			@PageableDefault(size=4) Pageable pageable, HttpServletRequest httpServletRequest){
+		ModelAndView mv = new ModelAndView("estilo/PesquisaEstilos");
+
+		
+		PageWrapper<Estilo> paginaWrapper = new PageWrapper<>(estilos.filtrar(estiloFilter, pageable), 
+				httpServletRequest);
+ 		
+		mv.addObject("pagina", paginaWrapper);
+		return mv;
 	}
 
 }

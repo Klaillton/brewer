@@ -37,12 +37,12 @@
 				<div class="row">
 					<div class="col-sm-6  form-group  bw-required">
 						<label for="sku" class="control-label">SKU</label> <input id="sku"
-							type="text" class="form-control" th:field="*{sku}"/>
+							type="text" class="form-control" th:field="*{sku}" />
 					</div>
 
 					<div class="col-sm-6  form-group  bw-required">
 						<label for="nome" class="control-label">Nome</label> <input
-							id="nome" type="text" class="form-control" th:field="*{nome}"/>
+							id="nome" type="text" class="form-control" th:field="*{nome}" />
 					</div>
 				</div>
 
@@ -77,9 +77,8 @@
 							<th:block th:each="origem : ${origens}">
 								<div class="radio radio-inline">
 									<input th:id="|id_${origem}|" type="radio" th:value="${origem}"
-										name="origem" th:field="*{origem}"/> 
-										<label th:for="|id_${origem}|"
-										th:text="${origem.descricao}">Nacional</label>
+										name="origem" th:field="*{origem}" /> <label
+										th:for="|id_${origem}|" th:text="${origem.descricao}">Nacional</label>
 								</div>
 							</th:block>
 							<div class="radio radio-inline">
@@ -95,12 +94,10 @@
 						<div class="form-inline">
 							<input type="text"
 								class="form-control aw-form-control-inline-sm  js-decimal"
-								id="valorDe" th:field="*{valorDe}"/> 
-								<label for="valorAte"
-								class="aw-form-label-between">até</label> 
-								<input type="text"
+								id="valorDe" th:field="*{valorDe}" /> <label for="valorAte"
+								class="aw-form-label-between">até</label> <input type="text"
 								class="form-control aw-form-control-inline-sm js-decimal"
-								id="valorAte" th:field="*{valorAte}"/>
+								id="valorAte" th:field="*{valorAte}" />
 						</div>
 					</div>
 
@@ -115,8 +112,12 @@
 					<thead>
 						<tr>
 							<th class="table-cervejas-col-foto"></th>
-							<th class="table-cervejas-col-sku">SKU</th>
-							<th class="table-cervejas-col-nome">Nome</th>							
+							<th class="table-cervejas-col-sku">
+								<brewer:order page="${pagina}" field="sku" text="SKU" />
+							</th>
+							<th class="table-cervejas-col-nome">
+								<brewer:order page="${pagina}" field="nome" text="Nome" />
+							</th>
 							<th class="table-cervejas-col-estilo">Estilo</th>
 							<th class="table-cervejas-col-sabor">Sabor</th>
 							<th class="table-cervejas-col-origem">Origem</th>
@@ -126,50 +127,29 @@
 					</thead>
 					<tbody>
 						<tr th:each="cerveja : ${pagina.conteudo}">
-							<td class="text-center">
-								<img th:src="@{/fotos/thumbnail.{foto}(foto=${cerveja.fotoOuMock})}" class="img-responsive">
-							</td>
-							<td class="text-center" th:text="${cerveja.sku}" >AA1234</td>
-							<td th:text="${cerveja.nome}">Cerveja Stella</td>							
+							<td class="text-center"><img
+								th:src="@{/fotos/thumbnail.{foto}(foto=${cerveja.fotoOuMock})}"
+								class="img-responsive"></td>
+							<td class="text-center" th:text="${cerveja.sku}">AA1234</td>
+							<td th:text="${cerveja.nome}">Cerveja Stella</td>
 							<td th:text="${cerveja.estilo.nome}">Lager</td>
 							<td th:text="${cerveja.sabor.descricao}">Amarga</td>
 							<td th:text="${cerveja.origem.descricao}">Internacional</td>
 							<td class="text-right" th:text="|R$ ${cerveja.valor}|">8</td>
-							<td class="text-center">
-								<a class="btn btn-link btn-xs " title="Editar">
-									<i class="glyphicon glyphicon-pencil"></i>
-								</a>
-								<a class="btn btn-link btn-xs" title="Excluir">
-									<i class="glyphicon glyphicon-remove"></i>
-								</a>
-							</td>
+							<td class="text-center"><a class="btn btn-link btn-xs "
+								title="Editar"> <i class="glyphicon glyphicon-pencil"></i>
+							</a> <a class="btn btn-link btn-xs" title="Excluir"> <i
+									class="glyphicon glyphicon-remove"></i>
+							</a></td>
 						</tr>
-						<tr th:if="${pagina.vazia}"> 
+						<tr th:if="${pagina.vazia}">
 							<td colspan="7">Nenhuma cerveja encontrada</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			
-			<div class="col-sm-12  text-center" th:if="${not pagina.vazia}">
-			<nav>
-				<ul class="pagination  pagination-sm" th:with="paginaAtual=${pagina.atual}">
-					<li th:class="${pagina.primeira} ? disabled">
-						<a th:href="${pagina.urlParaPagina(paginaAtual - 1)}" th:remove="${pagina.primeira} ? tag"><span>&laquo;</span></a>
-					</li>
-					
-					<th:block th:each="p : ${#numbers.sequence(1, pagina.total)}" th:with="numeroPagina=${p - 1}, paginaAtual=${pagina.atual}">
-						<li th:class="${paginaAtual == numeroPagina} ? active">
-							<a th:href="${pagina.urlParaPagina(numeroPagina)}">[[${p}]]</a>
-						</li>
-					</th:block>
-					
-					<li th:class="${pagina.ultima} ? disabled">
-						<a th:href="${pagina.urlParaPagina(paginaAtual + 1)}" th:remove="${pagina.ultima} ? tag"><span>&raquo;</span></a>
-					</li>
-				</ul>
-			</nav>
-		</div>
+
+			<brewer:pagination page="${pagina}" />
 
 		</div>
 
