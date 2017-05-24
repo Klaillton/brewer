@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="'layout/LayoutPadrao'">
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	layout:decorate="layout/LayoutPadrao">
 
 <head>
 <title>Cadastro de Cliente</title>
@@ -16,50 +17,52 @@
 			</div>
 		</div>
 		<div class="container-fluid">
-			<form method="post" th:object="${cerveja}"
-				class="form-vertical  js-form-loading">
+			<form method="post" class="form-vertical  js-form-loading">
 
 				<div class="row">
 
 					<div class="col-sm-12  form-group  bw-required">
 
-						<label for="nome" class="control-label">Nome</label> <input id="nome" type="text"
-							class="form-control" />
+						<label for="nome" class="control-label">Nome</label> <input
+							id="nome" type="text" class="form-control" />
 
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-lg-3  col-sm-6  form-group  bw-required">
-						<label for="tipoPessoa" class="control-label">Tipo Pessoa</label>
+					<div class="form-group  col-sm-4">
+						<label>Tipo pessoa</label>
 						<div>
-							<div class="radio radio-inline">
-								<input type="radio" name="tipoPessoa"> <label>Fisica</label>
-							</div>
-							<div class="radio radio-inline">
-								<input type="radio" name="tipoPessoa"> <label>Juridica</label>
-							</div>
+
+							<th:block th:each="tipoPessoa : ${tipoPessoa}">
+								<div class="radio  radio-inline">
+									<input type="radio" th:id="|id_${tipoPessoa}|"
+										class="js-radio-tipo-pessoa" name="tipoPessoa"
+										data:documento="${tipoPessoa.documento}"
+										data:mascara="${tipoPessoa.mascara}"> 
+										<label class="control-label" th:for="|id_${tipoPessoa}|"
+										th:text="${tipoPessoa.descricao}">Física</label>
+								</div>
+							</th:block>
+
 						</div>
 					</div>
 
-					<div class="col-lg-9  col-sm-6  form-group  bw-required">
-
-						<label for="cpfcnpj" class="control-label">CPF/CNPJ</label> <input id="cpfcnpj"
-							type="text" class="form-control " />
-
+					<div class="form-group  col-sm-8">
+						<label for="cpfOuCnpj">CPF/CNPJ</label> <input type="text"
+							class="form-control" id="cpfOuCnpj" disabled />
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="col-sm-3  form-group">
-						<label for="telefone" class="control-label">Telefone</label> <input id="telefone"
-							type="text" class="form-control  js-telefone" />
-
-
+					<div class="form-group  col-sm-3">
+						<label for="telefone">Telefone</label> <input type="text"
+							class="form-control  js-phone-number" id="telefone" />
 					</div>
+
 					<div class="col-sm-9  form-group">
-						<label for="email" class="control-label">E-Mail</label> <input id="email" type="text"
-							class="form-control" />
+						<label for="email" class="control-label">E-Mail</label> <input
+							id="email" type="text" class="form-control" />
 
 
 					</div>
@@ -67,34 +70,34 @@
 
 				<div class="row">
 					<div class="col-sm-7  form-group  bw-required">
-						<label for="logradouro" class="control-label">Logradouro</label> <input id="logradouro"
-							type="text" class="form-control" />
+						<label for="logradouro" class="control-label">Logradouro</label> <input
+							id="logradouro" type="text" class="form-control" />
 					</div>
 					<div class="col-sm-2  form-group  bw-required">
-						<label for="numero" class="control-label">Número</label> <input id="numero" type="text"
-							class="form-control" />
+						<label for="numero" class="control-label">Número</label> <input
+							id="numero" type="text" class="form-control" />
 					</div>
 					<div class="col-sm-3  form-group">
-						<label for="complemento" class="control-label">Complemento</label> <input
-							id="complemento" type="text" class="form-control" />
+						<label for="complemento" class="control-label">Complemento</label>
+						<input id="complemento" type="text" class="form-control" />
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="col-sm-3  form-group  bw-required">
-						<label for="cep" class="control-label">CEP</label> <input id="cep" type="text"
-							class="form-control  js-cep" />
+						<label for="cep" class="control-label">CEP</label> 
+						<input id="cep" type="text" class="form-control  js-cep" />
 					</div>
 					<div class="col-sm-4  form-group  bw-required">
-						<label for="estado" class="control-label">Estado</label> <select id="Estado"
-							class="form-control">
+						<label for="estado" class="control-label">Estado</label> 
+						<select id="Estado" class="form-control">
 							<option value="">Selecione o estado</option>
-							<option value="1">Minas Gerais</option>
+							<option th:each="estado : ${estados}" th:value="${estado.codigo}" th:text="${estado.nome}">Minas Gerais</option>
 						</select>
 					</div>
 					<div class="col-sm-5  form-group  bw-required">
-						<label for="cidade" class="control-label">Cidade</label> <select id="cidade"
-							class="form-control">
+						<label for="cidade" class="control-label">Cidade</label> <select
+							id="cidade" class="form-control">
 							<option value="">Selecione a cidade</option>
 							<option value="1">Montes Claros</option>
 						</select>
@@ -113,24 +116,7 @@
 	</section>
 
 	<th:block layout:fragment="javascript-extra">
-		<script th:src="@{/javascripts/vendors/jquery.mask.min.js}"></script>
-
-		<script>
-			$('.js-telefone').mask('(00) 90000-0000');
-			
-			$('.js-cep').mask('00.000-000');
-
-			var options = {
-				onKeyPress : function(cep, e, field, options) {
-					var masks = [ '000.000.000-00', '00.000.000/0000-00' ];
-					mask = (cep.length >= 11) ? masks[1] : masks[0];
-					$('#cpfcnpj').mask(mask, options);
-				}
-			};
-
-// 			$('#cpfcnpj').mask('09999999999999', options);
-		</script>
-
+		<script th:src="@{/javascripts/cliente.mascara-cpf-cnpj.js}"></script>
 	</th:block>
 </body>
 
