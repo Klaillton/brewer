@@ -118,6 +118,17 @@
 	width: 80px;
 }
 
+.table-cervejas-col-tipoPessoa {
+	width: 100px;
+}
+
+.table-cervejas-col-cpfOuCnpj {
+	width: 80px;
+}
+
+.table-cervejas-col-telefone {
+	width: 100px;
+}
 
 
 

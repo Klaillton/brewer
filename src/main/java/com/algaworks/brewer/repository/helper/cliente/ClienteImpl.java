@@ -1,4 +1,4 @@
-package com.algaworks.brewer.repository.helper.cerveja;
+package com.algaworks.brewer.repository.helper.cliente;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,12 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.algaworks.brewer.model.Cerveja;
-import com.algaworks.brewer.model.Estilo;
-import com.algaworks.brewer.repository.filter.EstiloFilter;
+import com.algaworks.brewer.model.Cliente;
+import com.algaworks.brewer.repository.filter.ClienteFilter;
 import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
 
-public class EstilosImpl implements EstilosQueries{
+public class ClienteImpl implements ClientesQueries {
 
 	@PersistenceContext
 	private EntityManager manager;
@@ -28,38 +27,37 @@ public class EstilosImpl implements EstilosQueries{
 	@Autowired
 	private PaginacaoUtil paginacaoUtil;
 	
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(readOnly = true)
-	public Page<Estilo> filtrar(EstiloFilter filtro, Pageable pageable) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cerveja.class);
+	public Page<Cliente> filtrar(ClienteFilter filtro, Pageable pageable) {
+		@SuppressWarnings("deprecation")
+		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cliente.class);
 		
 		paginacaoUtil.preparar(criteria, pageable);
-		
 		adicionarFiltro(filtro, criteria);
-		
+				
 		return new PageImpl<>(criteria.list(), pageable, total(filtro));
 	}
 	
-	private Long total(EstiloFilter filtro) {
+	private Long total(ClienteFilter filtro) {
 		@SuppressWarnings("deprecation")
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cerveja.class);
+		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cliente.class);
 		adicionarFiltro(filtro, criteria);
 		criteria.setProjection(Projections.rowCount());
 		return (Long) criteria.uniqueResult();
 	}
 
-	private void adicionarFiltro(EstiloFilter filtro, Criteria criteria) {
-		if(filtro != null){
-			
+	private void adicionarFiltro(ClienteFilter filtro, Criteria criteria) {
+		if (filtro != null) {
 			if (!StringUtils.isEmpty(filtro.getNome())) {
 				criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
 			}
 
-			
+			if (!StringUtils.isEmpty(filtro.getCpfOuCnpj())) {
+				criteria.add(Restrictions.eq("cpfOuCnpj", filtro.getCpfOuCnpjSemFormatacao()));
+			}
 		}
 	}
-	
-	
 
 }

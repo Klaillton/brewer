@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.algaworks.brewer.Service.CadastroEstiloService;
-import com.algaworks.brewer.Service.exception.NomeEstiloJaCadastradoException;
 import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.model.Estilo;
 import com.algaworks.brewer.repository.Estilos;
 import com.algaworks.brewer.repository.filter.EstiloFilter;
+import com.algaworks.brewer.service.CadastroEstiloService;
+import com.algaworks.brewer.service.exception.NomeEstiloJaCadastradoException;
 
 @Controller
 @RequestMapping("/estilos")

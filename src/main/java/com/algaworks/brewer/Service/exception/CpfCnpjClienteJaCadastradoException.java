@@ -1,4 +1,4 @@
-package com.algaworks.brewer.Service.exception;
+package com.algaworks.brewer.service.exception;
 
 public class CpfCnpjClienteJaCadastradoException extends RuntimeException {
 	

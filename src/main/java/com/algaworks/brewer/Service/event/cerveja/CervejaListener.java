@@ -1,4 +1,4 @@
-package com.algaworks.brewer.Service.event.cerveja;
+package com.algaworks.brewer.service.event.cerveja;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
