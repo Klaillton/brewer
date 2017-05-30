@@ -1,11 +1,9 @@
-
 /*
-##############################
-#UTILIDADES
-##############################
+######################
+# UTILIDADES
+######################
 */
-
-.bw-glyphicon-large{
+.bw-glyphicon-large {
 	font-size: 18px;
 }
 
@@ -13,18 +11,19 @@
 	content: "*";
 }
 
+
 /*
-##############################
-#COMPONENTES
-##############################
+######################
+# COMPONENTES
+######################
 */
 
-/*Fied Action*/
-.bw-field-action{
+/* Field Action */
+.bw-field-action {
 	display: flex;
 }
 
-.bw-field-action__icon{
+.bw-field-action__icon {
 	margin: 6px 0 0 5px;
 }
 
@@ -59,8 +58,7 @@
     font-size: 500px;
 }
 
-/* TABELA SIMPLES */
-
+/* Tabela Simples */
 .bw-tabela-simples {
 	margin-top: 15px;
 }
@@ -70,10 +68,10 @@
 }
 
 .bw-tabela-simples table tr td {
-	border-top: none;
-	border-bottom: 1px solid #e7eaec;
-	padding: 10px;
-	vertical-align: middle;
+    border-top: none;
+    border-bottom: 1px solid #e7eaec;
+    padding: 10px;
+    vertical-align: middle;
 }
 
 /*
@@ -81,6 +79,11 @@
 # PÁGINAS DO SISTEMA
 ###################
 */
+
+/* Colunas comuns */
+.table-col-acoes {
+	width: 80px;
+}
 
 /* Colunas - Pesquisa de Cervejas */
 .table-cervejas-col-foto {
@@ -95,10 +98,6 @@
 
 .table-cervejas-col-nome {
 	
-}
-
-.table-cervejas-col-sabor {
-	width: 120px;
 }
 
 .table-cervejas-col-estilo {
@@ -118,18 +117,32 @@
 	width: 80px;
 }
 
-.table-cervejas-col-tipoPessoa {
-	width: 100px;
-}
-
-.table-cervejas-col-cpfOuCnpj {
+/* Colunas - Pesquisa de Estilos */
+.table-estilos-col-codigo {
 	width: 80px;
 }
 
-.table-cervejas-col-telefone {
-	width: 100px;
+/* Colunas - Pesquisa de Clientes */
+.table-clientes-col-nome {
+	
 }
 
+.table-clientes-col-tipo-pessoa {
+	width: 120px;
+	text-align: center;
+}
 
+.table-clientes-col-cpf-cnpj {
+	width: 140px;
+	text-align: right;
+}
 
+.table-clientes-col-telefone {
+	width: 140px;
+	text-align: right;
+}
 
+.table-clientes-col-cidade-estado {
+	width: 140px;
+	text-align: right;
+}
