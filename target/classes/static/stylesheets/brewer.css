@@ -146,3 +146,13 @@
 	width: 140px;
 	text-align: right;
 }
+
+/* Colunas - Pesquisa de Cidades */
+.table-cidade-col-cidade {
+	
+}
+
+.table-cidade-col-estado {
+	width: 140px;
+	text-align: right;
+}
