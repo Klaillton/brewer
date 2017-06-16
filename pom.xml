@@ -65,7 +65,7 @@
 		<guava.version>19.0</guava.version>
 		
 		<!-- Spring Security -->
-		<spring-security-web.version>4.1.1.RELEASE</spring-security-web.version>
+		<spring-security.version>4.1.1.RELEASE</spring-security.version>
 		
 		<!-- Apache Bean Utils -->
 		<commons-beanutils.version>1.9.2</commons-beanutils.version>
@@ -260,7 +260,15 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>${spring-security-web.version}</version>
+			<version>${spring-security.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		
