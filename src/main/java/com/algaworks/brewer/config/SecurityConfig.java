@@ -38,8 +38,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.authorizeRequests()				
-				.anyRequest().authenticated()
+			.authorizeRequests()
+				.antMatchers("/cidades/novo").hasRole("CADASTRAR_CIDADE")
+				.antMatchers("/usuarios/**").hasRole("CADASTRAR_USUARIO")
+				.anyRequest().authenticated() /*permite o acesso estão pelo menos autenticado*/
+//				.anyRequest().denyAll() /*denyAll bloqueia o acesso a todas as páginas que não estão nas regras acima*/
 				.and()
 			.formLogin()
 				.loginPage("/login")
