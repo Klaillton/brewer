@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.algaworks.brewer.security.AppUserDetailsService;
 
@@ -41,14 +42,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/cidades/novo").hasRole("CADASTRAR_CIDADE")
 				.antMatchers("/usuarios/**").hasRole("CADASTRAR_USUARIO")
-				.anyRequest().authenticated() /*permite o acesso estão pelo menos autenticado*/
-//				.anyRequest().denyAll() /*denyAll bloqueia o acesso a todas as páginas que não estão nas regras acima*/
+				.anyRequest().authenticated()
 				.and()
 			.formLogin()
 				.loginPage("/login")
 				.permitAll()
 				.and()
-			.csrf().disable();
+			.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.and()
+			.exceptionHandling()
+				.accessDeniedPage("/403");
 	}
 	
 	@Bean

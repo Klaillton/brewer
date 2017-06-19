@@ -32,14 +32,14 @@ public class FotoStorageLocal implements FotoStorage {
 			this.local =(getDefault().getPath(System.getenv("USERPROFILE"), ".brewerfotos"));//Funciona no windows
 		}
 		
-		criarPastas();
+//		criarPastas();
 	}
 	
-//	public FotoStorageLocal(Path path){//Passando o caminho no construtor
-//		this.local = path;
-//		
-//		criarPastas();
-//	}
+	public FotoStorageLocal(Path path){//Passando o caminho no construtor
+		this.local = path;
+		
+		criarPastas();
+	}
 	
 	@Override
 	public byte[] recuperarFotoTemporaria(String nome) {

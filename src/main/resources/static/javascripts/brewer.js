@@ -82,6 +82,19 @@ Brewer.MaskDate = (function() {
 	
 }());
 
+//Brewer.Security = (function(){
+//	
+//	function Security(){
+//		this.token = $('input[name=_csrf]').val();
+//		this.header = $('input[name=_csrf_header]').val();
+//	}
+//	
+//	Security.prototype.enable = function() {
+//		
+//	}
+//	
+//}()):
+
 $(function() {
 	var maskMoney = new Brewer.MaskMoney();
 	maskMoney.enable();

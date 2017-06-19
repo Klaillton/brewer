@@ -1,2 +1,2 @@
 INSERT INTO usuario(nome, email, senha, ativo) 
-	values ('Admin', 'admin@brewer.com', '$2a$10$fSX.Ua5AbHQ6lhcvkjfMwO9aRKS1Jng06JBIkvD9MOXjVh9XNmLiu', 1)
+	values ('Admin', 'admin@brewer.com', '$2a$10$x3dW.vGNa.OsxIBZ7qi36uScizK1I1UspCXjasBlnZ31k5yiw.KCa', 1)
