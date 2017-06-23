@@ -52,7 +52,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.and()
 			.exceptionHandling()
-				.accessDeniedPage("/403");
+				.accessDeniedPage("/403")				
+				/*é possivel forçar a ter somente um login por usuario basta adicionar o gerenciamento da sessao
+				.and()
+			.sessionManagement()
+				.maximumSessions(1)/*numero de sessoes por usuario*/
+				//.expiredUrl("/login")/*url de redirecionamento*/
+				.and()
+			.sessionManagement()
+				.invalidSessionUrl("/login");
 	}
 	
 	@Bean

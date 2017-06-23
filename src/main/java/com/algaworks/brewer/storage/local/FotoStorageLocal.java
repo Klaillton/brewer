@@ -32,18 +32,22 @@ public class FotoStorageLocal implements FotoStorage {
 			this.local =(getDefault().getPath(System.getenv("USERPROFILE"), ".brewerfotos"));//Funciona no windows
 		}
 		
-//		criarPastas();
-	}
-	
-	public FotoStorageLocal(Path path){//Passando o caminho no construtor
-		this.local = path;
+		System.out.println("this.local: "+this.local);
 		
 		criarPastas();
 	}
 	
+//	public FotoStorageLocal(Path path){//Passando o caminho no construtor
+//		this.local = path;
+//		
+//		criarPastas();
+//	}
+	
 	@Override
 	public byte[] recuperarFotoTemporaria(String nome) {
+		System.out.println("nome: "+nome);
 		try {
+			System.out.println("this.localTemporario.resolve(nome): "+this.localTemporario.resolve(nome));
 			return Files.readAllBytes(this.localTemporario.resolve(nome));
 		} catch (IOException e) {
 			throw new RuntimeException("Erro lendo a foto temporária", e);
@@ -84,7 +88,11 @@ public class FotoStorageLocal implements FotoStorage {
 	
 	@Override
 	public byte[] recuperar(String nome) {
-		try {
+		System.out.println("nome: "+nome);
+		System.out.println("this.local: "+this.local);
+		System.out.println("this.localTemporario: "+this.localTemporario);
+		System.out.println("this.local.resolve(nome): "+this.local.resolve(nome));
+		try {			
 			return Files.readAllBytes(this.local.resolve(nome));
 		} catch (IOException e) {
 			throw new RuntimeException("Erro lendo a foto", e);
@@ -92,9 +100,13 @@ public class FotoStorageLocal implements FotoStorage {
 	}
 	
 	private void criarPastas(){		
+		System.out.println("**********");
+		System.out.println("criar pastas");
+		System.out.println("**********");
 		try {
 			Files.createDirectories(this.local);	
 			this.localTemporario = getDefault().getPath(this.local.toString(), "temp");
+			System.out.println("localTemporario: "+this.localTemporario);
 			Files.createDirectories(this.localTemporario);
 			if(logger.isDebugEnabled()){
 				logger.debug("Pastas criadas para salvar foto.");

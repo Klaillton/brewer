@@ -3,7 +3,8 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/LayoutPadrao"
-	xmlns:brewer="http://brewer.algaworks.com">
+	xmlns:brewer="http://brewer.algaworks.com"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
 <title>Pesquisa de estilos</title>
@@ -16,11 +17,11 @@
 		<div class="page-header">
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-sm-10">
+					<div class="col-xs-10">
 						<h1>Pesquisa de estilos</h1>
 					</div>
 
-					<div class="col-sm-2">
+					<div class="col-xs-2" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
 						<div class="aw-page-header-controls">
 							<a class="btn btn-default" th:href="@{/estilos/novo}"> <i
 								class="glyphicon glyphicon-plus-sign"></i> <span
@@ -58,7 +59,7 @@
 						<th>
 							<brewer:order page="${pagina}" field="nome" text="Nome"/>
 						</th>
-						<th class="table-col-acoes"></th>
+						<th class="table-col-acoes" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')"></th>
 					</tr>
 				</thead>
 				
@@ -66,7 +67,7 @@
 					<tr th:each="estilo : ${pagina.conteudo}">
 						<td class="text-center" th:text="${estilo.codigo}">1</td>
 						<td th:text="${estilo.nome}">Pale Lager</td>
-						<td class="text-center">
+						<td class="text-center" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
 							<a class="btn  btn-link  btn-xs" title="Editar"> 
 								<i class="glyphicon glyphicon-pencil"></i>
 							</a>

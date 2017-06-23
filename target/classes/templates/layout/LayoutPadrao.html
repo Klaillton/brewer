@@ -34,8 +34,8 @@
 
 <body>
 
-<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-<input type="hidden" name="_csrf_header" th:value="${_csrf.headerName}" />
+	<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+	<input type="hidden" name="_csrf_header" th:value="${_csrf.headerName}" />
 
 	<div class="aw-layout-page">
 		<div th:replace="layout/fragments/BarraNavegacao  :: navbar"></div>
@@ -58,7 +58,8 @@
 
 
 	<script th:src="@{/javascripts/vendors/bootstrap-datepicker.min.js}"></script>
-	<script th:src="@{/javascripts/vendors/bootstrap-datepicker.pt-BR.min.js}"></script>
+	<script
+		th:src="@{/javascripts/vendors/bootstrap-datepicker.pt-BR.min.js}"></script>
 
 	<script th:src="@{/javascripts/brewer.js}"></script>
 

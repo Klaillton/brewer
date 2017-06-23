@@ -3,7 +3,8 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/LayoutPadrao}"
-	xmlns:brewer="http://brewer.algaworks.com">
+	xmlns:brewer="http://brewer.algaworks.com"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
 <title>Pesquisa de cervejas</title>
@@ -14,11 +15,11 @@
 		<div class="page-header">
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-sm-10">
+					<div class="col-xs-10">
 						<h1>Pesquisa de cervejas</h1>
 					</div>
 
-					<div class="col-sm-2">
+					<div class="col-xs-2" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
 						<div class="aw-page-header-controls">
 							<a class="btn btn-default" th:href="@{/cervejas/novo}"> <i
 								class="glyphicon glyphicon-plus-sign"></i> <span
@@ -122,7 +123,7 @@
 							<th class="table-cervejas-col-sabor">Sabor</th>
 							<th class="table-cervejas-col-origem">Origem</th>
 							<th class="table-cervejas-col-valor">Valor</th>
-							<th class="table-col-acoes"></th>
+							<th class="table-col-acoes" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -136,9 +137,11 @@
 							<td th:text="${cerveja.sabor.descricao}">Amarga</td>
 							<td th:text="${cerveja.origem.descricao}">Internacional</td>
 							<td class="text-right" th:text="|R$ ${cerveja.valor}|">8</td>
-							<td class="text-center"><a class="btn btn-link btn-xs "
+							<td class="text-center" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
+							<a class="btn btn-link btn-xs "
 								title="Editar"> <i class="glyphicon glyphicon-pencil"></i>
-							</a> <a class="btn btn-link btn-xs" title="Excluir"> <i
+							</a> 
+							<a class="btn btn-link btn-xs" title="Excluir"> <i
 									class="glyphicon glyphicon-remove"></i>
 							</a></td>
 						</tr>

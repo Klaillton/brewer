@@ -61,6 +61,7 @@ public class CidadesController {
 		return cidades.findByEstadoCodigo(codigoEstado);
 	}
 	
+	//@Secured("ROLE_CADASTRAR_CIDADE") tbm é possível fazer a segurança do metodo desta forma
 	@PostMapping("/novo")
 	@CacheEvict(value = "cidades", key = "#cidade.estado.codigo"/*O objeto pode ser navegado para se chegar na key*/, 
 	condition = "#cidade.temEstado()")
