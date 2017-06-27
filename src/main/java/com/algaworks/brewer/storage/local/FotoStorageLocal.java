@@ -32,7 +32,7 @@ public class FotoStorageLocal implements FotoStorage {
 			this.local =(getDefault().getPath(System.getenv("USERPROFILE"), ".brewerfotos"));//Funciona no windows
 		}
 		
-		System.out.println("this.local: "+this.local);
+		
 		
 		criarPastas();
 	}
@@ -45,9 +45,7 @@ public class FotoStorageLocal implements FotoStorage {
 	
 	@Override
 	public byte[] recuperarFotoTemporaria(String nome) {
-		System.out.println("nome: "+nome);
 		try {
-			System.out.println("this.localTemporario.resolve(nome): "+this.localTemporario.resolve(nome));
 			return Files.readAllBytes(this.localTemporario.resolve(nome));
 		} catch (IOException e) {
 			throw new RuntimeException("Erro lendo a foto temporária", e);
@@ -57,8 +55,9 @@ public class FotoStorageLocal implements FotoStorage {
 	@Override
 	public String salvarTemporariamente(MultipartFile[] files) {
 		String novoNome = null;
-		if(files != null && files.length > 0){
+		if(files != null && files.length > 0){			
 			MultipartFile arquivo = files[0];
+			System.out.println("Nome: "+arquivo.getOriginalFilename());
 			novoNome = renomearArquivo(arquivo.getOriginalFilename());
 			try {
 				arquivo.transferTo(new File(this.localTemporario.toAbsolutePath().toString()+getDefault().getSeparator()+novoNome));
@@ -88,10 +87,6 @@ public class FotoStorageLocal implements FotoStorage {
 	
 	@Override
 	public byte[] recuperar(String nome) {
-		System.out.println("nome: "+nome);
-		System.out.println("this.local: "+this.local);
-		System.out.println("this.localTemporario: "+this.localTemporario);
-		System.out.println("this.local.resolve(nome): "+this.local.resolve(nome));
 		try {			
 			return Files.readAllBytes(this.local.resolve(nome));
 		} catch (IOException e) {
@@ -100,13 +95,9 @@ public class FotoStorageLocal implements FotoStorage {
 	}
 	
 	private void criarPastas(){		
-		System.out.println("**********");
-		System.out.println("criar pastas");
-		System.out.println("**********");
 		try {
 			Files.createDirectories(this.local);	
 			this.localTemporario = getDefault().getPath(this.local.toString(), "temp");
-			System.out.println("localTemporario: "+this.localTemporario);
 			Files.createDirectories(this.localTemporario);
 			if(logger.isDebugEnabled()){
 				logger.debug("Pastas criadas para salvar foto.");

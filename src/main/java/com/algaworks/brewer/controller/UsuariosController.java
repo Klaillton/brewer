@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.repository.Grupos;
+import com.algaworks.brewer.repository.Usuarios;
+import com.algaworks.brewer.repository.filter.UsuarioFilter;
 import com.algaworks.brewer.service.CadastroUsuarioService;
 import com.algaworks.brewer.service.exception.SenhaObrigatoriaUsuarioException;
 import com.algaworks.brewer.service.exception.UsuarioJaCadastradoException;
@@ -25,6 +28,9 @@ public class UsuariosController {
 	
 	@Autowired
 	private Grupos grupos;
+	
+	@Autowired
+	private Usuarios usuarios;
 	
 	
 	@RequestMapping("/novo")
@@ -53,6 +59,14 @@ public class UsuariosController {
 		attributes.addFlashAttribute("mensagem", "Usuario salvo com sucesso!");
 		
 		return new ModelAndView("redirect:/usuarios/novo");
+	}
+	
+	@GetMapping
+	public ModelAndView pesquisar(UsuarioFilter usuarioFilter) {
+		ModelAndView mv = new ModelAndView("/usuario/PesquisaUsuarios");
+		mv.addObject("usuarios", usuarios.findAll());
+		mv.addObject("grupos", grupos.findAll());
+		return mv;
 	}
 
 }

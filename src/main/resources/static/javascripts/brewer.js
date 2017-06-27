@@ -1,25 +1,19 @@
 var Brewer = Brewer || {};
 
 Brewer.MaskMoney = (function() {
-
+	
 	function MaskMoney() {
 		this.decimal = $('.js-decimal');
 		this.plain = $('.js-plain');
 	}
-
+	
 	MaskMoney.prototype.enable = function() {
-		this.decimal.maskMoney({
-			decimal : ',',
-			thousands : '.'
-		});
-		this.plain.maskMoney({
-			precision : 0,
-			thousands : '.'
-		});
+		this.decimal.maskMoney({ decimal: ',', thousands: '.' });
+		this.plain.maskMoney({ precision: 0, thousands: '.' });
 	}
-
+	
 	return MaskMoney;
-
+	
 }());
 
 Brewer.MaskPhoneNumber = (function() {
@@ -30,7 +24,7 @@ Brewer.MaskPhoneNumber = (function() {
 	
 	MaskPhoneNumber.prototype.enable = function() {
 		var maskBehavior = function (val) {
-		  return val.replace(/\D/g, '').length === 11 ? '(00) 0 0000-0000' : '(00) 0000-00009';
+		  return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
 		};
 		
 		var options = {
@@ -46,7 +40,7 @@ Brewer.MaskPhoneNumber = (function() {
 	
 }());
 
-Brewer.MaskCep = (function(){
+Brewer.MaskCep = (function() {
 	
 	function MaskCep() {
 		this.inputCep = $('.js-cep');
@@ -82,15 +76,15 @@ Brewer.MaskDate = (function() {
 	
 }());
 
-Brewer.Security = (function(){
+Brewer.Security = (function() {
 	
-	function Security(){
+	function Security() {
 		this.token = $('input[name=_csrf]').val();
 		this.header = $('input[name=_csrf_header]').val();
 	}
 	
 	Security.prototype.enable = function() {
-		$(document).ajaxSend(function (event, jqxhr, settings){
+		$(document).ajaxSend(function(event, jqxhr, settings) {
 			jqxhr.setRequestHeader(this.header, this.token);
 		}.bind(this));
 	}

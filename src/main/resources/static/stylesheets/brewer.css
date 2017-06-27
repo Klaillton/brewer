@@ -122,6 +122,24 @@
 	width: 80px;
 }
 
+/* Colunas - Pesquisa de Usuarios */
+.table-usuario-col-codigo {
+	width: 80px;
+}
+
+.table-usuarios-col-nome {
+	
+}
+
+.table-usuarios-col-email {
+	
+}
+
+.table-usuarios-col-status {
+	width: 120px;
+	text-align: left;
+}
+
 /* Colunas - Pesquisa de Clientes */
 .table-clientes-col-nome {
 	

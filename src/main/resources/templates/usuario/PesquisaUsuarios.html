@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="layout/LayoutPadrao"
+	xmlns:brewer="http://brewer.algaworks.com"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+<title>Pesquisa de usuários</title>
+
+</head>
+<body>
+
+	<section layout:fragment="conteudo">
+
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Pesquisa de usuários</h1>
+					</div>
+
+					<div class="col-xs-2"
+						sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" th:href="@{/usuarios/novo}"> <i
+								class="glyphicon glyphicon-plus-sign"></i> <span
+								class="hidden-xs  hidden-sm">Novo usuário</span>
+							</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+
+			<form method="GET" th:object="${usuarioFilter}">
+
+				<div class="row">
+
+					<div class="col-sm-6  form-group  bw-required">
+						<label for="nome" class="control-label">Nome</label> <input
+							id="nome" type="text" class="form-control" th:field="*{nome}" />
+					</div>
+
+					<div class="col-sm-6  form-group  bw-required">
+						<label for="nome" class="control-label">E-mail</label> <input
+							id="nome" type="text" class="form-control" th:field="*{email}" />
+					</div>
+
+				</div>
+
+				<div class="row">
+					<div class="form-group  col-sm-6">
+						<label class="control-label">Grupos</label>
+						<div>
+							<th:block th:each="grupo : ${grupos}">
+								<div class="checkbox  checkbox-inline">
+									<input type="checkbox" th:value="${grupo.codigo}"
+										th:field="*{grupos}" /> <label th:for="${#ids.prev('grupos')}"
+										th:text="${grupo.nome}">Administrador</label>
+								</div>
+
+							</th:block>
+						</div>
+					</div>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Pesquisar</button>
+
+			</form>
+
+			<div class="table-responsive  bw-tabela-simples">
+				<table class="table  table-hover">
+					<thead>
+						<tr>
+							<th class="table-usuarios-col-nome">Nome</th>
+							<!-- 						<th> -->
+							<!-- 							<brewer:order page="${pagina}" field="nome" text="Nome"/> -->
+							<!-- 						</th> -->
+							<th class="table-usuarios-col-email">E-mail</th>
+							<th class="table-usuarios-col-status">Status</th>
+							<!-- 						<th> -->
+							<!-- 							<brewer:order page="${pagina}" field="status" text="Status"/> -->
+							<!-- 						</th> -->
+							<th class="table-col-acoes"
+								sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')"></th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="usuario : ${usuarios}">
+							<td th:text="${usuario.nome}"></td>
+							<td th:text="${usuario.email}"></td>
+							<td th:text="${usuario.ativo} ? Ativo : Inativo"></td>
+							<td class="text-center"><a class="btn  btn-link  btn-xs"
+								title="Editar"> <i class="glyphicon glyphicon-pencil"></i>
+							</a> <a class="btn  btn-link  btn-xs" title="Excluir"> <i
+									class="glyphicon glyphicon-remove"></i>
+							</a></td>
+						</tr>
+
+						<tr th:if="${usuarios.empty}">
+							<td colspan="4">Nenhum usuário encontrado</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- 			<brewer:pagination page="${pagina}" /> -->
+
+
+		</div>
+
+
+
+	</section>
+</body>
+</html>
