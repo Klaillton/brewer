@@ -22,7 +22,7 @@ Brewer.UploadFoto = (function() {
 			filelimit : 1,
 			allow : '*.(jpg|jpeg|png)',
 			action : this.containerFotoCerveja.data('url-fotos'),
-			breforeSend: adicionarCsrfToken,
+			beforeSend: adicionarCsrfToken,
 			complete : onUploadCompleto.bind(this)
 			
 		}

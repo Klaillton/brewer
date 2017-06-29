@@ -40,6 +40,7 @@ public class JPAConfig {
 		adapter.setShowSql(false);
 		adapter.setGenerateDdl(false);
 		adapter.setDatabasePlatform("org.hibernate.dialect.MySQLDialect");
+//		adapter.getJpaDialect().setPrepareConnection(false); Adicionar essa linha ao JPAConfig
 		return adapter;
 	}
 	

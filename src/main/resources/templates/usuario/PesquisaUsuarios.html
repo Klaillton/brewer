@@ -4,6 +4,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="layout/LayoutPadrao"
 	xmlns:brewer="http://brewer.algaworks.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
@@ -60,8 +61,8 @@
 							<th:block th:each="grupo : ${grupos}">
 								<div class="checkbox  checkbox-inline">
 									<input type="checkbox" th:value="${grupo.codigo}"
-										th:field="*{grupos}" /> <label th:for="${#ids.prev('grupos')}"
-										th:text="${grupo.nome}">Administrador</label>
+										th:field="*{grupos}" /> <label
+										th:for="${#ids.prev('grupos')}" th:text="${grupo.nome}">Administrador</label>
 								</div>
 
 							</th:block>
@@ -73,19 +74,31 @@
 
 			</form>
 
+			<div class="aw-datatable-toolbar">
+				<button class="btn btn-default btn-xs js-status-btn"
+					data:status="ATIVAR">
+					<span>Ativar</span>
+				</button>
+
+				<button class="btn btn-default btn-xs js-status-btn"
+					data:status="DESATIVAR">
+					<span>Desativar</span>
+				</button>
+			</div>
+
 			<div class="table-responsive  bw-tabela-simples">
 				<table class="table  table-hover">
 					<thead>
 						<tr>
+							<th class="table-usuarios-col-checkbox">
+								<div class="checkbox aw-checkbox-no-margin ">
+									<input type="checkbox" /> <label></label>
+								</div>
+							</th>
 							<th class="table-usuarios-col-nome">Nome</th>
-							<!-- 						<th> -->
-							<!-- 							<brewer:order page="${pagina}" field="nome" text="Nome"/> -->
-							<!-- 						</th> -->
 							<th class="table-usuarios-col-email">E-mail</th>
+							<th>Grupo</th>
 							<th class="table-usuarios-col-status">Status</th>
-							<!-- 						<th> -->
-							<!-- 							<brewer:order page="${pagina}" field="status" text="Status"/> -->
-							<!-- 						</th> -->
 							<th class="table-col-acoes"
 								sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')"></th>
 						</tr>
@@ -93,8 +106,17 @@
 
 					<tbody>
 						<tr th:each="usuario : ${usuarios}">
+							<td>
+								<div class="checkbox aw-checkbox-no-margin">
+									<input type="checkbox" class="js-selecao" data:codigo="${usuario.codigo}" /> 
+									<label></label>
+								</div>
+							</td>
 							<td th:text="${usuario.nome}"></td>
 							<td th:text="${usuario.email}"></td>
+							<td><span th:each="grupo : ${usuario.grupos}"
+								th:text="|${grupo.nome}${grupoStat.last ? '' : ', '} |"></span>
+							</td>
 							<td th:text="${usuario.ativo} ? Ativo : Inativo"></td>
 							<td class="text-center"><a class="btn  btn-link  btn-xs"
 								title="Editar"> <i class="glyphicon glyphicon-pencil"></i>
@@ -118,5 +140,9 @@
 
 
 	</section>
+
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/multiselecao.js}"></script>
+	</th:block>
 </body>
 </html>

@@ -24,7 +24,7 @@ public class CadastroUsuarioService {
 	
 	@Transactional
 	public void salvar(Usuario usuario){
-		Optional<Usuario> usuarioExistente = usuarios.findByEmailIgnoreCase(usuario.getEmail());
+		Optional<Usuario> usuarioExistente = usuarios.findByEmail(usuario.getEmail());
 		if (usuarioExistente.isPresent()) {
 			throw new UsuarioJaCadastradoException("E-mail já cadastrado");
 		}
@@ -39,6 +39,12 @@ public class CadastroUsuarioService {
 		}
 		
 		usuarios.save(usuario);
+	}
+
+	@Transactional
+	public void alterarStatus(Long[] codigos, StatusUsuario statusUsuario) {
+		statusUsuario.executar(codigos, usuarios);
+		
 	}
 
 }

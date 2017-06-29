@@ -22,7 +22,7 @@
 		<flyway-maven-plugin.version>4.1.2</flyway-maven-plugin.version>
 
 		<mariadb-connector-java.version>2.0.0-RC</mariadb-connector-java.version>
-		
+
 		<!-- Maven Plugin Surefire -->
 		<maven-surefire-plugin.version>2.12.4</maven-surefire-plugin.version>
 
@@ -72,7 +72,7 @@
 
 		<!-- Apache Bean Utils -->
 		<commons-beanutils.version>1.9.2</commons-beanutils.version>
-		
+
 		<!-- Thymeleaf - Extras - Spring - Security -->
 		<thymeleaf-extras-springsecurity.version>3.0.0.RELEASE</thymeleaf-extras-springsecurity.version>
 
@@ -197,12 +197,14 @@
 		</dependency>
 
 		<!-- JPA / Hibernate -->
+		
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-			<scope>compile</scope>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-entitymanager</artifactId>
+		<version>${hibernate.version}</version>
+		<scope>compile</scope>
 		</dependency>
+		
 
 		<!-- Hibernate - Java 8 support -->
 		<dependency>
