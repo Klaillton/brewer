@@ -125,12 +125,9 @@
 /* Colunas - Pesquisa de Usuarios */
 .table-usuarios-col-checkbox {
 	width: 30px;
-	text-align: left;
+	text-align: center;
 }
 
-.table-usuario-col-codigo {
-	width: 80px;
-}
 
 .table-usuarios-col-nome {
 	
