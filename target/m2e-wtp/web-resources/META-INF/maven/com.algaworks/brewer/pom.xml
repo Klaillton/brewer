@@ -76,6 +76,9 @@
 		<!-- Thymeleaf - Extras - Spring - Security -->
 		<thymeleaf-extras-springsecurity.version>3.0.0.RELEASE</thymeleaf-extras-springsecurity.version>
 
+		<!-- JUnit -->
+		<junit.version>4.12</junit.version>
+
 
 	</properties>
 
@@ -197,14 +200,14 @@
 		</dependency>
 
 		<!-- JPA / Hibernate -->
-		
+
 		<dependency>
-		<groupId>org.hibernate</groupId>
-		<artifactId>hibernate-entitymanager</artifactId>
-		<version>${hibernate.version}</version>
-		<scope>compile</scope>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+			<scope>compile</scope>
 		</dependency>
-		
+
 
 		<!-- Hibernate - Java 8 support -->
 		<dependency>
@@ -299,6 +302,14 @@
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
 			<version>${thymeleaf-extras-springsecurity.version}</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<!-- JUnit -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 

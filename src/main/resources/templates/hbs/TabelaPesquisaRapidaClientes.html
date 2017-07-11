@@ -1,4 +1,5 @@
-<script id="tabela-pesquisa-rapida-cliente" type="text/x-handlebars-template">
+<script id="tabela-pesquisa-rapida-cliente"
+	type="text/x-handlebars-template">
 <div class="table-responsive  bw-tabela-simples" style="margin-top: 15px">
 	<table class="table  table-hover">
 		<thead>
@@ -11,7 +12,7 @@
 		<tbody>
 			{{#if .}}
 			{{#each .}}
-				<tr>
+				<tr data-codigo="{{codigo}}" data-nome="{{nome}}" class="js-cliente-pesquisa-rapida">
 					<td>{{nome}}</td>
 					<td>{{telefone}}</td>
 				</tr>
