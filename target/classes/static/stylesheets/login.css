@@ -1,8 +1,22 @@
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+
+/* optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #0080ff;
+}
+
 body {
 	min-height: 100vh;
 	background-color: #CCC;
 	background-image: url('https://unsplash.it/g/1500/800?random');	
-	overflow: hidden;
 }
 
 .login-form {

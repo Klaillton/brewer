@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.number.NumberStyleFormatter;
@@ -144,6 +145,11 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		bundle.setBasename("classpath:/messages");
 		bundle.setDefaultEncoding("UTF-8"); // http://www.utf8-chartable.de/ codigo de conversao de caracteres do utf8 ("\\u"+codigo)
 		return bundle;
+	}
+	
+	@Bean
+	public DomainClassConverter<?> domainClassConverter() {
+		return new DomainClassConverter<FormattingConversionService>(mvcConversionService());
 	}
 	
 }
