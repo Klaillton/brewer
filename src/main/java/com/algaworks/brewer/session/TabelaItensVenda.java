@@ -9,11 +9,15 @@ import java.util.stream.IntStream;
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.ItemVenda;
 
-public class TabelaItensVenda {
+class TabelaItensVenda {
 
 	private String uuid;
 	private List<ItemVenda> itens = new ArrayList<>();
-	
+
+	public TabelaItensVenda(String uuid) {
+		this.uuid = uuid;
+	}
+
 	public BigDecimal getValorTotal() {
 		return itens.stream()
 				.map(ItemVenda :: getValorTotal)
@@ -65,6 +69,12 @@ public class TabelaItensVenda {
 				.filter(i -> i.getCerveja().equals(cerveja))
 				.findAny();
 		return itemVendaOptional;
+	}
+	
+	
+
+	public String getUuid() {
+		return uuid;
 	}
 
 	@Override

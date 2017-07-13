@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.repository.Cervejas;
-import com.algaworks.brewer.session.TabelaItensVenda;
+import com.algaworks.brewer.session.TabelasItensSession;
 
 @Controller
 @RequestMapping("/vendas")
@@ -24,7 +24,7 @@ public class VendasController {
 	private Cervejas cervejas;
 	
 	@Autowired
-	private TabelaItensVenda tabelaItensVenda;
+	private TabelasItensSession tabelaItens;
 	
 	@GetMapping("/nova")
 	public ModelAndView nova() {
@@ -34,32 +34,32 @@ public class VendasController {
 	}
 	
 	@PostMapping("/item")
-	public ModelAndView adicionarItem(Long codigoCerveja) {
+	public ModelAndView adicionarItem(Long codigoCerveja, String uuid) {
 		Cerveja cerveja = cervejas.findOne(codigoCerveja);
-		tabelaItensVenda.adicionarItem(cerveja, 1);
+		tabelaItens.adicionarItem(uuid, cerveja, 1);
 
-		return mvTabelaItensVenda();
+		return mvTabelaItensVenda(uuid);
 	}
 	
 	@PutMapping("/item/{codigoCerveja}")
 	public ModelAndView alterarQuantidadeItem(@PathVariable("codigoCerveja") Cerveja cerveja
-			, Integer quantidade) {
-		tabelaItensVenda.alterarQuantidadeItens(cerveja, quantidade);
+			, Integer quantidade, String uuid) {
+		tabelaItens.alterarQuantidadeItens(uuid, cerveja, quantidade);
 		
-		return mvTabelaItensVenda();
+		return mvTabelaItensVenda(uuid);
 				
 	}
 	
-	@DeleteMapping("/item/{codigoCerveja}")
-	public ModelAndView excluirItem(@PathVariable("codigoCerveja") Cerveja cerveja) {
-		tabelaItensVenda.excluirItem(cerveja);
+	@DeleteMapping("/item/{uuid}/{codigoCerveja}")
+	public ModelAndView excluirItem(@PathVariable("codigoCerveja") Cerveja cerveja, @PathVariable String uuid) {
+		tabelaItens.excluirItem(uuid, cerveja);
 
-		return mvTabelaItensVenda();
+		return mvTabelaItensVenda(uuid);
 	}
 
-	private ModelAndView mvTabelaItensVenda() {
+	private ModelAndView mvTabelaItensVenda(String uuid) {
 		ModelAndView mv = new ModelAndView("venda/TabelaItensVenda");
-		mv.addObject("itens", tabelaItensVenda.getItens());
+		mv.addObject("itens", tabelaItens.getItens(uuid));
 		return mv;
 	}
 	
