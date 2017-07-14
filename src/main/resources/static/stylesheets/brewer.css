@@ -26,6 +26,8 @@ html {
 	content: "*";
 }
 
+
+
 /*
 ######################
 # COMPONENTES
@@ -91,7 +93,7 @@ html {
 
 /*
 ###################
-# PÁGINAS DO SISTEMA
+# PÃ�GINAS DO SISTEMA
 ###################
 */
 
@@ -191,7 +193,7 @@ html {
 	text-align: right;
 }
 
-/* Tabela Cervejas página de Venda */
+/* Tabela Cervejas pÃ¡gina de Venda */
 .bw-tabela-cervejas {
 	margin-bottom: 15px;
 }
@@ -207,7 +209,7 @@ html {
 
 /*
 ###################
-# CUSTOMIZAÇÃO DE COMPONENTES
+# CUSTOMIZACAO DE COMPONENTES
 ###################
 */
 .checkbox input[type="checkbox"]:checked+input+label::after { /* corrigindo bug do checkbox que inclui um input hidden por bug de alguns browsers */
@@ -228,9 +230,14 @@ html {
 	padding: 0px 5px !important;
 }
 
+/* Box */
+.negativo .aw-box__value {
+	color: red;
+}
+
 /* Tabela Item */
 .bw-tabela-item {
-	position: relative;	/* Para que o painel de exclusão apareça dentro da linha */
+	position: relative;	/* Para que o painel de exclusÃ£o apareÃ§a dentro da linha */
 	
 	padding: 15px 0;
 	
