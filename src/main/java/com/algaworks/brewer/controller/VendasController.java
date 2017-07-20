@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.controller.validator.VendaValidator;
+import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
@@ -53,6 +54,9 @@ public class VendasController {
 	
 	@Autowired
 	private Vendas vendas;
+	
+	@Autowired
+	private Mailer mailer;
 
 	@InitBinder("venda")/*O binder inicia o validador para todos os metodos, 
 	a não ser que seja adicionado o filtro ("venda"), 
@@ -89,8 +93,8 @@ public class VendasController {
 
 		venda.setUsuario(usuarioSistema.getUsuario());
 
-		cadastroVendaService.salvar(venda);
-		attributes.addFlashAttribute("mensagem", "Venda salva com sucesso!");
+		venda = cadastroVendaService.salvar(venda);
+		attributes.addFlashAttribute("mensagem", String.format("Venda nº %d salva com sucesso!", venda.getCodigo()));
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 
@@ -107,8 +111,8 @@ public class VendasController {
 
 		venda.setUsuario(usuarioSistema.getUsuario());
 
-		cadastroVendaService.emitir(venda);
-		attributes.addFlashAttribute("mensagem", "Venda emitida com sucesso!");
+		venda = cadastroVendaService.emitir(venda);
+		attributes.addFlashAttribute("mensagem", String.format("Venda nº %d emitida com sucesso!", venda.getCodigo()));
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 
@@ -123,8 +127,11 @@ public class VendasController {
 
 		venda.setUsuario(usuarioSistema.getUsuario());
 
-		cadastroVendaService.salvar(venda);
-		attributes.addFlashAttribute("mensagem", "Venda salva e e-mail enviado com sucesso!");
+		venda = cadastroVendaService.salvar(venda);
+		mailer.enviar(venda);
+		
+		
+		attributes.addFlashAttribute("mensagem", String.format("Venda nº %d salva com sucesso e e-mail enviado!", venda.getCodigo()));
 		return new ModelAndView("redirect:/vendas/nova");
 	}
 

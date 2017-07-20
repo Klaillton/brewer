@@ -12,4 +12,6 @@ public interface FotoStorage {
 
 	public byte[] recuperar(String nome);
 
+	public byte[] recuperarThumbnail(String fotoCerveja);
+
 }

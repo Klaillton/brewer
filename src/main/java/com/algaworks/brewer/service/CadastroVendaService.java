@@ -18,7 +18,7 @@ public class CadastroVendaService {
 	private Vendas vendas;
 	
 	@Transactional
-	public void salvar(Venda venda) {
+	public Venda salvar(Venda venda) {
 		if(venda.isNova()) {
 			venda.setDataCriacao(LocalDateTime.now());
 		}
@@ -31,13 +31,13 @@ public class CadastroVendaService {
 		
 		
 		
-		vendas.save(venda);
+		return vendas.saveAndFlush(venda); /*o metodo saveAndFlush ao realizar o salvamento no BD, retorna o resultado para o objeto que chama o metodo*/
 	}
 
 	@Transactional
-	public void emitir(Venda venda) {
+	public Venda emitir(Venda venda) {
 		venda.setStatus(StatusVenda.EMITIDA);
-		salvar(venda);
+		return salvar(venda);
 	}
 
 	

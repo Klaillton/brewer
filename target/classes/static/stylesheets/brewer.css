@@ -145,13 +145,6 @@ html {
 	text-align: center;
 }
 
-.table-usuarios-col-nome {
-	
-}
-
-.table-usuarios-col-email {
-	
-}
 
 .table-usuarios-col-status {
 	width: 120px;
@@ -159,9 +152,6 @@ html {
 }
 
 /* Colunas - Pesquisa de Clientes */
-.table-clientes-col-nome {
-	
-}
 
 .table-clientes-col-tipo-pessoa {
 	width: 120px;
@@ -193,7 +183,7 @@ html {
 	text-align: right;
 }
 
-/* Tabela Cervejas pÃ¡gina de Venda */
+/* Tabela Cervejas pagina de Venda */
 .bw-tabela-cervejas {
 	margin-bottom: 15px;
 }
