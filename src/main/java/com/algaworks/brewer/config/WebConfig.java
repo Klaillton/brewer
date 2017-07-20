@@ -117,6 +117,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 		//Api de datas do java 8
 		DateTimeFormatterRegistrar dateTimeFormatter = new DateTimeFormatterRegistrar();
 		dateTimeFormatter.setDateFormatter(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		dateTimeFormatter.setTimeFormatter(DateTimeFormatter.ofPattern("HH:mm"));
 		dateTimeFormatter.registerFormatters(conversionService);
 		
 		return conversionService;

@@ -18,13 +18,12 @@ public class SecurityInitializer extends AbstractSecurityWebApplicationInitializ
 		 * por quanto tempo o usuario pode ficar logado em segundos, mesmo mexendo no sistema*/
 		
 		servletContext.setSessionTrackingModes(EnumSet.of(SessionTrackingMode.COOKIE));
-
+		
 		FilterRegistration.Dynamic characterEncodingFilter = servletContext.addFilter("encodingFilter",
 				new CharacterEncodingFilter());
 		characterEncodingFilter.setInitParameter("encoding", "UTF-8");
 		characterEncodingFilter.setInitParameter("forceEncoding", "true");
 		characterEncodingFilter.addMappingForUrlPatterns(null, false, "/*");
-		
 	}
 	
 }

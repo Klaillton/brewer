@@ -22,8 +22,6 @@ public class TabelasItensSession {
 		tabelas.add(tabela);
 	}
 
-	
-
 	public void alterarQuantidadeItens(String uuid, Cerveja cerveja, Integer quantidade) {
 		TabelaItensVenda tabela = buscarTabelaPorUuid(uuid);
 		tabela.alterarQuantidadeItens(cerveja, quantidade);
@@ -33,17 +31,19 @@ public class TabelasItensSession {
 		TabelaItensVenda tabela = buscarTabelaPorUuid(uuid);
 		tabela.excluirItem(cerveja);
 	}
-	
+
 	public List<ItemVenda> getItens(String uuid) {
 		return buscarTabelaPorUuid(uuid).getItens();
 	}
-	
+
+	public Object getValorTotal(String uuid) {
+		return buscarTabelaPorUuid(uuid).getValorTotal();
+	}
+
 	private TabelaItensVenda buscarTabelaPorUuid(String uuid) {
-		TabelaItensVenda tabela = tabelas.stream()
-				.filter(t -> t.getUuid().equals(uuid))
-				.findAny()
+		TabelaItensVenda tabela = tabelas.stream().filter(t -> t.getUuid().equals(uuid)).findAny()
 				.orElse(new TabelaItensVenda(uuid));
 		return tabela;
 	}
-	
+
 }

@@ -21,7 +21,10 @@
 
 						<ul class="aw-menu__list  aw-menu__list--sublist">
 							<li class="aw-menu__item  aw-menu__item--link"
-								brewer:menu="@{/vendas}"><a th:href="@{/vendas/nova}">Nova
+								brewer:menu="@{/vendas/nova}"><a th:href="@{/vendas/nova}">Nova
+									venda</a></li>
+							<li class="aw-menu__item  aw-menu__item--link"
+								brewer:menu="@{/vendas}"><a th:href="@{/vendas}">Pesquisa de
 									venda</a></li>
 						</ul></li>
 
@@ -32,10 +35,10 @@
 
 						<ul class="aw-menu__list  aw-menu__list--sublist">
 							<li class="aw-menu__item  aw-menu__item--link"
-								brewer:menu="@{/estilos}"><a th:href="@{/estilos}">Estilos</a>
+								brewer:menu="@{/estilos.*}"><a th:href="@{/estilos}">Estilos</a>
 							</li>
 							<li class="aw-menu__item  aw-menu__item--link"
-								brewer:menu="@{/cervejas}"><a th:href="@{/cervejas}">Cervejas</a>
+								brewer:menu="@{/cervejas.*}"><a th:href="@{/cervejas}">Cervejas</a>
 							</li>
 						</ul></li>
 
@@ -46,15 +49,15 @@
 
 						<ul class="aw-menu__list  aw-menu__list--sublist">
 							<li class="aw-menu__item  aw-menu__item--link"
-								brewer:menu="@{/cidades}"><a th:href="@{/cidades}">Cidades</a>
+								brewer:menu="@{/cidades.*}"><a th:href="@{/cidades}">Cidades</a>
 							</li>
 
 							<li class="aw-menu__item  aw-menu__item--link"
-								brewer:menu="@{/clientes}"><a th:href="@{/clientes}">Clientes</a>
+								brewer:menu="@{/clientes.*}"><a th:href="@{/clientes}">Clientes</a>
 							</li>
 
 							<li class="aw-menu__item  aw-menu__item--link"
-								brewer:menu="@{/usuarios}"><a th:href="@{/usuarios}">Usuários</a>
+								brewer:menu="@{/usuarios.*}"><a th:href="@{/usuarios}">Usuários</a>
 							</li>
 						</ul></li>
 
