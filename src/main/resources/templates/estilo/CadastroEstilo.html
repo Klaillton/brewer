@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/LayoutPadrao">
+	layout:decorate="layout/LayoutPadrao"
+	xmlns:brewer="http://brewer.algaworks.com">
 
 <head>
 <title>Cadastro de Estilos</title>
@@ -19,7 +20,8 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Cadastro de estilos</h1>
+						<h1 th:if="${estilo.nova}">Cadastro de estilo</h1>
+						<h1 th:unless="${estilo.nova}" th:text="|Edição do estilo - ${estilo.nome}|">Edição de estilo</h1>
 					</div>
 					
 					<div class="col-xs-2">
@@ -37,16 +39,16 @@
 		
 		<div class="container-fluid">
 		
-		<th:block th:include="fragments/MensagemSucesso"></th:block>	
-		
-			<form method="post" th:object="${estilo}"
-				class="form-vertical  js-form-loading" th:action="@{/estilos/novo}">
+			<form method="POST" th:object="${estilo}" class="form-vertical  js-form-loading" 
+				th:action="${estilo.nova} ? @{/estilos/novo} : @{/estilos/{codigo}(codigo=${estilo.codigo})}">
 				
-				<th:block th:include="fragments/MensagensErroValidacao"></th:block>
+				<brewer:message />
+				
+				<input type="hidden" th:field="*{codigo}"/>
 
 				<div class="row">
 					
-					<div class="col-sm-12  form-group  bw-required" th:classappend="${#fields.hasErrors('nome')} ? has-error">
+					<div class="col-sm-12  form-group  bw-required" brewer:classforerror="nome">
 
 						<label for="nome" class="control-label">Nome</label> 
 						<input id="nome" type="text"

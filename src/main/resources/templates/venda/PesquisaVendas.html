@@ -95,8 +95,14 @@
 	                	</th>
 	                	<th>Data de criação</th>
 	                	<th>Valor total</th>
-	                	<th>Vendedor</th>
-	                	<th>Status</th>
+	                	<!-- <th>Vendedor</th> -->
+	                	<th>
+	                		<brewer:order page="${pagina}" field="usuario" text="Vendedor"/>
+	                	</th>
+<!-- 	                	<th>Status</th> -->
+						<th>
+	                		<brewer:order page="${pagina}" field="status" text="Status"/>
+	                	</th>
 	                 	<th class="table-col-acoes"></th>
 					</tr>
 				</thead>
@@ -110,7 +116,8 @@
 						<td th:text="${venda.usuario.nome}"></td>
 						<td th:text="${venda.status.descricao}"></td>
 	                 	<td class="text-center">
-		   					<a class="btn  btn-link  btn-xs  js-tooltip" title="Editar" href="#">
+		   					<a class="btn  btn-link  btn-xs  js-tooltip" title="Editar" 
+		   						th:href="@{/vendas/{codigo}(codigo=${venda.codigo})}">
 		   						<i class="glyphicon glyphicon-pencil"></i>
 		   					</a>
 	                 	</td>

@@ -9,5 +9,7 @@ import com.algaworks.brewer.repository.filter.CidadeFilter;
 public interface CidadesQueries {
 	
 	public Page<Cidade> filtrar(CidadeFilter cidadeFilter, Pageable pageable);
+	
+	public Cidade buscarComEstado(Long codigo);
 
 }

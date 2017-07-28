@@ -4,7 +4,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/LayoutPadrao}"
 	xmlns:brewer="http://brewer.algaworks.com"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	xmlns:data="http://www.thymeleaf.org/extras/data">
 
 <head>
 <title>Pesquisa de cervejas</title>
@@ -21,7 +22,7 @@
 
 					<div class="col-xs-2" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
 						<div class="aw-page-header-controls">
-							<a class="btn btn-default" th:href="@{/cervejas/novo}"> <i
+							<a class="btn btn-default" th:href="@{/cervejas/nova}"> <i
 								class="glyphicon glyphicon-plus-sign"></i> <span
 								class="hidden-xs  hidden-sm">Nova cerveja</span>
 							</a>
@@ -128,22 +129,26 @@
 					</thead>
 					<tbody>
 						<tr th:each="cerveja : ${pagina.conteudo}">
-							<td class="text-center"><img
-								th:src="@{/fotos/thumbnail.{foto}(foto=${cerveja.fotoOuMock})}"
-								class="img-responsive"></td>
+							<td class="text-center">
+								<img th:src="@{/fotos/thumbnail.{foto}(foto=${cerveja.fotoOuMock})}" class="img-responsive">
+							</td>
 							<td class="text-center" th:text="${cerveja.sku}">AA1234</td>
 							<td th:text="${cerveja.nome}">Cerveja Stella</td>
 							<td th:text="${cerveja.estilo.nome}">Lager</td>
 							<td th:text="${cerveja.sabor.descricao}">Amarga</td>
 							<td th:text="${cerveja.origem.descricao}">Internacional</td>
 							<td class="text-right" th:text="|R$ ${cerveja.valor}|">8</td>
-							<td class="text-center" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
-							<a class="btn btn-link btn-xs "
-								title="Editar"> <i class="glyphicon glyphicon-pencil"></i>
-							</a> 
-							<a class="btn btn-link btn-xs" title="Excluir"> <i
-									class="glyphicon glyphicon-remove"></i>
-							</a></td>
+							<td class="text-center">							
+								<a class="btn btn-link btn-xs js-tooltip" title="Editar" 
+									th:href="@{/cervejas/{codigo}(codigo=${cerveja.codigo})}"> 
+									<i class="glyphicon glyphicon-pencil"></i>
+								</a> 
+								<a class="btn btn-link btn-xs js-tooltip  js-exclusao-btn" title="Excluir" href="#" 
+									data:url="@{/cervejas/{codigo}(codigo=${cerveja.codigo})}"
+									data:objeto="${cerveja.nome}"> 
+									<i class="glyphicon glyphicon-remove"></i>
+								</a>
+							</td>
 						</tr>
 						<tr th:if="${pagina.vazia}">
 							<td colspan="7">Nenhuma cerveja encontrada</td>

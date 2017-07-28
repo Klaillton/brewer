@@ -21,7 +21,8 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Cadastro de usuario</h1>
+						<h1 th:if="${usuario.novo}">Cadastro de usuario</h1>
+						<h1 th:unless="${usuario.novo}">Edição de Usuário - [[${usuario.nome}]]</h1>
 					</div>
 					
 					<div class="col-xs-2">
@@ -37,10 +38,12 @@
 			</div>
 		</div>
 		<div class="container-fluid">
-			<form method="post" th:object="${usuario}"
-				class="form-vertical  js-form-loading" th:action="@{/usuarios/novo}">
+			<form method="post" th:object="${usuario}" class="form-vertical  js-form-loading" 
+						th:action="${usuario.novo} ? @{/usuarios/novo} : @{/usuarios/{codigo}(codigo=${usuario.codigo})}">
 
 				<brewer:message />
+				
+				<input type="hidden" th:field="*{codigo}" />
 
 				<div class="row">
 
@@ -48,7 +51,7 @@
 						brewer:classforerror="nome">
 
 						<label for="nome" class="control-label">Nome</label> <input
-							id="nome" type="text" class="form-control"
+							id="nome" type="text" class="form-control" autofocus="autofocus"
 							th:field="*{nome}" />
 
 					</div>
@@ -58,7 +61,7 @@
 					<div class="col-sm-6  form-group  bw-required"
 						brewer:classforerror="email">
 						<label for="email" class="control-label">E-Mail</label> <input
-							id="email" type="text" class="form-control" th:field="*{email}" />
+							id="email" type="text" class="form-control" th:field="*{email}" th:readonly="! ${usuario.novo}"/>
 
 
 					</div>
@@ -73,15 +76,15 @@
 					<div class="form-group  col-sm-3" brewer:classforerror="senha" th:classappend="${usuario.novo} ? bw-required">
 						<label for="senha" class="control-label">Senha</label> <input
 							type="password" class="form-control" id="senha"
-							th:field="*{senha}" />
+							th:field="*{senha}" th:readonly="! ${usuario.novo}"/>
 					</div>
 
 					<div class="form-group  col-sm-3" brewer:classforerror="confirmacaoSenha" th:classappend="${usuario.novo} ? bw-required">
 						<label for="confirmacaoSenha" class="control-label">Confirmação
 							de senha</label> <input type="password" class="form-control"
-							id="confirmacaoSenha" th:field="*{confirmacaoSenha}" />
+							id="confirmacaoSenha" th:field="*{confirmacaoSenha}" th:readonly="! ${usuario.novo}"/>
 					</div>
-					<div class="col-sm-3">
+					<div class="col-sm-3" th:if="${#authentication.principal.usuario.codigo != usuario.codigo}">
 						<label for="status" class="control-label">Status</label>
 						<div>
 							<input type="checkbox" class="js-status" data-size="small"
