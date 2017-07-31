@@ -25,7 +25,7 @@
 					<div class="aw-box__icon">
 						<i class="fa  fa-heartbeat  fa-3x"></i>
 					</div>
-					<div class="aw-box__value">R$90.542,59</div>
+					<div class="aw-box__value">R$ [[${{valorItensEstoque.valor}}]]</div>
 					<div class="aw-box__title">Valor do estoque</div>
 				</div>
 			</div>
@@ -35,7 +35,7 @@
 					<div class="aw-box__icon">
 						<i class="fa  fa-hashtag  fa-3x"></i>
 					</div>
-					<div class="aw-box__value">123</div>
+					<div class="aw-box__value" th:text="${valorItensEstoque.totalItens}">123</div>
 					<div class="aw-box__title">Itens no estoque</div>
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 					<div class="aw-box__icon">
 						<i class="fa  fa-users  fa-3x"></i>
 					</div>
-					<div class="aw-box__value">9</div>
+					<div class="aw-box__value" th:text="${totalClientes}">9</div>
 					<div class="aw-box__title">Total de clientes</div>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 					<div class="aw-box__icon">
 						<i class="fa  fa-usd  fa-3x"></i>
 					</div>
-					<div class="aw-box__value">R$3.542,59</div>
+					<div class="aw-box__value">R$ [[${{vendasNoAno}}]]</div>
 					<div class="aw-box__title">Vendas no ano</div>
 				</div>
 			</div>
@@ -67,7 +67,7 @@
 					<div class="aw-box__icon">
 						<i class="fa  fa-signal  fa-3x"></i>
 					</div>
-					<div class="aw-box__value">R$1.233,40</div>
+					<div class="aw-box__value">R$ [[${{vendasNoMes}}]]</div>
 					<div class="aw-box__title">Vendas no mês</div>
 				</div>
 			</div>
@@ -77,7 +77,7 @@
 					<div class="aw-box__icon">
 						<i class="fa  fa-shopping-cart  fa-3x"></i>
 					</div>
-					<div class="aw-box__value">R$433,20</div>
+					<div class="aw-box__value">R$ [[${{ticketMedio}}]]</div>
 					<div class="aw-box__title">Ticket médio</div>
 				</div>
 			</div>
@@ -90,12 +90,12 @@
 						<h2 class="aw-graph-box__title">Vendas por mês <small>últimos 6 meses</small></h2>
 					</div>
 					<div class="aw-graph-box__content">
-						<div class="aw-graph-box__no-data">
-							<i class="fa  fa-line-chart  fa-2x"></i>
-							<span>Não há dados</span>
-						</div>
+<!-- 						<div class="aw-graph-box__no-data"> -->
+<!-- 							<i class="fa  fa-line-chart  fa-2x"></i> -->
+<!-- 							<span>Não há dados</span> -->
+<!-- 						</div> -->
 						<div>
-							<canvas id="lineChart" height="160"></canvas>
+							<canvas id="graficoVendasPorMes" height="160"></canvas>
 						</div>
 					</div>
 				</div>
@@ -122,6 +122,8 @@
 </section>
 
 <th:block layout:fragment="javascript-extra">
+	<script th:src="@{/javascripts/vendors/Chart.min.js}"></script>
+	<script th:src="@{/javascripts/dashboard.graficos.js}"></script>	
 </th:block>
 
 </html>
