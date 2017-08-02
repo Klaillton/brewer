@@ -89,17 +89,22 @@
 			<table class="table  table-hover">
 	            <thead>
 	            	<tr>
-	                	<th>Código</th>
+	                	<th>
+	                		<brewer:order page="${pagina}" field="codigo" text="Código"/>
+	                	</th>
 	                	<th>
 	                		<brewer:order page="${pagina}" field="c.nome" text="Cliente"/>
 	                	</th>
-	                	<th>Data de criação</th>
-	                	<th>Valor total</th>
-	                	<!-- <th>Vendedor</th> -->
+	                	<th>
+	                		<brewer:order page="${pagina}" field="dataCriacao" text="Data de Criação"/>
+	                	</th>
+	                	
+	                	<th>
+	                		<brewer:order page="${pagina}" field="valorTotal" text="Valor total"/>
+	                	</th>
 	                	<th>
 	                		<brewer:order page="${pagina}" field="usuario" text="Vendedor"/>
 	                	</th>
-<!-- 	                	<th>Status</th> -->
 						<th>
 	                		<brewer:order page="${pagina}" field="status" text="Status"/>
 	                	</th>
