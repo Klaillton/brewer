@@ -56,7 +56,7 @@ public class Usuario implements Serializable{
 	@Size(min = 1, message = "Selecione pelo menos um grupo")
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario")
-	, inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))
+				, inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))
 	private List<Grupo> grupos;
 	
 	@NotNull(message = "Data de nascimento é obrigatório")
@@ -135,7 +135,7 @@ public class Usuario implements Serializable{
 	public void setGrupos(List<Grupo> grupos) {
 		this.grupos = grupos;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -89,14 +89,25 @@
 			<table class="table  table-hover">
 	            <thead>
 	            	<tr>
-	                	<th>Código</th>
+	                	<th>
+	                		<brewer:order page="${pagina}" field="codigo" text="Código"/>
+	                	</th>
 	                	<th>
 	                		<brewer:order page="${pagina}" field="c.nome" text="Cliente"/>
 	                	</th>
-	                	<th>Data de criação</th>
-	                	<th>Valor total</th>
-	                	<th>Vendedor</th>
-	                	<th>Status</th>
+	                	<th>
+	                		<brewer:order page="${pagina}" field="dataCriacao" text="Data de Criação"/>
+	                	</th>
+	                	
+	                	<th>
+	                		<brewer:order page="${pagina}" field="valorTotal" text="Valor total"/>
+	                	</th>
+	                	<th>
+	                		<brewer:order page="${pagina}" field="usuario" text="Vendedor"/>
+	                	</th>
+						<th>
+	                		<brewer:order page="${pagina}" field="status" text="Status"/>
+	                	</th>
 	                 	<th class="table-col-acoes"></th>
 					</tr>
 				</thead>
@@ -110,7 +121,8 @@
 						<td th:text="${venda.usuario.nome}"></td>
 						<td th:text="${venda.status.descricao}"></td>
 	                 	<td class="text-center">
-		   					<a class="btn  btn-link  btn-xs  js-tooltip" title="Editar" href="#">
+		   					<a class="btn  btn-link  btn-xs  js-tooltip" title="Editar" 
+		   						th:href="@{/vendas/{codigo}(codigo=${venda.codigo})}">
 		   						<i class="glyphicon glyphicon-pencil"></i>
 		   					</a>
 	                 	</td>

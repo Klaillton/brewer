@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -11,7 +12,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import com.algaworks.brewer.mail.Mailer;
+
 @Configuration
+@ComponentScan(basePackageClasses = Mailer.class)
 /*@PropertySource({ "classpath:env/mail-${ambiente:local}.properties" })
 @PropertySource({ "file://${HOME}/.brewer-mail.properties" }) //configuracao para o servidor*/
 @PropertySources({

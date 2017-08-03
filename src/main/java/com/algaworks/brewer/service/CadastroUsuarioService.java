@@ -2,6 +2,8 @@ package com.algaworks.brewer.service;
 
 import java.util.Optional;
 
+import javax.persistence.PersistenceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,40 +12,67 @@ import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.repository.Usuarios;
+import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
 import com.algaworks.brewer.service.exception.SenhaObrigatoriaUsuarioException;
 import com.algaworks.brewer.service.exception.UsuarioJaCadastradoException;
 
 @Service
 public class CadastroUsuarioService {
-	
+
 	@Autowired
 	private Usuarios usuarios;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Transactional
-	public void salvar(Usuario usuario){
-		Optional<Usuario> usuarioExistente = usuarios.findByEmail(usuario.getEmail());
-		if (usuarioExistente.isPresent()) {
+	public void salvar(Usuario usuario) {
+		Optional<Usuario> usuarioExistente = usuarios.findByEmailOrCodigo(usuario.getEmail(), usuario.getCodigo());
+		
+		if (usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
 			throw new UsuarioJaCadastradoException("E-mail já cadastrado");
 		}
-		
-		if(usuario.isNovo() && StringUtils.isEmpty(usuario.getSenha())){
+
+		if (usuario.isNovo() && StringUtils.isEmpty(usuario.getSenha())) {
 			throw new SenhaObrigatoriaUsuarioException("Senha é obrigatória para novo usuário!");
 		}
+
+		validarEncodarSenha(usuario, usuarioExistente);
+
+		usuario.setConfirmacaoSenha(usuario.getSenha());
 		
-		if(usuario.isNovo()){
-			usuario.setSenha(this.passwordEncoder.encode(usuario.getSenha()));
-			usuario.setConfirmacaoSenha(usuario.getSenha());
-		}
-		
+		validarStatus(usuario, usuarioExistente);
+
 		usuarios.save(usuario);
+	}
+
+	private void validarStatus(Usuario usuario, Optional<Usuario> usuarioExistente) {
+		if(!usuario.isNovo() && usuario.getAtivo() == null) {
+			usuario.setAtivo(usuarioExistente.get().getAtivo());
+		}
+	}
+
+	private void validarEncodarSenha(Usuario usuario, Optional<Usuario> usuarioExistente) {
+		if (usuario.isNovo() || !StringUtils.isEmpty(usuario.getSenha())) {
+			usuario.setSenha(this.passwordEncoder.encode(usuario.getSenha()));
+		} else if (StringUtils.isEmpty(usuario.getSenha())) {
+			usuario.setSenha(usuarioExistente.get().getSenha());
+		}
 	}
 
 	@Transactional
 	public void alterarStatus(Long[] codigos, StatusUsuario statusUsuario) {
 		statusUsuario.executar(codigos, usuarios);
+
+	}
+
+	public void excluir(Usuario usuario) {
+		try {
+			usuarios.delete(usuario);
+			usuarios.flush();
+		} catch (PersistenceException e) {
+			throw new ImpossivelExcluirEntidadeException("Impossivel apagar usuário. Já foi utilizada em alguma venda.");
+		}
 		
 	}
 

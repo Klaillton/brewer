@@ -16,6 +16,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "cliente")
 @GroupSequenceProvider(ClienteGroupSequenceProvider.class)
+@DynamicUpdate
 public class Cliente implements Serializable{
 
 	/**
@@ -44,7 +46,7 @@ public class Cliente implements Serializable{
 	@NotBlank(message = "Nome é obrigatório")
 	private String nome;
 
-	@NotNull(message = "Tipo pessoa é obrigatório")
+	@NotNull(message = "Tipo de pessoa é obrigatório")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "tipo_pessoa")
 	private TipoPessoa tipoPessoa;
@@ -159,6 +161,10 @@ public class Cliente implements Serializable{
 
 	public String getCpfOuCnpjSemFormatacao() {
 		return TipoPessoa.removerFormatacao(this.cpfOuCnpj);
+	}
+	
+	public boolean isNova() {
+		return codigo == null;
 	}
 
 

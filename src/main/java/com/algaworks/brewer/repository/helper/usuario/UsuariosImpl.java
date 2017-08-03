@@ -16,6 +16,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -69,6 +70,18 @@ public class UsuariosImpl implements UsuariosQueries {
 		return new PageImpl<>(filtrados, pageable, total(filtro));
 	}
 	
+	@SuppressWarnings({ "deprecation" })
+	@Transactional(readOnly = true)
+	@Override
+	public Usuario buscarComGrupos(Long codigo) {
+		Criteria criteria = manager.unwrap(Session.class).createCriteria(Usuario.class);
+		criteria.createAlias("grupos",  "g", JoinType.LEFT_OUTER_JOIN);
+		criteria.add(Restrictions.eq("codigo", codigo));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		
+		return (Usuario) criteria.uniqueResult();
+	}
+	
 	private Long total(UsuarioFilter filtro) {
 		@SuppressWarnings("deprecation")
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Usuario.class);
@@ -102,6 +115,8 @@ public class UsuariosImpl implements UsuariosQueries {
 			}
 		}
 	}
+
+
 
 
 }

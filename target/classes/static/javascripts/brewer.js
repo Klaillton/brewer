@@ -67,8 +67,7 @@ Brewer.MaskDate = (function() {
 			language: 'pt-BR',
 			autoclose: true,
 			daysOfWeekHighlighted: '[0]',
-			calendarWeeks: true,
-			endDate: '0d'
+			calendarWeeks: true
 		});
 	}
 	
