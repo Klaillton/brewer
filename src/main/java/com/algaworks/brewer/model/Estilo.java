@@ -26,8 +26,8 @@ public class Estilo implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
-	@NotBlank(message = "O nome é obrigatório")
-	@Size(max = 20, message = "O tamanho do nome não pode ser maior que {max} caracteres")
+	@NotBlank
+	@Size(max = 20, min = 1)
 	private String nome;
 	
 	@OneToMany(mappedBy = "estilo")

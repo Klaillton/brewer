@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,11 +17,11 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.algaworks.brewer.validation.AtributosConfirmacao;
 
@@ -39,10 +40,10 @@ public class Usuario implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 	
-	@NotBlank(message = "Nome é obrigatório")
+	@NotBlank
 	private String nome;
 	
-	@NotBlank(message = "E-mail é obrigatório")
+	@NotBlank
 	@Email(message = "E-mail inválido")
 	private String email;
 	
@@ -53,13 +54,13 @@ public class Usuario implements Serializable{
 	
 	private Boolean ativo;
 	
-	@Size(min = 1, message = "Selecione pelo menos um grupo")
-	@ManyToMany
+	@NotEmpty
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario")
 				, inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))
 	private List<Grupo> grupos;
 	
-	@NotNull(message = "Data de nascimento é obrigatório")
+	@NotNull
 	@Column(name = "data_nascimento")
 	private LocalDate dataNascimento;
 	

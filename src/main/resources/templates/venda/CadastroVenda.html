@@ -7,7 +7,7 @@
 	xmlns:data="http://www.thymeleaf.org/extras/data">
 
 <head>
-<title>Cadastro de venda</title>
+<title th:text="#{venda.cadastro.titulo}">Cadastro de venda</title>
 
 <link rel="stylesheet"
 	th:href="@{/stylesheets/vendors/easy-autocomplete.min.css}" />
@@ -21,15 +21,15 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-10">
-					<h1 th:if="${venda.nova}">Cadastro de venda</h1>
-					<h1 th:unless="${venda.nova}">Edição da venda nº [[${venda.codigo}]]</h1>
+					<h1 th:if="${venda.nova}" th:text="#{venda.cadastro.titulo}">Cadastro de venda</h1>
+					<h1 th:unless="${venda.nova}" th:text="#{venda.edicao.titulo(${venda.codigo})}">Edição da venda nº </h1>
 				</div>
 				
 				<div class="col-xs-2">
 						<div class="aw-page-header-controls">
 							<a class="btn btn-default" th:href="@{/vendas}">
 								
-								<span class="hidden-xs  hidden-sm">Pesquisa</span>
+								<span class="hidden-xs  hidden-sm" th:text="#{btn.pesquisa}">Pesquisa</span>
 							</a>
 						</div>
 					</div>
@@ -81,7 +81,7 @@
 							<span class="js-tooltip" th:if="${venda.diasCriacao == 1}">Há 1 dia</span>
 							<span class="js-tooltip" th:if="${venda.diasCriacao > 1}">Há [[${venda.diasCriacao}]] dias</span>
 						</div>
-						<div class="aw-box__title">Criação</div>
+						<div class="aw-box__title" th:text="#{venda.criacao}">Criação</div>
 					</div>
 				</div>
 			</div>
@@ -89,11 +89,11 @@
 			<div class="row">
 				<div class="form-group  col-sm-4  bw-required"
 					brewer:classforerror="cliente.codigo">
-					<label class="control-label" for="nomeCliente">Cliente</label>
+					<label class="control-label" for="nomeCliente" th:text="#{venda.cliente}">Cliente</label>
 					<div class="input-group">
 						<input id="nomeCliente" type="text" readonly="readonly"
 							class="form-control" th:field="*{cliente.nome}"
-							placeholder="Clique na lupa para pesquisar o cliente" /> <input
+							th:placeholder="#{venda.cliente.placeholder}" /> <input
 							id="codigoCliente" type="hidden" th:field="*{cliente}" /> <span
 							class="input-group-btn">
 							<button class="btn  btn-default  js-tooltip" type="button"
@@ -106,7 +106,7 @@
 				</div>
 
 				<div class="form-group  col-sm-4">
-					<label class="control-label" for="valorFrete">Valor do
+					<label class="control-label" for="valorFrete" th:text="#{venda.valorFrete}">Valor do
 						frete</label>
 					<div class="input-group">
 						<div class="input-group-addon">R$</div>
@@ -117,7 +117,7 @@
 				</div>
 
 				<div class="form-group  col-sm-4">
-					<label class="control-label" for="valorDesconto">Valor do
+					<label class="control-label" for="valorDesconto" th:text="#{venda.valorDesconto}">Valor do
 						desconto</label>
 					<div class="input-group">
 						<div class="input-group-addon">R$</div>
@@ -131,8 +131,8 @@
 			<div class="row">
 				<div class="form-group  col-lg-12">
 					<ul class="nav nav-tabs  js-abas-venda">
-						<li role="presentation" class="active"><a href="#cervejas">Cervejas</a></li>
-						<li role="presentation"><a href="#entrega">Entrega</a></li>
+						<li role="presentation" class="active"><a href="#cervejas" th:text="#{venda.abaCerveja}">Cervejas</a></li>
+						<li role="presentation"><a href="#entrega" th:text="#{venda.abaEntrega}">Entrega</a></li>
 					</ul>
 				</div>
 			</div>
@@ -144,7 +144,7 @@
 						<div class="form-group  col-lg-12">
 							<input type="text" class="form-control js-sku-nome-cerveja-input"
 								id="cerveja"
-								placeholder="Pesquise e adicione a cerveja pelo SKU ou nome"
+								th:placeholder="#{venda.cliente.placeholder}"
 								autofocus="autofocus" data:url="@{/cervejas}" th:disabled="${venda.salvarProibido}"/>
 						</div>
 					</div>
@@ -158,13 +158,13 @@
 				<div class="tab-pane" id="entrega">
 					<div class="row">
 						<div class="form-group  col-sm-3" brewer:classforerror="dataEntrega">
-							<label class="control-label" for="dataEntrega">Data da entrega</label> 
+							<label class="control-label" for="dataEntrega" th:text="#{venda.dataEntrega}">Data da entrega</label> 
 								<input type="text" class="form-control  js-date" id="dataEntrega"
 									th:field="*{dataEntrega}" th:disabled="${venda.salvarProibido}"/>
 						</div>
 
 						<div class="form-group  col-sm-3">
-							<label class="control-label" for="horarioEntrega">Horário de entrega</label> 
+							<label class="control-label" for="horarioEntrega" th:text="#{venda.horarioEntrega}">Horário de entrega</label> 
 								<input type="text" class="form-control" id="horarioEntrega"
 									 th:field="*{horarioEntrega}" th:disabled="${venda.salvarProibido}"/>
 						</div>
@@ -173,7 +173,7 @@
 					<div class="row">
 						<div class="form-group  col-sm-12">
 							<textarea class="form-control" id="dataEntrega" rows="5"
-								placeholder="Alguma observação para o entregador desse pedido?"
+								th:placeholder="#{venda.entrega.placeholder}"
 								th:field="*{observacao}" th:disabled="${venda.salvarProibido}">
 							</textarea>
 						</div>
@@ -185,7 +185,7 @@
 				<div class="col-lg-12">
 					<div class="btn-group">
 						<button type="submit" class="btn  btn-primary  js-submit-btn"
-							data:acao="salvar">Salvar</button>
+							data:acao="salvar" th:text="#{btn.salvar}">Salvar</button>
 						<button type="button" class="btn  btn-primary  dropdown-toggle"
 							data-toggle="dropdown">
 							<span class="caret"></span>
@@ -193,15 +193,15 @@
 
 						<ul class="dropdown-menu">
 							<li>
-								<a href="#" class="js-submit-btn" data:acao="emitir">Salvar e emitir</a>
+								<a href="#" class="js-submit-btn" data:acao="emitir" th:text="#{btn.emitir}">Salvar e emitir</a>
 							</li>
 							<li>
-								<a href="#" class="js-submit-btn" data:acao="enviarEmail">Salvar e enviar por e-mail</a>
+								<a href="#" class="js-submit-btn" data:acao="enviarEmail" th:text="#{btn.email}">Salvar e enviar por e-mail</a>
 							</li>
 						</ul>
 					</div>
 
-					<button class="btn  btn-danger  js-submit-btn" data:acao="cancelar" th:unless="${venda.nova}">Cancelar</button>
+					<button class="btn  btn-danger  js-submit-btn" data:acao="cancelar" th:unless="${venda.nova}" th:text="#{btn.cancelar}">Cancelar</button>
 				</div>
 			</div>
 		</form>

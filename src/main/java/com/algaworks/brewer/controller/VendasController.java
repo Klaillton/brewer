@@ -84,7 +84,8 @@ public class VendasController {
 	}
 	
 	@PostMapping(value = "/nova", params = "salvar")
-	public ModelAndView salvar(Venda venda, BindingResult result, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+	public ModelAndView salvar(Venda venda, BindingResult result
+			, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
 		validarVenda(venda, result);
 		if (result.hasErrors()) {
 			return nova(venda);

@@ -113,7 +113,6 @@ public class VendasImpl implements VendasQueries {
 		return vendasMes;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<VendaOrigem> totalPorOrigem() {
 		List<VendaOrigem> vendasNacionalidade = manager.createNamedQuery("Vendas.porOrigem", VendaOrigem.class)

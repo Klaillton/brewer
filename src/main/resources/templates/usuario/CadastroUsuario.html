@@ -7,7 +7,7 @@
 	layout:decorate="~{layout/LayoutPadrao}">
 
 <head>
-<title>Cadastro de Usuario</title>
+<title th:text="#{usuario.cadastro.titulo}">Cadastro de Usuario</title>
 <link rel="stylesheet" type="text/css"
 	th:href="@{/stylesheets/vendors/bootstrap-switch.min.css}" />
 	
@@ -21,15 +21,16 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1 th:if="${usuario.novo}">Cadastro de usuario</h1>
-						<h1 th:unless="${usuario.novo}">Edição de Usuário - [[${usuario.nome}]]</h1>
+						<h1 th:if="${usuario.novo}" th:text="#{usuario.cadastro.titulo}">Cadastro de usuario</h1>
+						<h1 th:unless="${usuario.novo}" th:text="#{usuario.edicao.titulo(${usuario.nome})}">Edição de Usuário - [[${usuario.nome}]]</h1>
+<!-- 						<h1 th:unless="${usuario.novo}" >Edição de Usuário - [[${usuario.nome}]]</h1> -->
 					</div>
 					
 					<div class="col-xs-2">
 						<div class="aw-page-header-controls">
 							<a class="btn btn-default" th:href="@{/usuarios}">
 								
-								<span class="hidden-xs  hidden-sm">Pesquisa</span>
+								<span class="hidden-xs  hidden-sm" th:text="#{btn.pesquisa}">Pesquisa</span>
 							</a>
 						</div>
 					</div>
@@ -50,7 +51,7 @@
 					<div class="col-sm-12  form-group  bw-required"
 						brewer:classforerror="nome">
 
-						<label for="nome" class="control-label">Nome</label> <input
+						<label for="nome" class="control-label" th:text="#{usuario.nome}">Nome</label> <input
 							id="nome" type="text" class="form-control" autofocus="autofocus"
 							th:field="*{nome}" />
 
@@ -66,7 +67,7 @@
 
 					</div>
 					<div class="form-group  col-sm-3"  brewer:classforerror="dataNascimento">
-						<label for="dataNascimento" class="control-label">Data de nascimento</label>
+						<label for="dataNascimento" class="control-label" th:text="#{usuario.dataNascimento}">Data de nascimento</label>
 						<input type="text" class="form-control  js-date" id="dataNascimento" th:field="*{dataNascimento}" autocomplete="off" />
 					</div>
 
@@ -74,13 +75,13 @@
 
 				<div class="row">
 					<div class="form-group  col-sm-3" brewer:classforerror="senha" th:classappend="${usuario.novo} ? bw-required">
-						<label for="senha" class="control-label">Senha</label> <input
+						<label for="senha" class="control-label" th:text="#{usuario.senha}">Senha</label> <input
 							type="password" class="form-control" id="senha"
 							th:field="*{senha}" th:readonly="! ${usuario.novo}"/>
 					</div>
 
 					<div class="form-group  col-sm-3" brewer:classforerror="confirmacaoSenha" th:classappend="${usuario.novo} ? bw-required">
-						<label for="confirmacaoSenha" class="control-label">Confirmação
+						<label for="confirmacaoSenha" class="control-label" th:text="#{usuario.senhaConfirmacao}">Confirmação
 							de senha</label> <input type="password" class="form-control"
 							id="confirmacaoSenha" th:field="*{confirmacaoSenha}" th:readonly="! ${usuario.novo}"/>
 					</div>
@@ -98,7 +99,7 @@
 
 				<div class="row">
 					<div class="form-group  col-sm-6  bw-required" brewer:classforerror="grupos">
-						<label class="control-label">Grupos</label>
+						<label class="control-label" th:text="#{usuario.grupo}">Grupos</label>
 						<div>
 							<th:block th:each="grupo : ${grupos}">
 								<div class="checkbox  checkbox-inline">
@@ -112,7 +113,7 @@
 				</div>
 
 				<div class="form-group">
-					<button class="btn  btn-primary" type="submit">Salvar</button>
+					<button class="btn  btn-primary" type="submit" th:text="#{btn.salvar}">Salvar</button>
 
 				</div>
 

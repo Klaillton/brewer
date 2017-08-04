@@ -18,7 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -36,46 +35,44 @@ public class Cerveja {
 	private Long codigo;
 	
 	@SKU
-	@NotBlank(message = "SKU é obrigatório")
+	@NotBlank
 	private String sku;
 	
-	@NotBlank(message = "Nome é obrigatório")
+	@NotBlank
 	private String nome;
 	
-	@NotBlank(message = "A descrição é obrigatória")
-	@Size(max = 50, message = "O tamanho da descrição deve estar entre 1 e 50")
+	@Size(max = 50, min = 1)
 	private String descricao;
 	
-	@NotNull(message = "Valor é obrigatório")
-	@DecimalMax(value = "9999999.99", message = "O valor deve ser menor que R$ 9.999.999,99")
+	@NotNull
+	@DecimalMax(value = "9999999.99")
 	private BigDecimal valor;
 	
 	@Column(name = "teor_alcoolico")
-	@NotNull(message = "O teor alcoolico é obrigatório")
-	@DecimalMax(value= "100.0", message = "O teor alcoolico deve ser menor que 100")
+	@NotNull
+	@DecimalMax(value= "100.0")
 	private BigDecimal teorAlcoolico;
 	
-	@DecimalMax(value = "100.0", message = "A comissão deve ser igual ou menor que 100")
-	@NotNull(message = "A comissão é obrigatória")
+	@DecimalMax(value = "100.0")
+	@NotNull
 	private BigDecimal comissao;
 	
-	@NotNull(message = "Quantide em estoque é obrigatória")
+	@NotNull
 	@Column(name = "quantidade_estoque")
-	@Max(value = 9999, message = "A quantidade deve ser menor que 9.999")
-	@Min(value = 0, message = "A quantidade deve ser maior que 0")
+	@Max(value = 9999)
 	private Integer quantidadeEstoque;
 	
-	@NotNull(message = "A origem é obrigatória")
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Origem origem;
 	
-	@NotNull(message = "O sabor é obrigatório")
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private Sabor sabor;
 	
 	@ManyToOne
 	@JoinColumn(name = "codigo_estilo")
-	@NotNull(message = "O estilo é obrigatório")
+	@NotNull
 	private Estilo estilo;
 	
 	private String foto;

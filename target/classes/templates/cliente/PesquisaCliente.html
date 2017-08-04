@@ -8,7 +8,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
-<title>Pesquisa de clientes</title>
+<title th:text="#{cliente.pesquisa.titulo}">Pesquisa de clientes</title>
 </head>
 
 <body>
@@ -17,14 +17,14 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Pesquisa de clientes</h1>
+						<h1 th:text="#{cliente.pesquisa.titulo}">Pesquisa de clientes</h1>
 					</div>
 
 					<div class="col-xs-2" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
 						<div class="aw-page-header-controls">
 							<a class="btn  btn-default" th:href="@{/clientes/novo}"> <i
 								class="glyphicon  glyphicon-plus-sign"></i> <span
-								class="hidden-xs  hidden-sm">Novo cliente</span>
+								class="hidden-xs  hidden-sm" th:text="#{btn.cadastrar}">Novo cliente</span>
 							</a>
 						</div>
 					</div>
@@ -36,7 +36,7 @@
 			<form method="GET" th:object="${clienteFilter}">
 				<div class="row">
 					<div class="form-group  col-sm-8">
-						<label class="control-label" for="nome">Nome</label> <input
+						<label class="control-label" for="nome" th:text="#{cliente.nome}">Nome</label> <input
 							type="text" class="form-control" id="nome" autofocus="autofocus"
 							th:field="*{nome}" />
 					</div>
@@ -60,8 +60,8 @@
 							<th class="table-clientes-col-tipo-pessoa"><brewer:order
 									page="${pagina}" field="tipoPessoa" text="Tipo Pessoa" /></th>
 							<th class="table-clientes-col-cpf-cnpj">CPF/CNPJ</th>
-							<th class="table-clientes-col-telefone">Telefone</th>
-							<th class="table-clientes-col-cidade-estado">Cidade/Estado</th>
+							<th class="table-clientes-col-telefone" th:text="#{cliente.telefone}">Telefone</th>
+							<th class="table-clientes-col-cidade-estado" th:text="#{cliente.cidadeEstado}">Cidade/Estado</th>
 							<th class="table-col-acoes" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')"></th>
 						</tr>
 					</thead>
@@ -89,7 +89,7 @@
 							</td>
 						</tr>
 						<tr th:if="${pagina.vazia}">
-							<td colspan="5">Nenhum cliente encontrado</td>
+							<td colspan="5" th:text="#{pesquisa.vazia}">Nenhum cliente encontrado</td>
 						</tr>
 					</tbody>
 				</table>
