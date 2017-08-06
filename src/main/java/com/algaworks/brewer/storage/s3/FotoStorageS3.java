@@ -31,7 +31,7 @@ public class FotoStorageS3 implements FotoStorage {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FotoStorageS3.class);
 
-	private static final String BUCKET = "brewer";
+	private static final String BUCKET = "brewer_klaillton";
 
 	@Autowired
 	private AmazonS3 amazonS3;
@@ -85,12 +85,12 @@ public class FotoStorageS3 implements FotoStorage {
 	@Override
 	public String getUrl(String foto) {
 		if (!StringUtils.isEmpty(foto)) {
-			// return "https://s3-sa-east-1.amazonaws.com/brewer/" + foto;
+			 return "https://s3-sa-east-1.amazonaws.com/brewer-klaillton/" + foto;
 			/*
 			 * No momento dessa configuração, não tenho acesso a nuvem da amazon, por isso
 			 * foi configurado em um emulador local
 			 */
-			return "http://localhost:9444/s3/brewer/" + foto + "?noAuth=true";
+//			return "http://localhost:9444/s3/brewer/" + foto + "?noAuth=true";
 		}
 		
 		return null;
