@@ -225,7 +225,6 @@ public class Venda {
 	}
 	
 	public boolean isSalvarPermitido() {
-		System.out.println(">>>>> status venda: "+status);
 		return !StatusVenda.CANCELADA.equals(status);
 	}
 	

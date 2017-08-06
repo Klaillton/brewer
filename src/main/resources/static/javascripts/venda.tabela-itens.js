@@ -38,8 +38,7 @@ Brewer.TabelaItens = (function() {
 		bindQuantidade.call(this);
 
 		var tabelaItem = bindTabelaItem.call(this);
-		this.emitter.trigger('tabela-itens-atualizada', tabelaItem
-				.data('valor-total'));
+		this.emitter.trigger('tabela-itens-atualizada', tabelaItem.data('valor-total'));
 	}
 
 	function onQuantidadeItemAlterado(evento) {
@@ -73,8 +72,7 @@ Brewer.TabelaItens = (function() {
 		var codigoCerveja = $(evento.target).data('codigo-cerveja');
 		var resposta = $.ajax({
 			url : 'item/' + this.uuid + '/' + codigoCerveja,
-			method : 'DELETE',
-
+			method : 'DELETE'
 		});
 
 		resposta.done(onItemAtualizadoNoServidor.bind(this));
@@ -82,11 +80,9 @@ Brewer.TabelaItens = (function() {
 
 	function bindQuantidade() {
 		var quantidadeItemInput = $('.js-tabela-cerveja-quantidade-item');
-		quantidadeItemInput.on('change', onQuantidadeItemAlterado.bind(this));
-		quantidadeItemInput.maskMoney({
-			precision : 0,
-			thousands : ''
-		});
+//		quantidadeItemInput.on('change', onQuantidadeItemAlterado.bind(this)); //alterado o evento 'change' para 'blur'por compatibilidade com celular
+		quantidadeItemInput.on('blur', onQuantidadeItemAlterado.bind(this));
+		quantidadeItemInput.maskNumber({ integer: true, thousands : '' });
 	}
 
 	function bindTabelaItem() {
