@@ -8,7 +8,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
-<title>Pesquisa de cidades</title>
+<title th:text="#{cidade.pesquisa.titulo}">Pesquisa de cidades</title>
 </head>
 
 <body>
@@ -17,7 +17,7 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Pesquisa de cidades</h1>
+						<h1 th:text="#{cidade.pesquisa.titulo}">Pesquisa de cidades</h1>
 					</div>
 
 					<div class="col-xs-2" sec:authorize-url="/cidades/novo"> <!-- usar esta forma <<<- ou 
@@ -25,7 +25,7 @@
 						<div class="aw-page-header-controls">
 							<a class="btn  btn-default" th:href="@{/cidades/novo}"> <i
 								class="glyphicon  glyphicon-plus-sign"></i> <span
-								class="hidden-xs  hidden-sm">Nova cidade</span>
+								class="hidden-xs  hidden-sm" th:text="#{btn.cadastrar}">Nova cidade</span>
 							</a>
 						</div>
 					</div>
@@ -37,33 +37,33 @@
 			<form method="GET" th:object="${cidadeFilter}">
 				<div class="row">
 					<div class="col-sm-12 col-lg-3  form-group  bw-required">
-						<label for="estado">Estado</label> <select id="estado"
-							class="form-control" th:field="*{estado}">
-							<option value="">Todos</option>
-							<option th:each="estado : ${estados}" th:value="${estado.codigo}"
-								th:text="${estado.nome}">São Paulo</option>
+						<label for="estado" th:text="#{cidade.estado}">Estado</label> 
+							<select id="estado" class="form-control" th:field="*{estado}">
+								<option value="" th:text="#{cidade.todos}">Todos</option>
+								<option th:each="estado : ${estados}" th:value="${estado.codigo}"
+									th:text="${estado.nome}">São Paulo</option>
 						</select>
 					</div>
 					<div class="col-sm-12 col-lg-9  form-group"
 						brewer:classforerror="nome">
 
-						<label for="nome" class="control-label">Nome</label> <input
+						<label for="nome" class="control-label" th:text="#{cidade.nome}">Nome</label> <input
 							id="nome" type="text" class="form-control" th:field="*{nome}" />
 
 					</div>
 				</div>
 
-				<button type="submit" class="btn  btn-primary">Pesquisar</button>
+				<button type="submit" class="btn  btn-primary" th:text="#{btn.pesquisa}">Pesquisar</button>
 			</form>
 			
 			<div class="table-responsive  bw-tabela-simples">
 			<table class="table  table-hover">
 				<thead>
 					<tr>
-						<th class="table-cidade-col-cidade">
+						<th class="table-cidades-col-cidade">
 							<brewer:order page="${pagina}" field="nome" text="Nome"/>
 						</th>
-						<th class="table-cidade-col-estado">
+						<th class="table-cidades-col-estado">
 							<brewer:order page="${pagina}" field="estado" text="Estado"/>
 						</th>
 						
@@ -74,7 +74,7 @@
 				<tbody>
 					<tr th:each="cidade : ${pagina.conteudo}">
 						<td th:text="${cidade.nome}">Montes Claros</td>
-						<td class="text-center" th:text="${cidade.estado.nome}">Minas Gerais</td>
+						<td class="text-left" th:text="${cidade.estado.nome}">Minas Gerais</td>
 						<td class="text-center" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
 							<a class="btn btn-link btn-xs js-tooltip" title="Editar" 
 									th:href="@{/cidades/{codigo}(codigo=${cidade.codigo})}"> 
@@ -88,7 +88,7 @@
 						</td>
 					</tr>
 					<tr th:if="${pagina.vazia}">
-						<td colspan="5">Nenhuma cidade encontrada</td>
+						<td colspan="5" th:text="#{pesquisa.vazia}">Nenhuma cidade encontrada</td>
 					</tr>
 				</tbody>
 			</table>

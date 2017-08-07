@@ -2,12 +2,12 @@
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/LayoutPadrao"
+	layout:decorate="~{layout/LayoutPadrao}"
 	xmlns:brewer="http://brewer.algaworks.com"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
-<title>Pesquisa de estilos</title>
+<title th:text="#{estilo.pesquisa.titulo}">Pesquisa de estilos</title>
 
 </head>
 <body>
@@ -18,14 +18,14 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Pesquisa de estilos</h1>
+						<h1 th:text="#{estilo.pesquisa.titulo}">Pesquisa de estilos</h1>
 					</div>
 
 					<div class="col-xs-2" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
 						<div class="aw-page-header-controls">
 							<a class="btn btn-default" th:href="@{/estilos/novo}"> <i
 								class="glyphicon glyphicon-plus-sign"></i> <span
-								class="hidden-xs  hidden-sm">Novo estilo</span>
+								class="hidden-xs  hidden-sm" th:text="#{btn.cadastrar}">Novo estilo</span>
 							</a>
 						</div>
 					</div>
@@ -41,13 +41,13 @@
 				<div class="row">
 
 					<div class="col-sm-12  form-group  bw-required">
-						<label for="nome" class="control-label">Nome</label> <input
+						<label for="nome" class="control-label" th:text="#{estilo.nome}">Nome</label> <input
 							id="nome" type="text" class="form-control" th:field="*{nome}" />
 					</div>
 
 				</div>
 
-				<button type="submit" class="btn btn-primary">Pesquisar</button>
+				<button type="submit" class="btn btn-primary" th:text="#{btn.pesquisa}">Pesquisar</button>
 
 			</form>
 			
@@ -55,7 +55,7 @@
 			<table class="table  table-hover">
 				<thead>
 					<tr>
-						<th class="table-estilos-col-codigo">Código</th>
+						<th class="table-estilos-col-codigo" th:text="#{estilo.codigo}">Código</th>
 						<th>
 							<brewer:order page="${pagina}" field="nome" text="Nome"/>
 						</th>
@@ -80,7 +80,7 @@
 						</td>
 					</tr>
 					<tr th:if="${pagina.vazia}">
-						<td colspan="3">Nenhum estilo encontrado</td>
+						<td colspan="3" th:text="#{pesquisa.vazia}">Nenhum estilo encontrado</td>
 					</tr>
 				</tbody>
 			</table>

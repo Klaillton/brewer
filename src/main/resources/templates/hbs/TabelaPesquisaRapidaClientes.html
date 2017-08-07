@@ -4,8 +4,8 @@
 	<table class="table  table-hover">
 		<thead>
 			<tr>
-				<th class="col-sm-2">Nome</th>
-				<th class="col-sm-2">Telefone</th>
+				<th class="col-sm-2" th:text="#{cliente.pesquisaRapida.nome}">Nome</th>
+				<th class="col-sm-2" th:text="#{cliente.pesquisaRapida.telefone}">Telefone</th>
 			</tr>
 		</thead>
 				
@@ -19,7 +19,7 @@
 			{{/each}}
 			{{else}}
 			<tr>
-				<td colspan="2">Nenhum cliente encontrado</td>
+				<td colspan="2" th:text="#{pesquisa.vazia}">Nenhum cliente encontrado</td>
 			</tr>
 			{{/if}}
 		</tbody>

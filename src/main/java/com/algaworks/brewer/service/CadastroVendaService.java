@@ -9,11 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.algaworks.brewer.model.Cerveja;
-import com.algaworks.brewer.model.ItemVenda;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
-import com.algaworks.brewer.repository.Cervejas;
 import com.algaworks.brewer.repository.Vendas;
 import com.algaworks.brewer.service.event.venda.CancelaVendaEvent;
 import com.algaworks.brewer.service.event.venda.VendaEvent;
@@ -27,8 +24,6 @@ public class CadastroVendaService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
-	@Autowired
-	private Cervejas cervejas;
 	
 	@Transactional
 	public Venda salvar(Venda venda) {
@@ -49,32 +44,34 @@ public class CadastroVendaService {
 					, venda.getHorarioEntrega() != null ? venda.getHorarioEntrega() : LocalTime.NOON));
 		}
 		
-		if(temEstoque(venda)) {
-			throw new RuntimeException("Não há itens suficientes no estoque!");
-		}
+//		if(temEstoque(venda)) {
+//			throw new RuntimeException("Não há itens suficientes no estoque!");/*Não pode ser o RunTimeException 
+//			tem de verificar um metodo de retornar msg para o usuario na tela*/
+//		}
 		
-		return vendas.saveAndFlush(venda); /*o metodo saveAndFlush ao realizar o salvamento no BD, retorna o resultado para o objeto que chama o metodo*/
+		return vendas.saveAndFlush(venda); /*o metodo saveAndFlush ao realizar o salvamento no BD, 
+		retorna o resultado para o objeto que chama o metodo*/
 	}
 	
-	private boolean temEstoque(Venda venda) {
-		
-		boolean temEstoque = false;
-		
-		for (ItemVenda item: venda.getItens()) {
-			Cerveja cerveja = cervejas.findOne(item.getCerveja().getCodigo());
-			temEstoque = (cerveja.getQuantidadeEstoque() < item.getQuantidade()) ? true : false;
-		}
-		
-		return temEstoque;
-	}
+//	private boolean temEstoque(Venda venda) {/*Verificar de acordo com as regras de negócio se a venda pode ser feita sem haver os itens no estoque*/
+//		
+//		boolean temEstoque = false;
+//		
+//		for (ItemVenda item: venda.getItens()) {
+//			Cerveja cerveja = cervejas.findOne(item.getCerveja().getCodigo());
+//			temEstoque = (cerveja.getQuantidadeEstoque() < item.getQuantidade()) ? true : false;
+//		}
+//		
+//		return temEstoque;
+//	}
 	
 
 	@Transactional
 	public void emitir(Venda venda) {
 		
-		if(temEstoque(venda)) {
-			throw new RuntimeException("Não há itens suficientes no estoque!");
-		}
+//		if(temEstoque(venda)) {
+//			throw new RuntimeException("Não há itens suficientes no estoque!");
+//		}
 		
 		venda.setStatus(StatusVenda.EMITIDA);
 		salvar(venda);

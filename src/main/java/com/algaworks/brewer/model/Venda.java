@@ -225,7 +225,7 @@ public class Venda {
 	}
 	
 	public boolean isSalvarPermitido() {
-		return !status.equals(StatusVenda.CANCELADA);
+		return !StatusVenda.CANCELADA.equals(status);
 	}
 	
 	public boolean isSalvarProibido() {

@@ -6,7 +6,7 @@
 	xmlns:brewer="http://brewer.algaworks.com">
 
 <head>
-<title>Cadastro de cerveja</title>
+<title th:text="#{cerveja.cadastro.titulo}">Cadastro de cerveja</title>
 
 <link rel="stylesheet" th:href="@{/stylesheets/vendors/upload.min.css}" />
 </head>
@@ -18,14 +18,16 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1 th:if="${cerveja.nova}">Cadastro de cerveja</h1>
-						<h1 th:unless="${cerveja.nova}" th:text="|Edição da ${cerveja.nome}|">Edição de cerveja</h1>
+						<h1 th:if="${cerveja.nova}" th:text="#{cerveja.cadastro.titulo}">Cadastro de cerveja</h1>
+						<h1 th:unless="${cerveja.nova}" th:text="#{cerveja.edicao.titulo(${cerveja.nome})}">Edição de cerveja</h1>
+<!-- 						<h1 th:unless="${cerveja.nova}" th:text="|Edição da ${cerveja.nome}|">Edição de cerveja</h1> -->
 					</div>
 
 					<div class="col-xs-2">
 						<div class="aw-page-header-controls">
-							<a class="btn btn-default" th:href="@{/cervejas}">  
-							 <span class="hidden-xs  hidden-sm">Pesquisa</span>
+							<a class="btn btn-default" th:href="@{/cervejas}">
+								<i class="glyphicon glyphicon-search"></i>   
+								<span class="hidden-xs  hidden-sm" th:text="#{btn.pesquisa}">Pesquisa</span>
 							</a>
 						</div>
 					</div>
@@ -46,20 +48,20 @@
 				<div class="row">
 					<div class="col-sm-2  form-group  bw-required"
 						brewer:classforerror="sku">
-						<label for="sku" class="control-label">SKU</label> <input id="sku"
-							type="text" class="form-control" th:field="*{sku}" />
+						<label for="sku" class="control-label" th:text="#{cerveja.sku}">SKU</label> 
+						<input id="sku" type="text" class="form-control" th:field="*{sku}" />
 					</div>
 
 					<div class="col-sm-10  form-group  bw-required"
 						brewer:classforerror="nome">
-						<label for="nome" class="control-label">Nome</label> <input
+						<label for="nome" class="control-label" th:text="#{cerveja.nome}">Nome</label> <input
 							id="nome" type="text" class="form-control" th:field="*{nome}" />
 					</div>
 				</div>
 
 				<div class="form-group  bw-required"
 					brewer:classforerror="descricao">
-					<label for="descricao" class="control-label">Descrição</label>
+					<label for="descricao" class="control-label" th:text="#{cerveja.descricao}">Descrição</label>
 					<textarea id="descricao" rows="3" class="form-control"
 						th:field="*{descricao}"></textarea>
 				</div>
@@ -67,7 +69,7 @@
 				<div class="row">
 					<div class="col-sm-3  form-group  bw-required"
 						brewer:classforerror="estilo">
-						<label for="estilo" class="control-label">Estilo</label>
+						<label for="estilo" class="control-label" th:text="#{cerveja.estilo}">Estilo</label>
 						<div class="bw-field-action">
 							<select id="estilo" class="form-control" th:field="*{estilo}">
 								<option value="">Selecione o estilo</option>
@@ -87,8 +89,8 @@
 
 					<div class="col-sm-3  form-group  bw-required"
 						brewer:classforerror="sabor">
-						<label for="sabor" class="control-label">Sabor</label> <select
-							id="sabor" class="form-control" th:field="*{sabor}">
+						<label for="sabor" class="control-label" th:text="#{cerveja.sabor}">Sabor</label> 
+						<select id="sabor" class="form-control" th:field="*{sabor}">
 							<option value="">Selecione o sabor</option>
 							<option th:each="sabor : ${sabores}" th:value="${sabor}"
 								th:text="${sabor.descricao}">Adocicada</option>
@@ -97,8 +99,7 @@
 
 					<div class="col-sm-3  form-group  bw-required"
 						brewer:classforerror="teorAlcoolico">
-						<label for="teorAlcoolico" class="control-label">Teor
-							alcoólico</label>
+						<label for="teorAlcoolico" class="control-label" th:text="#{cerveja.teorAlcoolico}">Teor alcoólico</label>
 						<div class="input-group">
 							<input id="teorAlcoolico" type="text"
 								class="form-control  js-decimal" th:field="*{teorAlcoolico}" />
@@ -108,7 +109,7 @@
 
 					<div class="col-lg-3  col-sm-6  form-group  bw-required"
 						brewer:classforerror="origem">
-						<label for="origem" class="control-label">Origem</label>
+						<label for="origem" class="control-label" th:text="#{cerveja.origem}">Origem</label>
 						<div>
 							<th:block th:each="origem : ${origens}">
 								<div class="radio  radio-inline">
@@ -124,7 +125,7 @@
 				<div class="row">
 					<div class="col-sm-3  form-group  bw-required"
 						brewer:classforerror="valor">
-						<label for="valor" class="control-label">Valor</label>
+						<label for="valor" class="control-label" th:text="#{cerveja.valor}">Valor</label>
 						<div class="input-group">
 							<div class="input-group-addon">R$</div>
 							<input id="valor" type="text" class="form-control  js-decimal"
@@ -134,7 +135,7 @@
 
 					<div class="col-sm-3  form-group  bw-required"
 						brewer:classforerror="comissao">
-						<label for="comissao" class="control-label">Comissão</label>
+						<label for="comissao" class="control-label" th:text="#{cerveja.comissao}">Comissão</label>
 						<div class="input-group">
 							<input id="comissao" type="text" class="form-control  js-decimal"
 								th:field="*{comissao}" />
@@ -144,7 +145,7 @@
 
 					<div class="col-sm-3  form-group  bw-required"
 						brewer:classforerror="quantidadeEstoque">
-						<label for="estoque" class="control-label">Estoque</label> <input
+						<label for="estoque" class="control-label" th:text="#{cerveja.quantidadeEstoque}">Estoque</label> <input
 							id="estoque" type="text" class="form-control  js-plain"
 							th:field="*{quantidadeEstoque}" />
 					</div>
@@ -155,15 +156,20 @@
 						<input type="hidden" th:field="*{foto}"> 
 						<input type="hidden" th:field="*{contentType}"> 
 						<input type="hidden" th:field="*{novaFoto}"> 
+						<input type="hidden" th:field="*{urlFoto}"> 
 						
-						<label class="control-label">Foto</label>
+						<label class="control-label" th:text="#{cerveja.foto}">Foto</label>
 
 						<div class="js-container-foto-cerveja"
 							th:attr="data-url-fotos=@{/fotos}">
 							<div id="upload-drop" class="bw-upload">
-								<i class="glyphicon  glyphicon-cloud-upload"></i> <span>Arraste
-									a foto aqui ou </span> <a class="bw-upload-form-file">selecione <input
-									id="upload-select" type="file" accept=".jpg,.jpeg,.png" /></a>
+								<img th:src="@{/images/gears24x24-loading.svg}" class="js-img-loading hidden"/>
+								<i class="glyphicon  glyphicon-cloud-upload"></i> 
+								<span th:text="#{cerveja.arraste}">Arraste a foto aqui ou </span> 
+								<a class="bw-upload-form-file">
+									<label th:text="#{cerveja.select}">selecione</label> 
+									<input id="upload-select" type="file" accept=".jpg,.jpeg,.png" />
+								</a>
 							</div>
 						</div>
 
@@ -171,7 +177,7 @@
 				</div>
 
 				<div class="form-group">
-					<button class="btn  btn-primary" type="submit">Salvar</button>
+					<button class="btn  btn-primary" type="submit" th:text="#{btn.salvar}">Salvar</button>
 				</div>
 
 			</form>

@@ -7,7 +7,7 @@
 	xmlns:data="http://www.thymeleaf.org/extras/data">
 	
 <head>
-	<title>Pesquisa de vendas</title>
+	<title th:text="#{venda.pesquisa.titulo}">Pesquisa de vendas</title>
 </head>
 
 <body>
@@ -16,13 +16,14 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-10">
-					<h1>Pesquisa de vendas</h1>
+					<h1 th:text="#{venda.pesquisa.titulo}">Pesquisa de vendas</h1>
 				</div>
 				
 				<div class="col-xs-2">
 					<div class="aw-page-header-controls">
 						<a class="btn  btn-default" th:href="@{/vendas/nova}">
-							<i class="glyphicon  glyphicon-plus-sign"></i> <span class="hidden-xs  hidden-sm">Nova venda</span>
+							<i class="glyphicon  glyphicon-plus-sign"></i> 
+							<span class="hidden-xs  hidden-sm" th:text="#{btn.cadastrar}">Nova venda</span>
 						</a>
 					</div>
 				</div>
@@ -34,14 +35,14 @@
 		<form method="GET" th:object="${vendaFilter}" th:action="@{/vendas}">
 			<div class="row">
 				<div class="form-group  col-sm-6">
-					<label class="control-label" for="codigo">Código</label>
+					<label class="control-label" for="codigo" th:text="#{venda.codigo}">Código</label>
 					<input type="text" class="form-control" id="codigo" autofocus="autofocus" th:field="*{codigo}"/>
 				</div>
 				
 				<div class="form-group  col-sm-6">
 					<label for="status" class="control-label">Status</label>
 					<select id="status" class="form-control" th:field="*{status}">
-	                    <option value="">Todos os status</option>
+	                    <option value="" th:text="#{venda.status}">Todos os status</option>
 	                    <option th:each="status : ${todosStatus}" th:value="${status}" th:text="${status.descricao}"></option>
 	                </select>
 				</div>
@@ -49,7 +50,7 @@
 			
 			<div class="row">
 				<div class="form-group  col-sm-6">
-					<label for="dataCriacaoInicial">Data de criação</label>
+					<label for="dataCriacaoInicial" th:text="#{venda.criacao}">Data de criação</label>
 					<div class="form-inline">
 						<input type="text" class="form-control  aw-form-control-inline-sm  js-date" id="dataCriacaoInicial" 
 							th:field="*{desde}" autocomplete="off"/>
@@ -60,7 +61,7 @@
 				</div>
 				
 				<div class="form-group  col-sm-6">
-					<label for="valorMinimo">Valor total</label>
+					<label for="valorMinimo" th:text="#{venda.valorTotal}">Valor total</label>
 					<div class="form-inline">
 						<input type="text" class="form-control  aw-form-control-inline-sm  js-decimal" id="valorMinimo" th:field="*{valorMinimo}"/>
 						<label for="valorMaximo" class="aw-form-label-between">até</label>
@@ -71,7 +72,7 @@
 			
 			<div class="row">
 				<div class="form-group  col-sm-6">
-					<label class="control-label" for="nomeCliente">Nome cliente</label>
+					<label class="control-label" for="nomeCliente" th:text="#{venda.nomeCliente}">Nome cliente</label>
 					<input type="text" class="form-control" id="nomeCliente" th:field="*{nomeCliente}"/>
 				</div>
 			
@@ -82,7 +83,7 @@
 				
 			</div>
 			
-			<button type="submit" class="btn  btn-primary">Pesquisar</button>
+			<button type="submit" class="btn  btn-primary" th:text="#{btn.pesquisa}">Pesquisar</button>
 		</form>
 		
 		<div class="table-responsive  bw-tabela-simples">
@@ -90,7 +91,7 @@
 	            <thead>
 	            	<tr>
 	                	<th>
-	                		<brewer:order page="${pagina}" field="codigo" text="Código"/>
+	                		<brewer:order page="${pagina}" field="codigo" text="Código" />
 	                	</th>
 	                	<th>
 	                		<brewer:order page="${pagina}" field="c.nome" text="Cliente"/>
@@ -129,7 +130,7 @@
 	                </tr>
 	                
 	                <tr th:if="${pagina.vazia}">
-	                	<td colspan="7">Nenhuma venda encontrada</td>
+	                	<td colspan="7" th:text="#{pesquisa.vazia}">Nenhuma venda encontrada</td>
 	                </tr>
 	             </tbody>
 	         </table>

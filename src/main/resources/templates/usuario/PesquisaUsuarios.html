@@ -2,13 +2,13 @@
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="layout/LayoutPadrao"
+	layout:decorate="~{layout/LayoutPadrao}"
 	xmlns:brewer="http://brewer.algaworks.com"
 	xmlns:data="http://www.thymeleaf.org/extras/data"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
-<title>Pesquisa de usuários</title>
+<title th:text="#{usuario.pesquisa.titulo}">Pesquisa de usuários</title>
 
 </head>
 <body>
@@ -19,15 +19,15 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Pesquisa de usuários</h1>
+						<h1 th:text="#{usuario.pesquisa.titulo}">Pesquisa de usuários</h1>
 					</div>
 
 					<div class="col-xs-2"
 						sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
 						<div class="aw-page-header-controls">
-							<a class="btn btn-default" th:href="@{/usuarios/novo}"> <i
-								class="glyphicon glyphicon-plus-sign"></i> <span
-								class="hidden-xs  hidden-sm">Novo usuário</span>
+							<a class="btn btn-default" th:href="@{/usuarios/novo}"> 
+								<i class="glyphicon glyphicon-plus-sign"></i> 
+								<span class="hidden-xs  hidden-sm" th:text="#{btn.cadastrar}">Novo usuário</span>
 							</a>
 						</div>
 					</div>
@@ -43,7 +43,7 @@
 				<div class="row">
 
 					<div class="col-sm-6  form-group  bw-required">
-						<label for="nome" class="control-label">Nome</label> <input
+						<label for="nome" class="control-label" th:text="#{usuario.nome}">Nome</label> <input
 							id="nome" type="text" class="form-control" th:field="*{nome}" />
 					</div>
 
@@ -56,7 +56,7 @@
 
 				<div class="row">
 					<div class="form-group  col-sm-6">
-						<label class="control-label">Grupos</label>
+						<label class="control-label" th:text="#{usuario.grupo}">Grupos</label>
 						<div>
 							<th:block th:each="grupo : ${grupos}">
 								<div class="checkbox  checkbox-inline">
@@ -70,19 +70,19 @@
 					</div>
 				</div>
 
-				<button type="submit" class="btn btn-primary">Pesquisar</button>
+				<button type="submit" class="btn btn-primary" th:text="#{btn.pesquisa}">Pesquisar</button>
 
 			</form>
 
 			<div class="aw-datatable-toolbar">
 				<button class="btn btn-default btn-xs js-status-btn disabled"
 					data:status="ATIVAR" data:url="@{/usuarios/status}">
-					<span>Ativar</span>
+					<span th:text="#{usuario.ativar}">Ativar</span>
 				</button>
 
 				<button class="btn btn-default btn-xs js-status-btn disabled"
 					data:status="DESATIVAR" data:url="@{/usuarios/status}">
-					<span>Desativar</span>
+					<span th:text="#{usuario.desativar}">Desativar</span>
 				</button>
 			</div>
 
@@ -92,13 +92,20 @@
 						<tr>
 							<th class="table-usuarios-col-checkbox">
 								<div class="checkbox aw-checkbox-no-margin ">
-									<input type="checkbox" class="js-selecao-todos"/> <label></label>
+									<input type="checkbox" class="js-selecao-todos"/> 
+									<label></label>
 								</div>
 							</th>
-							<th class="table-usuarios-col-nome">Nome</th>
+							<th class="table-usuarios-col-nome">
+								<brewer:order page="${pagina}" field="nome" text="Nome" />
+							</th>
 							<th class="table-usuarios-col-email">E-mail</th>
-							<th>Grupo</th>
-							<th class="table-usuarios-col-status">Status</th>
+							<th>
+								<brewer:order page="${pagina}" field="grupos" text="Grupos" />
+							</th>
+							<th class="table-usuarios-col-status">
+								<brewer:order page="${pagina}" field="ativo" text="Status" />
+							</th>
 							<th class="table-col-acoes"
 								sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')"></th>
 						</tr>
@@ -119,10 +126,10 @@
 							</td>
 							<td>
 								<th:block th:if="${usuario.ativo}">
-									<span class="label label-success">Ativo</span>
+									<span class="label label-success" ><label th:text="#{usuario.statusAtivo}"></label></span>
 								</th:block>
 								<th:block th:if="${not usuario.ativo}">
-									<span class="label label-danger">Inativo</span>
+									<span class="label label-danger" ><label th:text="#{usuario.statusInativo}"></label></span>
 								</th:block>
 								
 							</td>
@@ -139,7 +146,7 @@
 						</tr>
 
 						<tr th:if="${pagina.vazia}">
-							<td colspan="6">Nenhum usuário encontrado</td>
+							<td colspan="6" th:text="#{pesquisa.vazia}">Nenhum usuário encontrado</td>
 						</tr>
 					</tbody>
 				</table>
