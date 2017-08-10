@@ -34,8 +34,7 @@ public class FotoStorageLocal implements FotoStorage {
 																						// amazon, não funciona no
 																						// windows
 		} else {
-//			this.local = (getDefault().getPath(System.getenv("USERPROFILE"), ".brewerfotos"));// Funciona no windows
-			this.local = (getDefault().getPath("D:\\Desenvolvimento\\s3-ninja\\s3ninja-2.7-zip\\data\\s3\\brewer"));// Funciona no windows
+			this.local = (getDefault().getPath(System.getenv("USERPROFILE"), ".brewerfotos"));// Funciona no windows
 		}
 
 		criarPastas();

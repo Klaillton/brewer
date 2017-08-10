@@ -1,6 +1,5 @@
 package com.algaworks.brewer.controller;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,14 +20,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.controller.validator.VendaValidator;
-import com.algaworks.brewer.dto.VendaMes;
-import com.algaworks.brewer.dto.VendaOrigem;
 import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.ItemVenda;
@@ -84,8 +80,7 @@ public class VendasController {
 	}
 	
 	@PostMapping(value = "/nova", params = "salvar")
-	public ModelAndView salvar(Venda venda, BindingResult result
-			, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+	public ModelAndView salvar(Venda venda, BindingResult result, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
 		validarVenda(venda, result);
 		if (result.hasErrors()) {
 			return nova(venda);
@@ -187,16 +182,6 @@ public class VendasController {
 		
 		attributes.addFlashAttribute("mensagem", "Venda cancelada com sucesso");
 		return new ModelAndView("redirect:/vendas/" + venda.getCodigo());
-	}
-	
-	@GetMapping("/totalPorMes")
-	public @ResponseBody List<VendaMes> listarTotalVendaPorMes() {
-		return vendas.totalPorMes();
-	}
-	
-	@GetMapping("/porOrigem")
-	public @ResponseBody List<VendaOrigem> vendasPorNacionalidade() {
-		return this.vendas.totalPorOrigem();
 	}
 	
 	private ModelAndView mvTabelaItensVenda(String uuid) {
