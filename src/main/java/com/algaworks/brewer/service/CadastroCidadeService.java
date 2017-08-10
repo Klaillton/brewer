@@ -29,6 +29,7 @@ public class CadastroCidadeService {
 		cidades.save(cidade);
 	}
 
+	@Transactional
 	public void excluir(Cidade cidade) {
 		try {
 			cidades.delete(cidade);

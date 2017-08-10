@@ -66,6 +66,7 @@ public class CadastroUsuarioService {
 
 	}
 
+	@Transactional
 	public void excluir(Usuario usuario) {
 		try {
 			usuarios.delete(usuario);
