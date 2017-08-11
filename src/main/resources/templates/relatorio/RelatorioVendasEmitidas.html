@@ -19,7 +19,7 @@
 	</div>
 	
 	<div class="container-fluid">
-		<form method="POST" th:object="${periodoRelatorio}" th:action="@{/relatorios/vendasEmitidas}">
+		<form method="POST" th:object="${periodoRelatorio}" th:action="@{/relatorios/vendasEmitidas}" target="_blank">
 			<th:block th:include="fragments/MensagensErroValidacao"></th:block>
 			
 			<div class="row">
@@ -35,7 +35,7 @@
 				</div>
 			</div>
 				
-			<button type="submit" class="btn  btn-primary">Emitir</button>
+			<button type="submit" class="btn  btn-primary" >Emitir</button>
 		</form>
 	</div>
 </section>
