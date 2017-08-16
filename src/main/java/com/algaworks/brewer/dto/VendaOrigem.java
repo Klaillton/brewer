@@ -6,6 +6,10 @@ public class VendaOrigem {
 	private Integer totalNacional;
 	private Integer totalInternacional;
 	
+	public VendaOrigem() {
+		
+	}
+	
 	public VendaOrigem(String mes, Integer totalNacional, Integer totalInternacional) {
 		this.mes = mes;
 		this.totalNacional = totalNacional;
