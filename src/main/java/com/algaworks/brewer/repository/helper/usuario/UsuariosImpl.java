@@ -34,7 +34,7 @@ public class UsuariosImpl implements UsuariosQueries {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
+
 	@Autowired
 	private PaginacaoUtil paginacaoUtil;
 	
@@ -59,31 +59,27 @@ public class UsuariosImpl implements UsuariosQueries {
 	public Page<Usuario> filtrar(UsuarioFilter filtro, Pageable pageable) {
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Usuario.class);
 		
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		paginacaoUtil.preparar(criteria, pageable);
 		adicionarFiltro(filtro, criteria);
 		
 		List<Usuario> filtrados = criteria.list();
-		
 		filtrados.forEach(u -> Hibernate.initialize(u.getGrupos()));
-		
 		return new PageImpl<>(filtrados, pageable, total(filtro));
 	}
 	
-	@SuppressWarnings({ "deprecation" })
+	@SuppressWarnings("deprecation")
 	@Transactional(readOnly = true)
 	@Override
 	public Usuario buscarComGrupos(Long codigo) {
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Usuario.class);
-		criteria.createAlias("grupos",  "g", JoinType.LEFT_OUTER_JOIN);
+		criteria.createAlias("grupos", "g", JoinType.LEFT_OUTER_JOIN);
 		criteria.add(Restrictions.eq("codigo", codigo));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		
 		return (Usuario) criteria.uniqueResult();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private Long total(UsuarioFilter filtro) {
-		@SuppressWarnings("deprecation")
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Usuario.class);
 		adicionarFiltro(filtro, criteria);
 		criteria.setProjection(Projections.rowCount());
@@ -115,8 +111,5 @@ public class UsuariosImpl implements UsuariosQueries {
 			}
 		}
 	}
-
-
-
 
 }

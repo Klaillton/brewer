@@ -24,7 +24,7 @@ import com.algaworks.brewer.repository.filter.CervejaFilter;
 import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
 import com.algaworks.brewer.storage.FotoStorage;
 
-public class CervejasImpl implements CervejasQueries{
+public class CervejasImpl implements CervejasQueries {
 
 	@PersistenceContext
 	private EntityManager manager;
@@ -42,16 +42,9 @@ public class CervejasImpl implements CervejasQueries{
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cerveja.class);
 		
 		paginacaoUtil.preparar(criteria, pageable);
-		
 		adicionarFiltro(filtro, criteria);
 		
 		return new PageImpl<>(criteria.list(), pageable, total(filtro));
-	}
-	
-	@Override
-	public ValorItensEstoque valorItensEstoque() {
-		String query = "select new com.algaworks.brewer.dto.ValorItensEstoque(sum(valor * quantidadeEstoque), sum(quantidadeEstoque)) from Cerveja";
-		return manager.createQuery(query, ValorItensEstoque.class).getSingleResult();
 	}
 	
 	@Override
@@ -64,10 +57,15 @@ public class CervejasImpl implements CervejasQueries{
 		cervejasFiltradas.forEach(c -> c.setUrlThumbnailFoto(fotoStorage.getUrl(FotoStorage.THUMBNAIL_PREFIX + c.getFoto())));
 		return cervejasFiltradas;
 	}
-
 	
+	@Override
+	public ValorItensEstoque valorItensEstoque() {
+		String query = "select new com.algaworks.brewer.dto.ValorItensEstoque(sum(valor * quantidadeEstoque), sum(quantidadeEstoque)) from Cerveja";
+		return manager.createQuery(query, ValorItensEstoque.class).getSingleResult();
+	}
+	
+	@SuppressWarnings("deprecation")
 	private Long total(CervejaFilter filtro) {
-		@SuppressWarnings("deprecation")
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cerveja.class);
 		adicionarFiltro(filtro, criteria);
 		criteria.setProjection(Projections.rowCount());
@@ -75,7 +73,7 @@ public class CervejasImpl implements CervejasQueries{
 	}
 
 	private void adicionarFiltro(CervejaFilter filtro, Criteria criteria) {
-		if(filtro != null){
+		if (filtro != null) {
 			if (!StringUtils.isEmpty(filtro.getSku())) {
 				criteria.add(Restrictions.eq("sku", filtro.getSku()));
 			}
@@ -106,11 +104,8 @@ public class CervejasImpl implements CervejasQueries{
 		}
 	}
 	
-	
-
 	private boolean isEstiloPresente(CervejaFilter filtro) {
 		return filtro.getEstilo() != null && filtro.getEstilo().getCodigo() != null;
 	}
 
-	
 }
