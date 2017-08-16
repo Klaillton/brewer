@@ -26,14 +26,14 @@ import com.algaworks.brewer.repository.Cervejas;
 
 @Configuration
 @ComponentScan(basePackageClasses = Cervejas.class)
-@EnableJpaRepositories(basePackageClasses = Cervejas.class, enableDefaultTransactions = false
-, repositoryImplementationPostfix = "Impl")
+@EnableJpaRepositories(basePackageClasses = Cervejas.class, enableDefaultTransactions = false)
 @EnableTransactionManagement
 public class JPAConfig {
 	
 	@Profile("local")
 	@Bean
 	public DataSource dataSource(){
+		System.out.println(">>>>>>> Profile Local");
 		JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
 		dataSourceLookup.setResourceRef(true);
 		return dataSourceLookup.getDataSource("jdbc/brewerDB");
@@ -42,6 +42,7 @@ public class JPAConfig {
 	@Profile("prod")
 	@Bean
 	public DataSource dataSourceProd() throws URISyntaxException {
+		System.out.println(">>>>>>> Profile Producao");
 		URI jdbUri = new URI(System.getenv("JAWSDB_MARIA_URL"));
 
 	    String username = jdbUri.getUserInfo().split(":")[0];

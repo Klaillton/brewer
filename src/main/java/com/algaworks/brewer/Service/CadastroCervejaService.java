@@ -16,13 +16,12 @@ public class CadastroCervejaService {
 
 	@Autowired
 	private Cervejas cervejas;
-
 	
 	@Autowired
 	private FotoStorage fotoStorage;
 	
 	@Transactional
-	public void salvar(Cerveja cerveja){
+	public void salvar(Cerveja cerveja) {
 		cervejas.save(cerveja);
 	}
 	
@@ -34,9 +33,8 @@ public class CadastroCervejaService {
 			cervejas.flush();
 			fotoStorage.excluir(foto);
 		} catch (PersistenceException e) {
-			throw new ImpossivelExcluirEntidadeException("Impossivel apagar cerveja. Já foi utilizada em alguma venda.");
+			throw new ImpossivelExcluirEntidadeException("Impossível apagar cerveja. Já foi usada em alguma venda.");
 		}
 	}
-	
 	
 }
