@@ -5,6 +5,10 @@ public class VendaMes {
 	private String mes;
 	private Integer total;
 	
+	public VendaMes() {
+		
+	}
+	
 	
 	public VendaMes(String mes, Integer total) {
 		this.mes = mes;
