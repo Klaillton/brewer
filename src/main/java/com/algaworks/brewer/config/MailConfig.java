@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -15,13 +16,13 @@ import com.algaworks.brewer.mail.Mailer;
 
 @Configuration
 @ComponentScan(basePackageClasses = Mailer.class)
-@PropertySource(value = { "classpath:env/mail-${ambiente:local}.properties" })
-@PropertySource(value = { "file://${HOME}/.brewer-mail.properties" }, ignoreResourceNotFound = true) //configuracao para o servidor
-//@PropertySources({
-//	@PropertySource("classpath:env/mail-${ambiente:local}.properties"),
-//	@PropertySource(value = "file:${USERPROFILE}/brewer-mail.properties"
-//		, ignoreResourceNotFound = true)
-//})
+//@PropertySource(value = { "classpath:env/mail-${ambiente:local}.properties" })
+//@PropertySource(value = { "file://${HOME}/.brewer-mail.properties" }, ignoreResourceNotFound = true) //configuracao para o servidor
+@PropertySources({
+	@PropertySource("classpath:env/mail-${ambiente:local}.properties"),
+	@PropertySource(value = "file:${USERPROFILE}/brewer-mail.properties"
+		, ignoreResourceNotFound = true)
+})
 public class MailConfig {
 	
 	@Autowired

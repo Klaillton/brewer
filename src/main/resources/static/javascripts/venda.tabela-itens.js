@@ -68,8 +68,9 @@ Brewer.TabelaItens = (function() {
 		$(this).toggleClass('solicitando-exclusao');
 	}
 	
-	function onExclusaoItemClick(evento) {
+	function onExclusaoItemClick(evento, item) {
 		var codigoCerveja = $(evento.target).data('codigo-cerveja');
+		console.log('codigoCerveja', codigoCerveja);
 		var resposta = $.ajax({
 			url: 'item/' + this.uuid + '/' + codigoCerveja,
 			method: 'DELETE'
@@ -84,13 +85,14 @@ Brewer.TabelaItens = (function() {
 		quantidadeItemInput.maskNumber({ integer: true, thousands: '' });
 	}
 	
+
 	function bindTabelaItem() {
 		var tabelaItem = $('.js-tabela-item');
-		tabelaItem.on('dblclick', onDoubleClick);
-		$('.js-exclusao-item-btn').on('click', onExclusaoItemClick.bind(this));
+		$('body').on('.js-tabela-item', 'dblclick', onDoubleClick);
+		$('body').on('.js-tabela-item', '.js-exclusao-item-btn').on('click', onExclusaoItemClick.bind(this));
 		return tabelaItem;
 	}
-	
+		
 	return TabelaItens;
 	
 }());
