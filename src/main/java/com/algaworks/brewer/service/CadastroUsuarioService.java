@@ -1,4 +1,4 @@
-package com.algaworks.brewer.service;
+package com.algaworks.brewer.Service;
 
 import java.util.Optional;
 
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.algaworks.brewer.Service.Exception.ImpossivelExcluirEntidadeException;
+import com.algaworks.brewer.Service.Exception.SenhaObrigatoriaUsuarioException;
+import com.algaworks.brewer.Service.Exception.UsuarioJaCadastradoException;
 import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.repository.Usuarios;
-import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
-import com.algaworks.brewer.service.exception.SenhaObrigatoriaUsuarioException;
-import com.algaworks.brewer.service.exception.UsuarioJaCadastradoException;
 
 @Service
 public class CadastroUsuarioService {

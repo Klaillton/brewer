@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
 <Context>
-    <Resource name="jdbc/brewerDB" auth="Container" 
+    <Resource name="jdbc/brewer" auth="Container" 
             factory="org.apache.naming.factory.BeanFactory"
             type="com.mchange.v2.c3p0.ComboPooledDataSource"
             driverClass="org.mariadb.jdbc.Driver"

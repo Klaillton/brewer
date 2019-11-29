@@ -36,7 +36,7 @@ public class JPAConfig {
 		System.out.println(">>>>>>> Profile Local");
 		JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
 		dataSourceLookup.setResourceRef(true);
-		return dataSourceLookup.getDataSource("jdbc/brewerDB");
+		return dataSourceLookup.getDataSource("jdbc/brewer");
 	}
 	
 	@Profile("prod")

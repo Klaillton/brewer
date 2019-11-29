@@ -1,4 +1,4 @@
-package com.algaworks.brewer.service.event.venda;
+package com.algaworks.brewer.Service.event.venda;
 
 import com.algaworks.brewer.model.Venda;
 

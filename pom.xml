@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -19,15 +20,15 @@
 
 		<maven-compiler-pluging.version>3.3</maven-compiler-pluging.version>
 
-		<flyway-maven-plugin.version>4.1.2</flyway-maven-plugin.version>
+		<flyway-maven-plugin.version>5.2.4</flyway-maven-plugin.version>
 
-		<mariadb-connector-java.version>2.0.0-RC</mariadb-connector-java.version>
+		<mariadb-connector-java.version>2.3.0</mariadb-connector-java.version>
 
 		<!-- Maven Plugin Surefire -->
 		<maven-surefire-plugin.version>2.12.4</maven-surefire-plugin.version>
 
 		<!-- Spring MVC -->
-		<spring-framework.version>4.3.0.RELEASE</spring-framework.version>
+		<spring-framework.version>5.0.15.RELEASE</spring-framework.version>
 
 		<!-- Servlet API -->
 		<servlet.version>3.1.0</servlet.version>
@@ -42,7 +43,7 @@
 		<thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
 
 		<!-- logging -->
-		<log4j.version>2.6</log4j.version>
+		<log4j.version>2.12.0</log4j.version>
 		<jcl-over-slf4j.version>1.7.21</jcl-over-slf4j.version>
 
 		<!-- JPA / Hibernate -->
@@ -53,7 +54,7 @@
 
 
 		<!-- Jackson - JSON -->
-		<jackson-core.version>2.9.0.pr3</jackson-core.version>
+		<jackson-core.version>2.9.2</jackson-core.version>
 		<!-- <jackson-core.version>2.7.5</jackson-core.version> -->
 
 		<!-- thumbnailator - Gerar Thumbnail -->
@@ -64,8 +65,7 @@
 		<!-- Thymeleaf extras data attribute -->
 		<thymeleaf-extras-data-attribute.version>2.0.1</thymeleaf-extras-data-attribute.version>
 
-		<!-- Cache - Guava -->
-		<guava.version>19.0</guava.version>
+
 
 		<!-- Spring Security -->
 		<spring-security.version>4.1.1.RELEASE</spring-security.version>
@@ -87,12 +87,21 @@
 
 		<!-- Apache Commons DBCP -->
 		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
-		
+
 		<!-- JasperReports -->
 		<jasperreports.version>6.3.0</jasperreports.version>
-		
+
 		<!-- JasperReports Fonts -->
 		<jasperreports-fonts.version>6.0.0</jasperreports-fonts.version>
+
+		<!-- EhCache -->
+		<ehcache.version>3.8.0</ehcache.version>
+
+		<!-- JCache -->
+		<jcache.version>1.0.0</jcache.version>
+		
+		
+		
 
 
 	</properties>
@@ -285,7 +294,7 @@
 
 
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
+		<!-- spring-data-jpa -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
@@ -317,13 +326,24 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Cache - Guava -->
+
+
+		<!-- EhCache -->
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-			<scope>compile</scope>
+			<groupId>org.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>${ehcache.version}</version>
 		</dependency>
+
+		<!-- JCache -->
+		<dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>${jcache.version}</version>
+        </dependency>
+
+
+
 
 		<!-- Spring Context Support -->
 		<dependency>
@@ -395,7 +415,7 @@
 			<version>${commons-dbcp2.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<!-- JasperReports -->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
@@ -403,14 +423,14 @@
 			<version>${jasperreports.version}</version>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>net.sf.jasperreports</groupId>
-		    <artifactId>jasperreports-fonts</artifactId>
-		    <version>${jasperreports-fonts.version}</version>
-		    <scope>compile</scope>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-fonts</artifactId>
+			<version>${jasperreports-fonts.version}</version>
+			<scope>compile</scope>
 		</dependency>
-		
+
 
 
 

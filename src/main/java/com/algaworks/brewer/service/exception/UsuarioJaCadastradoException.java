@@ -1,4 +1,4 @@
-package com.algaworks.brewer.service.exception;
+package com.algaworks.brewer.Service.Exception;
 
 public class UsuarioJaCadastradoException extends RuntimeException {
 

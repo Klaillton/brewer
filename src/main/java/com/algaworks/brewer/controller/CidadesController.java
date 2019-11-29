@@ -24,14 +24,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.algaworks.brewer.Service.CadastroCidadeService;
+import com.algaworks.brewer.Service.Exception.ImpossivelExcluirEntidadeException;
+import com.algaworks.brewer.Service.Exception.NomeCidadeJaCadastradaException;
 import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.model.Cidade;
 import com.algaworks.brewer.repository.Cidades;
 import com.algaworks.brewer.repository.Estados;
 import com.algaworks.brewer.repository.filter.CidadeFilter;
-import com.algaworks.brewer.service.CadastroCidadeService;
-import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
-import com.algaworks.brewer.service.exception.NomeCidadeJaCadastradaException;
 
 @Controller
 @RequestMapping("/cidades")

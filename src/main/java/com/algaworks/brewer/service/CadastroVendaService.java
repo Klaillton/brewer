@@ -1,4 +1,4 @@
-package com.algaworks.brewer.service;
+package com.algaworks.brewer.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -9,11 +9,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.algaworks.brewer.Service.event.venda.CancelaVendaEvent;
+import com.algaworks.brewer.Service.event.venda.VendaEvent;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.Vendas;
-import com.algaworks.brewer.service.event.venda.CancelaVendaEvent;
-import com.algaworks.brewer.service.event.venda.VendaEvent;
 
 @Service
 public class CadastroVendaService {

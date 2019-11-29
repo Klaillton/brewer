@@ -22,16 +22,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.algaworks.brewer.Service.CadastroUsuarioService;
+import com.algaworks.brewer.Service.StatusUsuario;
+import com.algaworks.brewer.Service.Exception.ImpossivelExcluirEntidadeException;
+import com.algaworks.brewer.Service.Exception.SenhaObrigatoriaUsuarioException;
+import com.algaworks.brewer.Service.Exception.UsuarioJaCadastradoException;
 import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.repository.Grupos;
 import com.algaworks.brewer.repository.Usuarios;
 import com.algaworks.brewer.repository.filter.UsuarioFilter;
-import com.algaworks.brewer.service.CadastroUsuarioService;
-import com.algaworks.brewer.service.StatusUsuario;
-import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
-import com.algaworks.brewer.service.exception.SenhaObrigatoriaUsuarioException;
-import com.algaworks.brewer.service.exception.UsuarioJaCadastradoException;
 
 @Controller
 @RequestMapping("/usuarios")
