@@ -28,7 +28,7 @@
 		<maven-surefire-plugin.version>2.12.4</maven-surefire-plugin.version>
 
 		<!-- Spring MVC -->
-		<spring-framework.version>5.0.15.RELEASE</spring-framework.version>
+		<spring-framework.version>5.0.19.RELEASE</spring-framework.version>
 
 		<!-- Servlet API -->
 		<servlet.version>3.1.0</servlet.version>
