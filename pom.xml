@@ -68,7 +68,7 @@
 
 
 		<!-- Spring Security -->
-		<spring-security.version>4.1.1.RELEASE</spring-security.version>
+		<spring-security.version>5.2.10.RELEASE</spring-security.version>
 
 		<!-- Apache Bean Utils -->
 		<commons-beanutils.version>1.9.2</commons-beanutils.version>
