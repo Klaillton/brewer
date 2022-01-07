@@ -71,7 +71,7 @@
 		<spring-security.version>4.1.1.RELEASE</spring-security.version>
 
 		<!-- Apache Bean Utils -->
-		<commons-beanutils.version>1.9.2</commons-beanutils.version>
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 
 		<!-- Thymeleaf - Extras - Spring - Security -->
 		<thymeleaf-extras-springsecurity.version>3.0.0.RELEASE</thymeleaf-extras-springsecurity.version>
