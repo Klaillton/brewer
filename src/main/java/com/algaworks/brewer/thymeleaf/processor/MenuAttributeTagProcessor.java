@@ -1,6 +1,6 @@
 package com.algaworks.brewer.thymeleaf.processor;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.thymeleaf.IEngineConfiguration;
 import org.thymeleaf.context.ITemplateContext;
@@ -13,6 +13,7 @@ import org.thymeleaf.standard.expression.IStandardExpression;
 import org.thymeleaf.standard.expression.IStandardExpressionParser;
 import org.thymeleaf.standard.expression.StandardExpressions;
 import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.web.IWebExchange;
 
 public class MenuAttributeTagProcessor extends AbstractAttributeTagProcessor {
 
@@ -35,9 +36,8 @@ public class MenuAttributeTagProcessor extends AbstractAttributeTagProcessor {
 
 		String menu = (String) expression.execute(context);
 
-		HttpServletRequest request = ((IWebContext) context).getRequest();
-
-		String uri = request.getRequestURI();
+		IWebExchange webExchange = ((IWebContext) context).getExchange();
+		String uri = webExchange.getRequest().getRequestPath();
 
 		if (uri.matches(menu)) {
 

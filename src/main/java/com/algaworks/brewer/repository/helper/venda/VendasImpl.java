@@ -6,19 +6,19 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.MonthDay;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,37 +31,42 @@ import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
 import com.algaworks.brewer.model.Venda;
 import com.algaworks.brewer.repository.filter.VendaFilter;
-import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
 
 public class VendasImpl implements VendasQueries {
 
 	@PersistenceContext
 	private EntityManager manager;
 
-	@Autowired
-	private PaginacaoUtil paginacaoUtil;
-
-	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Transactional(readOnly = true)
 	@Override
 	public Page<Venda> filtrar(VendaFilter filtro, Pageable pageable) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Venda.class);
-		paginacaoUtil.preparar(criteria, pageable);
-		adicionarFiltro(filtro, criteria);
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Venda> query = builder.createQuery(Venda.class);
+		Root<Venda> root = query.from(Venda.class);
+		root.fetch("cliente", JoinType.LEFT);
 
-		return new PageImpl<>(criteria.list(), pageable, total(filtro));
+		List<Predicate> predicates = adicionarFiltro(filtro, builder, root);
+		query.where(predicates.toArray(new Predicate[0]));
+
+		TypedQuery<Venda> typedQuery = manager.createQuery(query);
+		typedQuery.setFirstResult((int) pageable.getOffset());
+		typedQuery.setMaxResults(pageable.getPageSize());
+
+		return new PageImpl<>(typedQuery.getResultList(), pageable, total(filtro));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Transactional(readOnly = true)
 	@Override
 	public Venda buscarComItens(Long codigo) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Venda.class);
-		criteria.createAlias("itens", "i", JoinType.LEFT_OUTER_JOIN);
-		criteria.add(Restrictions.eq("codigo", codigo));
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Venda> query = builder.createQuery(Venda.class);
+		Root<Venda> root = query.from(Venda.class);
+		root.fetch("itens", JoinType.LEFT);
 
-		return (Venda) criteria.uniqueResult();
+		query.where(builder.equal(root.get("codigo"), codigo));
+		query.distinct(true);
+
+		return manager.createQuery(query).getSingleResult();
 	}
 
 	@Override
@@ -134,53 +139,61 @@ public class VendasImpl implements VendasQueries {
 		return vendasNacionalidade;
 	}
 
-	@SuppressWarnings("deprecation")
 	private Long total(VendaFilter filtro) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Venda.class);
-		adicionarFiltro(filtro, criteria);
-		criteria.setProjection(Projections.rowCount());
-		return (Long) criteria.uniqueResult();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<Venda> root = query.from(Venda.class);
+		root.join("cliente", JoinType.LEFT);
+
+		List<Predicate> predicates = adicionarFiltro(filtro, builder, root);
+		query.where(predicates.toArray(new Predicate[0]));
+		query.select(builder.count(root));
+
+		return manager.createQuery(query).getSingleResult();
 	}
 
-	private void adicionarFiltro(VendaFilter filtro, Criteria criteria) {
-		criteria.createAlias("cliente", "c");
+	private List<Predicate> adicionarFiltro(VendaFilter filtro, CriteriaBuilder builder, Root<Venda> root) {
+		List<Predicate> predicates = new ArrayList<>();
 
 		if (filtro != null) {
-			if (!StringUtils.isEmpty(filtro.getCodigo())) {
-				criteria.add(Restrictions.eq("codigo", filtro.getCodigo()));
+			if (filtro.getCodigo() != null) {
+				predicates.add(builder.equal(root.get("codigo"), filtro.getCodigo()));
 			}
 
 			if (filtro.getStatus() != null) {
-				criteria.add(Restrictions.eq("status", filtro.getStatus()));
+				predicates.add(builder.equal(root.get("status"), filtro.getStatus()));
 			}
 
 			if (filtro.getDesde() != null) {
 				LocalDateTime desde = LocalDateTime.of(filtro.getDesde(), LocalTime.of(0, 0));
-				criteria.add(Restrictions.ge("dataCriacao", desde));
+				predicates.add(builder.greaterThanOrEqualTo(root.get("dataCriacao"), desde));
 			}
 
 			if (filtro.getAte() != null) {
 				LocalDateTime ate = LocalDateTime.of(filtro.getAte(), LocalTime.of(23, 59));
-				criteria.add(Restrictions.le("dataCriacao", ate));
+				predicates.add(builder.lessThanOrEqualTo(root.get("dataCriacao"), ate));
 			}
 
 			if (filtro.getValorMinimo() != null) {
-				criteria.add(Restrictions.ge("valorTotal", filtro.getValorMinimo()));
+				predicates.add(builder.greaterThanOrEqualTo(root.get("valorTotal"), filtro.getValorMinimo()));
 			}
 
 			if (filtro.getValorMaximo() != null) {
-				criteria.add(Restrictions.le("valorTotal", filtro.getValorMaximo()));
+				predicates.add(builder.lessThanOrEqualTo(root.get("valorTotal"), filtro.getValorMaximo()));
 			}
 
-			if (!StringUtils.isEmpty(filtro.getNomeCliente())) {
-				criteria.add(Restrictions.ilike("c.nome", filtro.getNomeCliente(), MatchMode.ANYWHERE));
+			if (StringUtils.hasText(filtro.getNomeCliente())) {
+				predicates.add(builder.like(builder.lower(root.get("cliente").get("nome")),
+						"%" + filtro.getNomeCliente().toLowerCase() + "%"));
 			}
 
-			if (!StringUtils.isEmpty(filtro.getCpfOuCnpjCliente())) {
-				criteria.add(
-						Restrictions.eq("c.cpfOuCnpj", TipoPessoa.removerFormatacao(filtro.getCpfOuCnpjCliente())));
+			if (StringUtils.hasText(filtro.getCpfOuCnpjCliente())) {
+				predicates.add(builder.equal(root.get("cliente").get("cpfOuCnpj"),
+						TipoPessoa.removerFormatacao(filtro.getCpfOuCnpjCliente())));
 			}
 		}
+
+		return predicates;
 	}
 
 }

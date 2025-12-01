@@ -1,15 +1,17 @@
 package com.algaworks.brewer.repository.helper.cliente;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.sql.JoinType;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,67 +20,70 @@ import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.model.Cliente;
 import com.algaworks.brewer.repository.filter.ClienteFilter;
-import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
 
 public class ClientesImpl implements ClientesQueries {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
-	@Autowired
-	private PaginacaoUtil paginacaoUtil;
-	
-	@SuppressWarnings({ "unchecked", "deprecation" })
+
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Cliente> filtrar(ClienteFilter filtro, Pageable pageable) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cliente.class);
-		
-		paginacaoUtil.preparar(criteria, pageable);
-		adicionarFiltro(filtro, criteria);
-		
-		criteria.createAlias("endereco.cidade", "c", JoinType.LEFT_OUTER_JOIN);
-		criteria.createAlias("c.estado", "e", JoinType.LEFT_OUTER_JOIN);
-				
-		return new PageImpl<>(criteria.list(), pageable, total(filtro));
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Cliente> query = builder.createQuery(Cliente.class);
+		Root<Cliente> root = query.from(Cliente.class);
+		root.fetch("endereco", JoinType.LEFT).fetch("cidade", JoinType.LEFT).fetch("estado", JoinType.LEFT);
+
+		List<Predicate> predicates = adicionarFiltro(filtro, builder, root);
+		query.where(predicates.toArray(new Predicate[0]));
+
+		TypedQuery<Cliente> typedQuery = manager.createQuery(query);
+		typedQuery.setFirstResult((int) pageable.getOffset());
+		typedQuery.setMaxResults(pageable.getPageSize());
+
+		return new PageImpl<>(typedQuery.getResultList(), pageable, total(filtro));
 	}
-	
-	@SuppressWarnings({ "deprecation" })
+
 	@Transactional(readOnly = true)
 	@Override
 	public Cliente buscarEstadoCidade(Long codigo) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cliente.class);
-		
-		criteria.createAlias("endereco.cidade", "c", JoinType.LEFT_OUTER_JOIN);
-		criteria.createAlias("c.estado", "e", JoinType.LEFT_OUTER_JOIN);
-		
-		criteria.add(Restrictions.eq("codigo", codigo));
-		
-		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		
-		return (Cliente) criteria.uniqueResult();
-	}
-	
-	private Long total(ClienteFilter filtro) {
-		@SuppressWarnings("deprecation")
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Cliente.class);
-		adicionarFiltro(filtro, criteria);
-		criteria.setProjection(Projections.rowCount());
-		return (Long) criteria.uniqueResult();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Cliente> query = builder.createQuery(Cliente.class);
+		Root<Cliente> root = query.from(Cliente.class);
+		root.fetch("endereco", JoinType.LEFT).fetch("cidade", JoinType.LEFT).fetch("estado", JoinType.LEFT);
+
+		query.where(builder.equal(root.get("codigo"), codigo));
+
+		return manager.createQuery(query).getSingleResult();
 	}
 
-	private void adicionarFiltro(ClienteFilter filtro, Criteria criteria) {
+	private Long total(ClienteFilter filtro) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<Cliente> root = query.from(Cliente.class);
+
+		List<Predicate> predicates = adicionarFiltro(filtro, builder, root);
+		query.where(predicates.toArray(new Predicate[0]));
+		query.select(builder.count(root));
+
+		return manager.createQuery(query).getSingleResult();
+	}
+
+	private List<Predicate> adicionarFiltro(ClienteFilter filtro, CriteriaBuilder builder, Root<Cliente> root) {
+		List<Predicate> predicates = new ArrayList<>();
+
 		if (filtro != null) {
-			if (!StringUtils.isEmpty(filtro.getNome())) {
-				criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+			if (StringUtils.hasText(filtro.getNome())) {
+				predicates.add(builder.like(builder.lower(root.get("nome")),
+						"%" + filtro.getNome().toLowerCase() + "%"));
 			}
 
-			if (!StringUtils.isEmpty(filtro.getCpfOuCnpj())) {
-				criteria.add(Restrictions.eq("cpfOuCnpj", filtro.getCpfOuCnpjSemFormatacao()));
+			if (StringUtils.hasText(filtro.getCpfOuCnpj())) {
+				predicates.add(builder.equal(root.get("cpfOuCnpj"), filtro.getCpfOuCnpjSemFormatacao()));
 			}
 		}
-	}
 
-	
+		return predicates;
+	}
 
 }
