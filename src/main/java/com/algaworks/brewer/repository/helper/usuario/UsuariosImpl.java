@@ -84,7 +84,7 @@ public class UsuariosImpl implements UsuariosQueries {
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 		Root<Usuario> root = query.from(Usuario.class);
 
-		List<Predicate> predicates = adicionarFiltro(filtro, builder, root, null);
+		List<Predicate> predicates = adicionarFiltroBasico(filtro, builder, root);
 		query.where(predicates.toArray(new Predicate[0]));
 		query.select(builder.count(root));
 
@@ -92,7 +92,23 @@ public class UsuariosImpl implements UsuariosQueries {
 	}
 
 	private List<Predicate> adicionarFiltro(UsuarioFilter filtro, CriteriaBuilder builder, 
-			Root<Usuario> root, CriteriaQuery<?> query) {
+			Root<Usuario> root, CriteriaQuery<Usuario> query) {
+		List<Predicate> predicates = adicionarFiltroBasico(filtro, builder, root);
+
+		if (filtro != null && filtro.getGrupos() != null && !filtro.getGrupos().isEmpty()) {
+			for (Grupo grupo : filtro.getGrupos()) {
+				Subquery<Long> subquery = query.subquery(Long.class);
+				Root<UsuarioGrupo> subRoot = subquery.from(UsuarioGrupo.class);
+				subquery.select(subRoot.get("id").get("usuario").get("codigo"));
+				subquery.where(builder.equal(subRoot.get("id").get("grupo").get("codigo"), grupo.getCodigo()));
+				predicates.add(root.get("codigo").in(subquery));
+			}
+		}
+
+		return predicates;
+	}
+
+	private List<Predicate> adicionarFiltroBasico(UsuarioFilter filtro, CriteriaBuilder builder, Root<Usuario> root) {
 		List<Predicate> predicates = new ArrayList<>();
 
 		if (filtro != null) {
@@ -104,16 +120,6 @@ public class UsuariosImpl implements UsuariosQueries {
 			if (StringUtils.hasText(filtro.getEmail())) {
 				predicates.add(builder.like(builder.lower(root.get("email")),
 						filtro.getEmail().toLowerCase() + "%"));
-			}
-
-			if (filtro.getGrupos() != null && !filtro.getGrupos().isEmpty() && query != null) {
-				for (Grupo grupo : filtro.getGrupos()) {
-					Subquery<Long> subquery = query.subquery(Long.class);
-					Root<UsuarioGrupo> subRoot = subquery.from(UsuarioGrupo.class);
-					subquery.select(subRoot.get("id").get("usuario").get("codigo"));
-					subquery.where(builder.equal(subRoot.get("id").get("grupo").get("codigo"), grupo.getCodigo()));
-					predicates.add(root.get("codigo").in(subquery));
-				}
 			}
 		}
 

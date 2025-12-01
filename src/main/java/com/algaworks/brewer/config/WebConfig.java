@@ -91,9 +91,10 @@ public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/api/**")
-			.allowedOrigins("*")
+			.allowedOriginPatterns("http://localhost:*", "https://localhost:*")
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-			.allowedHeaders("*");
+			.allowedHeaders("*")
+			.allowCredentials(true);
 	}
 
 	@Bean

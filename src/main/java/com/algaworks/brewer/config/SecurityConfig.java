@@ -24,7 +24,9 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/cidades/novo").hasRole("CADASTRAR_CIDADE")
 				.requestMatchers("/usuarios/**").hasRole("CADASTRAR_USUARIO")
-				.requestMatchers("/api/**").permitAll()
+				.requestMatchers("/api/estados").permitAll()
+				.requestMatchers("/api/cervejas/search").permitAll()
+				.requestMatchers("/api/**").authenticated()
 				.anyRequest().authenticated()
 			)
 			.formLogin(form -> form
@@ -39,6 +41,9 @@ public class SecurityConfig {
 			)
 			.sessionManagement(session -> session
 				.invalidSessionUrl("/login")
+			)
+			.csrf(csrf -> csrf
+				.ignoringRequestMatchers("/api/**")
 			);
 		
 		return http.build();

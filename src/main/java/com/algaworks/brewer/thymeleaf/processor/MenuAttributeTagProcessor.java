@@ -36,14 +36,14 @@ public class MenuAttributeTagProcessor extends AbstractAttributeTagProcessor {
 
 		String menu = (String) expression.execute(context);
 
-		IWebExchange webExchange = ((IWebContext) context).getExchange();
-		String uri = webExchange.getRequest().getRequestPath();
+		if (context instanceof IWebContext) {
+			IWebExchange webExchange = ((IWebContext) context).getExchange();
+			String uri = webExchange.getRequest().getRequestPath();
 
-		if (uri.matches(menu)) {
-
-			String classesExistentes = tag.getAttributeValue("class");
-			structureHandler.setAttribute("class", classesExistentes + " is-active");
-
+			if (uri.matches(menu)) {
+				String classesExistentes = tag.getAttributeValue("class");
+				structureHandler.setAttribute("class", classesExistentes + " is-active");
+			}
 		}
 
 	}
