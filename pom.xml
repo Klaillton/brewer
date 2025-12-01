@@ -18,48 +18,47 @@
 
 		<java.version>1.8</java.version>
 
-		<maven-compiler-pluging.version>3.3</maven-compiler-pluging.version>
+		<maven-compiler-pluging.version>3.13.0</maven-compiler-pluging.version>
 
-		<flyway-maven-plugin.version>5.2.4</flyway-maven-plugin.version>
+		<flyway-maven-plugin.version>9.22.3</flyway-maven-plugin.version>
 
-		<mariadb-connector-java.version>2.3.0</mariadb-connector-java.version>
+		<mariadb-connector-java.version>2.7.12</mariadb-connector-java.version>
 
 		<!-- Maven Plugin Surefire -->
-		<maven-surefire-plugin.version>2.12.4</maven-surefire-plugin.version>
+		<maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
 
 		<!-- Spring MVC -->
-		<spring-framework.version>5.0.15.RELEASE</spring-framework.version>
+		<spring-framework.version>5.3.39</spring-framework.version>
 
 		<!-- Servlet API -->
-		<servlet.version>3.1.0</servlet.version>
+		<servlet.version>4.0.1</servlet.version>
 
 		<!-- ThymeLeaf -->
-		<thymeleaf.version>3.0.7.RELEASE</thymeleaf.version>
+		<thymeleaf.version>3.0.15.RELEASE</thymeleaf.version>
 
 		<!-- Bean Validation / Hibernate Validator -->
-		<hibernate-validator.version>5.4.1.Final</hibernate-validator.version>
+		<hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
 
 		<!-- Thymeleaf - Layout dialect -->
-		<thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
+		<thymeleaf-layout-dialect.version>2.5.3</thymeleaf-layout-dialect.version>
 
 		<!-- logging -->
-		<log4j.version>2.12.0</log4j.version>
-		<jcl-over-slf4j.version>1.7.21</jcl-over-slf4j.version>
+		<log4j.version>2.24.3</log4j.version>
+		<jcl-over-slf4j.version>2.0.16</jcl-over-slf4j.version>
 
 		<!-- JPA / Hibernate -->
-		<hibernate.version>5.2.10.Final</hibernate.version>
+		<hibernate.version>5.6.15.Final</hibernate.version>
 
 		<!-- Spring Data JPA -->
-		<spring-data-jpa.version>1.10.10.RELEASE</spring-data-jpa.version>
+		<spring-data-jpa.version>2.7.18</spring-data-jpa.version>
 
 
 		<!-- Jackson - JSON -->
-		<jackson-core.version>2.9.2</jackson-core.version>
-		<!-- <jackson-core.version>2.7.5</jackson-core.version> -->
+		<jackson-core.version>2.18.2</jackson-core.version>
 
 		<!-- thumbnailator - Gerar Thumbnail -->
 		<!-- https://github.com/coobird/thumbnailator -->
-		<thumbnailator.version>0.4.8</thumbnailator.version>
+		<thumbnailator.version>0.4.20</thumbnailator.version>
 
 
 		<!-- Thymeleaf extras data attribute -->
@@ -68,37 +67,37 @@
 
 
 		<!-- Spring Security -->
-		<spring-security.version>4.1.1.RELEASE</spring-security.version>
+		<spring-security.version>5.8.15</spring-security.version>
 
 		<!-- Apache Bean Utils -->
-		<commons-beanutils.version>1.9.2</commons-beanutils.version>
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 
 		<!-- Thymeleaf - Extras - Spring - Security -->
-		<thymeleaf-extras-springsecurity.version>3.0.0.RELEASE</thymeleaf-extras-springsecurity.version>
+		<thymeleaf-extras-springsecurity.version>3.0.5.RELEASE</thymeleaf-extras-springsecurity.version>
 
 		<!-- JUnit -->
-		<junit.version>4.12</junit.version>
+		<junit.version>4.13.2</junit.version>
 
 		<!-- Java Mail -->
-		<javax.mail.version>1.5.6</javax.mail.version>
+		<javax.mail.version>1.6.2</javax.mail.version>
 
 		<!-- AWS SDK - S3 -->
-		<aws-java-sdk-s3.version>1.10.77</aws-java-sdk-s3.version>
+		<aws-java-sdk-s3.version>1.12.777</aws-java-sdk-s3.version>
 
 		<!-- Apache Commons DBCP -->
-		<commons-dbcp2.version>2.1.1</commons-dbcp2.version>
+		<commons-dbcp2.version>2.12.0</commons-dbcp2.version>
 
 		<!-- JasperReports -->
-		<jasperreports.version>6.3.0</jasperreports.version>
+		<jasperreports.version>6.21.3</jasperreports.version>
 
 		<!-- JasperReports Fonts -->
-		<jasperreports-fonts.version>6.0.0</jasperreports-fonts.version>
+		<jasperreports-fonts.version>6.21.3</jasperreports-fonts.version>
 
 		<!-- EhCache -->
-		<ehcache.version>3.8.0</ehcache.version>
+		<ehcache.version>3.10.8</ehcache.version>
 
 		<!-- JCache -->
-		<jcache.version>1.0.0</jcache.version>
+		<jcache.version>1.1.1</jcache.version>
 		
 		
 		
@@ -131,7 +130,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.3</version>
+				<version>3.8.1</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -143,7 +142,7 @@
 								<artifactItem>
 									<groupId>com.github.jsimone</groupId>
 									<artifactId>webapp-runner</artifactId>
-									<version>8.5.11.3</version>
+									<version>9.0.93.1</version>
 									<destFileName>webapp-runner.jar</destFileName>
 								</artifactItem>
 							</artifactItems>
@@ -229,14 +228,14 @@
 
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf-spring4</artifactId>
+			<artifactId>thymeleaf-spring5</artifactId>
 			<version>${thymeleaf.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<!-- Bean Validation / Hibernate Validator -->
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${hibernate-validator.version}</version>
 			<scope>compile</scope>
@@ -333,6 +332,12 @@
 			<groupId>org.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 			<version>${ehcache.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.glassfish.jaxb</groupId>
+					<artifactId>jaxb-runtime</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- JCache -->
@@ -379,7 +384,7 @@
 		<!-- Thymeleaf - Extras - Spring - Security -->
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
+			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 			<version>${thymeleaf-extras-springsecurity.version}</version>
 			<scope>compile</scope>
 		</dependency>
@@ -422,6 +427,24 @@
 			<artifactId>jasperreports</artifactId>
 			<version>${jasperreports.version}</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jaxb</groupId>
+					<artifactId>jaxb-runtime</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -429,6 +452,18 @@
 			<artifactId>jasperreports-fonts</artifactId>
 			<version>${jasperreports-fonts.version}</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<!-- JAXB API and Implementation for Java 8+ -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.9</version>
 		</dependency>
 
 
