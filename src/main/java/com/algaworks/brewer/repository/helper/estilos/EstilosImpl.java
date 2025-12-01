@@ -1,14 +1,16 @@
 package com.algaworks.brewer.repository.helper.estilos;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,48 +19,52 @@ import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.model.Estilo;
 import com.algaworks.brewer.repository.filter.EstiloFilter;
-import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
 
-public class EstilosImpl implements EstilosQueries{
+public class EstilosImpl implements EstilosQueries {
 
 	@PersistenceContext
 	private EntityManager manager;
-	
-	@Autowired
-	private PaginacaoUtil paginacaoUtil;
-	
-	@SuppressWarnings({ "unchecked", "deprecation" })
+
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Estilo> filtrar(EstiloFilter filtro, Pageable pageable) {
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Estilo.class);
-		
-		paginacaoUtil.preparar(criteria, pageable);
-		
-		adicionarFiltro(filtro, criteria);
-		
-		return new PageImpl<>(criteria.list(), pageable, total(filtro));
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Estilo> query = builder.createQuery(Estilo.class);
+		Root<Estilo> root = query.from(Estilo.class);
+
+		List<Predicate> predicates = adicionarFiltro(filtro, builder, root);
+		query.where(predicates.toArray(new Predicate[0]));
+
+		TypedQuery<Estilo> typedQuery = manager.createQuery(query);
+		typedQuery.setFirstResult((int) pageable.getOffset());
+		typedQuery.setMaxResults(pageable.getPageSize());
+
+		return new PageImpl<>(typedQuery.getResultList(), pageable, total(filtro));
 	}
-	
+
 	private Long total(EstiloFilter filtro) {
-		@SuppressWarnings("deprecation")
-		Criteria criteria = manager.unwrap(Session.class).createCriteria(Estilo.class);
-		adicionarFiltro(filtro, criteria);
-		criteria.setProjection(Projections.rowCount());
-		return (Long) criteria.uniqueResult();
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<Estilo> root = query.from(Estilo.class);
+
+		List<Predicate> predicates = adicionarFiltro(filtro, builder, root);
+		query.where(predicates.toArray(new Predicate[0]));
+		query.select(builder.count(root));
+
+		return manager.createQuery(query).getSingleResult();
 	}
 
-	private void adicionarFiltro(EstiloFilter filtro, Criteria criteria) {
-		if(filtro != null){
-			
-			if (!StringUtils.isEmpty(filtro.getNome())) {
-				criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
+	private List<Predicate> adicionarFiltro(EstiloFilter filtro, CriteriaBuilder builder, Root<Estilo> root) {
+		List<Predicate> predicates = new ArrayList<>();
+
+		if (filtro != null) {
+			if (StringUtils.hasText(filtro.getNome())) {
+				predicates.add(builder.like(builder.lower(root.get("nome")),
+						"%" + filtro.getNome().toLowerCase() + "%"));
 			}
-
-			
 		}
+
+		return predicates;
 	}
-	
-	
 
 }
