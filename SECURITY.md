@@ -2,6 +2,41 @@
 
 ## Supported Versions
 
+This repository is maintained as a study project and does not have multiple
+supported release branches.
+
+| Version | Supported |
+| ------- | --------- |
+| master  | Yes       |
+| Older branches or forks | No |
+
+## Reporting a Vulnerability
+
+If you believe you have found a security vulnerability, do not open a public
+issue.
+
+Please use GitHub's private vulnerability reporting flow for this repository:
+
+- Open the repository Security tab.
+- Use Report a vulnerability to submit the details privately.
+
+When reporting, include:
+
+- A clear description of the issue and affected area.
+- Reproduction steps or a proof of concept.
+- Impact assessment, if known.
+- Suggested remediation, if available.
+
+Best effort response targets:
+
+- Initial acknowledgement within 5 business days.
+- Follow-up after triage when the report is validated.
+
+Please avoid public disclosure until the issue has been reviewed and a fix or
+mitigation is available.# Security Policy
+
+## Supported Versions
+
 Use this section to tell people about which versions of your project are
 currently being supported with security updates.
 
