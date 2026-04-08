@@ -39,7 +39,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <commons-beanutils.version>1.11.0</commons-beanutils.version>
 
 <!-- AWS SDK - S3 -->
-<aws-java-sdk-s3.version>1.12.777</aws-java-sdk-s3.version>
+<aws-java-sdk-s3.version>1.12.797</aws-java-sdk-s3.version>
 
 <!-- JasperReports -->
 <jasperreports.version>6.21.3</jasperreports.version>
