@@ -45,7 +45,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <jasperreports.version>6.21.3</jasperreports.version>
 
 <!-- JasperReports Fonts -->
-<jasperreports-fonts.version>6.21.3</jasperreports-fonts.version>
+<jasperreports-fonts.version>7.0.6</jasperreports-fonts.version>
 </properties>
 
 <build>
