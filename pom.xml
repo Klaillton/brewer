@@ -24,7 +24,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <java.version>17</java.version>
 
 <!-- Flyway -->
-<flyway.version>10.10.0</flyway.version>
+<flyway.version>12.3.0</flyway.version>
 
 <!-- MariaDB -->
 <mariadb-connector-java.version>3.3.3</mariadb-connector-java.version>
