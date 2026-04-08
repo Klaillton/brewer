@@ -55,7 +55,7 @@ public class UsuariosController {
 		return mv;
 	}
 	
-	@PostMapping({"/novo", "{\\d+}"})/*As regras ficam na camada de servico, nenhuma regra e usada no controller*/
+	@PostMapping({"/novo", "/{codigo}"})/*As regras ficam na camada de servico, nenhuma regra e usada no controller*/
 	public ModelAndView salvar(@Valid Usuario usuario, BindingResult result, RedirectAttributes attributes){
 		if(result.hasErrors()){
 			return novo(usuario);
