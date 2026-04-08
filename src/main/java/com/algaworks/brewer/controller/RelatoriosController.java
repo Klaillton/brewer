@@ -51,6 +51,7 @@ public class RelatoriosController {
 
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+				.header("Content-Disposition", "inline; filename=relatorio-vendas-emitidas-spike.pdf")
 				.body(relatorio);
 	}
 

@@ -4,21 +4,42 @@
 	<meta charset="UTF-8" />
 	<title>Spike - Relatorio de vendas emitidas</title>
 	<style>
+		@page {
+			size: A4;
+			margin: 20mm 14mm 18mm;
+		}
+
 		body {
 			font-family: Helvetica, Arial, sans-serif;
 			font-size: 12px;
 			color: #1f2933;
-			margin: 24px;
+			margin: 0;
 		}
 
-		h1 {
-			font-size: 22px;
-			margin-bottom: 8px;
+		.header {
+			border-bottom: 2px solid #102a43;
+			padding-bottom: 12px;
+			margin-bottom: 18px;
+		}
+
+		.header-title {
+			font-size: 24px;
+			font-weight: bold;
+			color: #102a43;
+			margin: 0 0 4px;
+		}
+
+		.header-subtitle {
+			font-size: 12px;
+			color: #486581;
+			margin: 0;
 		}
 
 		.meta {
-			margin-bottom: 18px;
+			margin: 14px 0 18px;
 			color: #52606d;
+			font-size: 11px;
+			line-height: 1.6;
 		}
 
 		.summary {
@@ -28,13 +49,28 @@
 		}
 
 		.summary td {
-			padding: 8px 10px;
+			padding: 10px 12px;
 			border: 1px solid #d9e2ec;
+			background: #f8fbff;
+		}
+
+		.summary-label {
+			font-size: 10px;
+			text-transform: uppercase;
+			letter-spacing: 0.04em;
+			color: #7b8794;
+		}
+
+		.summary-value {
+			font-size: 16px;
+			font-weight: bold;
+			color: #102a43;
 		}
 
 		table.report {
 			width: 100%;
 			border-collapse: collapse;
+			table-layout: fixed;
 		}
 
 		table.report th {
@@ -43,14 +79,28 @@
 			text-align: left;
 			padding: 8px 10px;
 			font-size: 11px;
+			text-transform: uppercase;
 		}
 
 		table.report td {
 			padding: 8px 10px;
 			border-bottom: 1px solid #d9e2ec;
+			vertical-align: top;
+			word-wrap: break-word;
+		}
+
+		table.report tbody tr:nth-child(even) td {
+			background: #f8fbff;
 		}
 
 		.text-right {
+			text-align: right;
+		}
+
+		.footer {
+			margin-top: 18px;
+			font-size: 10px;
+			color: #7b8794;
 			text-align: right;
 		}
 
@@ -63,19 +113,27 @@
 	</style>
 </head>
 <body>
-	<h1>Spike HTML para PDF - Vendas Emitidas</h1>
+	<div class="header">
+		<div class="header-title">Relatorio de vendas emitidas</div>
+		<div class="header-subtitle">Spike HTML para comparacao com o fluxo JasperReports</div>
+	</div>
+
 	<div class="meta">
-		<div>Periodo: <span th:text="${#temporals.format(periodoRelatorio.dataInicio, 'dd/MM/yyyy')}">01/01/2026</span>
-			ate <span th:text="${#temporals.format(periodoRelatorio.dataFim, 'dd/MM/yyyy')}">31/01/2026</span></div>
+		<div>Periodo analisado: <strong th:text="${#temporals.format(periodoRelatorio.dataInicio, 'dd/MM/yyyy')}">01/01/2026</strong>
+			ate <strong th:text="${#temporals.format(periodoRelatorio.dataFim, 'dd/MM/yyyy')}">31/01/2026</strong></div>
 		<div>Gerado em: <span th:text="${#temporals.format(dataGeracao, 'dd/MM/yyyy HH:mm')}">08/04/2026 10:30</span></div>
 	</div>
 
 	<table class="summary">
 		<tr>
-			<td>Quantidade de vendas</td>
-			<td class="text-right" th:text="${quantidadeVendas}">0</td>
-			<td>Valor total</td>
-			<td class="text-right" th:text="${#numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}">0,00</td>
+			<td>
+				<div class="summary-label">Quantidade de vendas</div>
+				<div class="summary-value" th:text="${quantidadeVendas}">0</div>
+			</td>
+			<td>
+				<div class="summary-label">Valor total emitido</div>
+				<div class="summary-value" th:text="|R$ ${#numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</div>
+			</td>
 		</tr>
 	</table>
 
@@ -98,13 +156,17 @@
 				<td th:text="${venda.nomeUsuario}">Usuario</td>
 				<td th:text="${venda.status.descricao}">Emitida</td>
 				<td class="text-right"
-					th:text="${#numbers.formatDecimal(venda.valorTotal, 1, 'POINT', 2, 'COMMA')}">0,00</td>
+					th:text="|R$ ${#numbers.formatDecimal(venda.valorTotal, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</td>
 			</tr>
 		</tbody>
 	</table>
 
 	<div class="empty" th:if="${#lists.isEmpty(vendasEmitidas)}">
 		Nenhuma venda emitida encontrada para o periodo informado.
+	</div>
+
+	<div class="footer">
+		Documento gerado pelo spike HTML para avaliacao de substituicao do JasperReports.
 	</div>
 </body>
 </html>
