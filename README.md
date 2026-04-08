@@ -123,6 +123,12 @@ Este projeto foi migrado de:
 - Hibernate Criteria API → JPA Criteria API
 - Spring Security 5 → Spring Security 6
 
+### Plano de migração faseada do Angular
+
+- Fase 1: alinhar todas as dependências do frontend na última base estável do Angular 17 e bloquear upgrades major automáticos parciais.
+- Fase 2: executar migração coordenada do Angular 17 para 18 com atualização conjunta de framework, CLI, builder e compiler-cli.
+- Fase 3: repetir o mesmo processo para 19+ apenas após build e testes verdes em cada etapa.
+
 ## Licença
 
 Este projeto é baseado no curso AlgaWorks e serve apenas para fins educacionais.
