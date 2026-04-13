@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,16 +42,16 @@ public class FotoStorageLocal implements FotoStorage {
 		String novoNome = null;
 		if (files != null && files.length > 0) {
 			MultipartFile arquivo = files[0];
-			novoNome = renomearArquivo(arquivo.getOriginalFilename());
+			novoNome = renomearArquivo(extrairNomeArquivo(arquivo.getOriginalFilename()));
 			try {
-				arquivo.transferTo(new File(this.local.toAbsolutePath().toString() + getDefault().getSeparator() + novoNome));
+				arquivo.transferTo(new File(resolverCaminhoSeguro(novoNome).toString()));
 			} catch (IOException e) {
 				throw new RuntimeException("Erro salvando a foto", e);
 			}
 		}
 		
 		try {
-			Thumbnails.of(this.local.resolve(novoNome).toString()).size(40, 68).toFiles(Rename.PREFIX_DOT_THUMBNAIL);
+			Thumbnails.of(resolverCaminhoSeguro(novoNome).toString()).size(40, 68).toFiles(Rename.PREFIX_DOT_THUMBNAIL);
 		} catch (IOException e) {
 			throw new RuntimeException("Erro gerando thumbnail", e);
 		}
@@ -61,7 +62,7 @@ public class FotoStorageLocal implements FotoStorage {
 	@Override
 	public byte[] recuperar(String nome) {
 		try {
-			return Files.readAllBytes(this.local.resolve(nome));
+			return Files.readAllBytes(resolverCaminhoSeguro(nome));
 		} catch (IOException e) {
 			throw new RuntimeException("Erro lendo a foto", e);
 		}
@@ -75,8 +76,8 @@ public class FotoStorageLocal implements FotoStorage {
 	@Override
 	public void excluir(String foto) {
 		try {
-			Files.deleteIfExists(this.local.resolve(foto));
-			Files.deleteIfExists(this.local.resolve(THUMBNAIL_PREFIX + foto));
+			Files.deleteIfExists(resolverCaminhoSeguro(foto));
+			Files.deleteIfExists(resolverCaminhoSeguro(THUMBNAIL_PREFIX + foto));
 		} catch (IOException e) {
 			logger.warn(String.format("Erro apagando foto '%s'. Mensagem: %s", foto, e.getMessage()));
 		}
@@ -99,6 +100,25 @@ public class FotoStorageLocal implements FotoStorage {
 		} catch (IOException e) {
 			throw new RuntimeException("Erro criando pasta para salvar foto", e);
 		}
+	}
+
+	private Path resolverCaminhoSeguro(String nomeArquivo) {
+		Path base = this.local.toAbsolutePath().normalize();
+		Path arquivo = base.resolve(extrairNomeArquivo(nomeArquivo)).normalize();
+
+		if (!arquivo.startsWith(base)) {
+			throw new IllegalArgumentException("Nome de arquivo invalido");
+		}
+
+		return arquivo;
+	}
+
+	private String extrairNomeArquivo(String nomeArquivo) {
+		if (nomeArquivo == null || nomeArquivo.isBlank()) {
+			throw new IllegalArgumentException("Nome de arquivo invalido");
+		}
+
+		return Paths.get(nomeArquivo).getFileName().toString();
 	}
 	
 }
