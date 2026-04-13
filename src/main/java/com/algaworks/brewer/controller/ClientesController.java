@@ -54,7 +54,7 @@ public class ClientesController {
 		return mv;
 	}
 	
-	@PostMapping(value = {"/novo", "{\\d+}"})
+	@PostMapping(value = {"/novo", "/{codigo}"})
 	public ModelAndView salvar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes){
 		if(result.hasErrors()){
 			return novo(cliente);

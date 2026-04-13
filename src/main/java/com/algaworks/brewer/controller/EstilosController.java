@@ -46,7 +46,7 @@ public class EstilosController {
 		return mv;
 	}
 	
-	@PostMapping(value = {"/novo", "{\\d+}"})
+	@PostMapping(value = {"/novo", "/{codigo}"})
 	public ModelAndView salvar(@Valid Estilo estilo, BindingResult result, Model model,
 			RedirectAttributes attributes) {
 		if (result.hasErrors()) {

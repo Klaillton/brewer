@@ -55,7 +55,7 @@ public class CervejasController {
 		return mv;
 	}
 
-	@PostMapping(value = {"/nova", "{\\d+}"})
+	@PostMapping(value = {"/nova", "/{codigo}"})
 	public ModelAndView salvar(@Valid Cerveja cerveja, BindingResult result, Model model,
 			RedirectAttributes attributes) {
 		if (result.hasErrors()) {		

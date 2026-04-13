@@ -18,7 +18,7 @@ import com.algaworks.brewer.storage.FotoStorage;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.name.Rename;
 
-@Profile("local")
+@Profile("!prod")
 @Component
 public class FotoStorageLocal implements FotoStorage {
 
@@ -28,7 +28,7 @@ public class FotoStorageLocal implements FotoStorage {
 	private Path local;
 	
 	public FotoStorageLocal() {
-		this(getDefault().getPath(System.getenv("USERPROFILE"), ".brewerfotos"));
+		this(getDefault().getPath(System.getProperty("user.home"), ".brewerfotos"));
 	}
 	
 	public FotoStorageLocal(Path path) {

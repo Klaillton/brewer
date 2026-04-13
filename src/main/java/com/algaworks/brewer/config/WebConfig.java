@@ -14,10 +14,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
-import org.springframework.format.support.DefaultFormattingConversionService;
-import org.springframework.format.support.FormattingConversionService;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.ViewResolver;
@@ -97,27 +95,24 @@ public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
 			.allowCredentials(true);
 	}
 
-	@Bean
-	public FormattingConversionService mvcConversionService() {
-		DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService();
-		conversionService.addConverter(new EstiloConverter());
-		conversionService.addConverter(new CidadeConverter());
-		conversionService.addConverter(new EstadoConverter());
-		conversionService.addConverter(new GrupoConverter());
+	@Override
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addConverter(new EstiloConverter());
+		registry.addConverter(new CidadeConverter());
+		registry.addConverter(new EstadoConverter());
+		registry.addConverter(new GrupoConverter());
 
 		BigDecimalFormatter bigDecimalFormatter = new BigDecimalFormatter("#,##0.00");
-		conversionService.addFormatterForFieldType(BigDecimal.class, bigDecimalFormatter);
+		registry.addFormatterForFieldType(BigDecimal.class, bigDecimalFormatter);
 
 		BigDecimalFormatter integerFormatter = new BigDecimalFormatter("#,##0");
-		conversionService.addFormatterForFieldType(Integer.class, integerFormatter);
+		registry.addFormatterForFieldType(Integer.class, integerFormatter);
 
 		// Api de datas do Java
 		DateTimeFormatterRegistrar dateTimeFormatter = new DateTimeFormatterRegistrar();
 		dateTimeFormatter.setDateFormatter(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		dateTimeFormatter.setTimeFormatter(DateTimeFormatter.ofPattern("HH:mm"));
-		dateTimeFormatter.registerFormatters(conversionService);
-
-		return conversionService;
+		dateTimeFormatter.registerFormatters(registry);
 	}
 
 	@Bean
@@ -133,11 +128,6 @@ public class WebConfig implements ApplicationContextAware, WebMvcConfigurer {
 		bundle.setBasename("classpath:/messages");
 		bundle.setDefaultEncoding("UTF-8");
 		return bundle;
-	}
-
-	@Bean
-	public DomainClassConverter<?> domainClassConverter() {
-		return new DomainClassConverter<FormattingConversionService>(mvcConversionService());
 	}
 
 	@Bean

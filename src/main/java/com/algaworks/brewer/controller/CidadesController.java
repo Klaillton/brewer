@@ -66,7 +66,7 @@ public class CidadesController {
 	}
 	
 	//@Secured("ROLE_CADASTRAR_CIDADE") tbm é possível fazer a segurança do metodo desta forma
-	@PostMapping(value = {"/novo", "{\\d+}"})
+	@PostMapping(value = {"/novo", "/{codigo}"})
 	@CacheEvict(value = "cidades", key = "#cidade.estado.codigo"/*O objeto pode ser navegado para se chegar na key*/, 
 	condition = "#cidade.temEstado()")
 	public ModelAndView salvar(@Valid Cidade cidade, BindingResult result, RedirectAttributes attributes){
