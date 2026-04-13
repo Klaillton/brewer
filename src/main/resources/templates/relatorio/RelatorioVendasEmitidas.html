@@ -21,11 +21,6 @@
 	<div class="container-fluid">
 		<form method="POST" th:object="${periodoRelatorio}" th:action="@{/relatorios/vendasEmitidas}" target="_blank">
 			<th:block th:include="fragments/MensagensErroValidacao"></th:block>
-
-			<div class="alert alert-warning">
-				<strong th:text="#{vendasEmitidas.spike.titulo}">Comparativo do spike</strong>
-				<span th:text="#{vendasEmitidas.spike.descricao}">O botao do spike gera um PDF alternativo em HTML para comparacao visual com o Jasper atual.</span>
-			</div>
 			
 			<div class="row">
 				<div class="form-group  col-sm-12">
@@ -41,9 +36,6 @@
 			</div>
 				
 			<button type="submit" class="btn  btn-primary" th:text=#{btn.emitir}>Emitir</button>
-			<button type="submit" class="btn btn-default"
-				formaction="/relatorios/vendasEmitidas/spike-html"
-				formtarget="_blank" th:text="#{vendasEmitidas.spike.botao}">Emitir spike HTML</button>
 		</form>
 	</div>
 </section>

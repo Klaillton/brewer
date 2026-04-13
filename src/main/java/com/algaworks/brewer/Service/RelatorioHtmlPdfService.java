@@ -29,7 +29,7 @@ public class RelatorioHtmlPdfService {
 	}
 
 	@Transactional(readOnly = true)
-	public byte[] gerarRelatorioVendasEmitidasSpike(PeriodoRelatorio periodoRelatorio) throws Exception {
+	public byte[] gerarRelatorioVendasEmitidas(PeriodoRelatorio periodoRelatorio) throws Exception {
 		LocalDateTime dataInicio = LocalDateTime.of(periodoRelatorio.getDataInicio(), LocalTime.of(0, 0, 0));
 		LocalDateTime dataFim = LocalDateTime.of(periodoRelatorio.getDataFim(), LocalTime.of(23, 59, 59));
 
@@ -55,5 +55,10 @@ public class RelatorioHtmlPdfService {
 			builder.run();
 			return outputStream.toByteArray();
 		}
+	}
+
+	@Transactional(readOnly = true)
+	public byte[] gerarRelatorioVendasEmitidasSpike(PeriodoRelatorio periodoRelatorio) throws Exception {
+		return gerarRelatorioVendasEmitidas(periodoRelatorio);
 	}
 }
