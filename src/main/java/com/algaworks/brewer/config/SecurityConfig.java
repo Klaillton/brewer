@@ -22,6 +22,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/h2-console/**").permitAll()
 				.requestMatchers("/cidades/novo").hasRole("CADASTRAR_CIDADE")
 				.requestMatchers("/usuarios/**").hasRole("CADASTRAR_USUARIO")
 				.requestMatchers("/api/estados").permitAll()
@@ -43,7 +44,10 @@ public class SecurityConfig {
 				.invalidSessionUrl("/login")
 			)
 			.csrf(csrf -> csrf
-				.ignoringRequestMatchers("/api/**")
+				.ignoringRequestMatchers("/api/**", "/h2-console/**")
+			)
+			.headers(headers -> headers
+				.frameOptions(frame -> frame.sameOrigin())
 			);
 		
 		return http.build();

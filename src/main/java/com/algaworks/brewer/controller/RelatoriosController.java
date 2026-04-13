@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.algaworks.brewer.Service.RelatorioService;
+import com.algaworks.brewer.Service.RelatorioHtmlPdfService;
 import com.algaworks.brewer.dto.PeriodoRelatorio;
 
 @Controller
@@ -21,6 +22,9 @@ public class RelatoriosController {
 	
 	@Autowired
 	private RelatorioService relatorioService;
+
+	@Autowired
+	private RelatorioHtmlPdfService relatorioHtmlPdfService;
 	
 	@GetMapping("/vendasEmitidas")
 	public ModelAndView relatorioVendasEmitidas() {
@@ -38,6 +42,16 @@ public class RelatoriosController {
 		
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+				.body(relatorio);
+	}
+
+	@PostMapping("/vendasEmitidas/spike-html")
+	public ResponseEntity<byte[]> gerarRelatorioVendasEmitidasSpike(PeriodoRelatorio periodoRelatorio) throws Exception {
+		byte[] relatorio = relatorioHtmlPdfService.gerarRelatorioVendasEmitidasSpike(periodoRelatorio);
+
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+				.header("Content-Disposition", "inline; filename=relatorio-vendas-emitidas-spike.pdf")
 				.body(relatorio);
 	}
 

@@ -200,6 +200,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <artifactId>jackson-databind</artifactId>
 </dependency>
 
+<dependency>
+<groupId>com.openhtmltopdf</groupId>
+<artifactId>openhtmltopdf-pdfbox</artifactId>
+<version>1.0.10</version>
+</dependency>
+
 <!-- Apache Bean Utils -->
 <dependency>
 <groupId>commons-beanutils</groupId>
