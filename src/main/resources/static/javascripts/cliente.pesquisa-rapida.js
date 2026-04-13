@@ -41,7 +41,7 @@ Brewer.PesquisaRapidaCliente = (function() {
 		this.mensagemErro.addClass('hidden');
 		
 		var html = this.template(resultado);
-		this.containerTabelaPesquisa.html(html);
+		this.containerTabelaPesquisa.empty().append($(html));
 		
 		var tabelaClientePesquisaRapida = new Brewer.TabelaClientePesquisaRapida(this.pesquisaRapidaClientesModal);
 		tabelaClientePesquisaRapida.iniciar();

@@ -58,12 +58,10 @@ Brewer.ComboCidade = (function() {
 	}
 	
 	function onBuscarCidadesFinalizado(cidades) {
-		var options = [];
+		this.combo.empty();
 		cidades.forEach(function(cidade) {
-			options.push('<option value="' + cidade.codigo + '">' + cidade.nome + '</option>');
-		});
-		
-		this.combo.html(options.join(''));
+			this.combo.append($('<option/>').val(cidade.codigo).text(cidade.nome));
+		}.bind(this));
 		this.combo.removeAttr('disabled');
 		
 		var codigoCidadeSelecionada = this.inputHiddenCidadeSelecionada.val();
@@ -73,7 +71,7 @@ Brewer.ComboCidade = (function() {
 	}
 	
 	function reset() {
-		this.combo.html('<option value="">Selecione a cidade</option>');
+		this.combo.empty().append($('<option/>').val('').text('Selecione a cidade'));
 		this.combo.val('');
 		this.combo.attr('disabled', 'disabled');
 	}

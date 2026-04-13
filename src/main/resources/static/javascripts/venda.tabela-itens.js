@@ -33,7 +33,7 @@ Brewer.TabelaItens = (function() {
 	}
 	
 	function onItemAtualizadoNoServidor(html) {
-		this.tabelaCervejasContainer.html(html);
+		this.tabelaCervejasContainer.empty().append($(html));
 		
 		bindQuantidade.call(this);
 		
