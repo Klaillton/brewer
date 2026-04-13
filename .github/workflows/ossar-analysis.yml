@@ -17,6 +17,10 @@ on:
   schedule:
     - cron: '15 15 * * 5'
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   OSSAR-Scan:
     # OSSAR runs on windows-latest.

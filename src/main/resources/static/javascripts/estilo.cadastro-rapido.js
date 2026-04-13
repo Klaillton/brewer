@@ -43,13 +43,13 @@ Brewer.EstiloCadastroRapido = (function(){
 	function onErroSalvandoEstilo(obj) {
 		var mensagemErro = obj.responseText;
 		this.containerMensagemErro.removeClass('hidden');
-		this.containerMensagemErro.html('<span>'+mensagemErro+'</span>');
+		this.containerMensagemErro.empty().append($('<span/>').text(mensagemErro));
 		this.form.find('.form-group').addClass('has-error');
 	}
 	
 	function onEstiloSalvo(estilo) {
 		var comboEstilo = $('#estilo');
-		comboEstilo.append('<option value='+estilo.codigo+'>'+estilo.nome+'</option>');
+		comboEstilo.append($('<option/>').val(estilo.codigo).text(estilo.nome));
 		comboEstilo.val(estilo.codigo);
 		this.modal.modal('hide');
 	}
