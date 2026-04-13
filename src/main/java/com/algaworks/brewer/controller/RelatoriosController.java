@@ -12,16 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.algaworks.brewer.Service.RelatorioService;
 import com.algaworks.brewer.Service.RelatorioHtmlPdfService;
 import com.algaworks.brewer.dto.PeriodoRelatorio;
 
 @Controller
 @RequestMapping("/relatorios")
 public class RelatoriosController {
-	
-	@Autowired
-	private RelatorioService relatorioService;
 
 	@Autowired
 	private RelatorioHtmlPdfService relatorioHtmlPdfService;
@@ -37,11 +33,11 @@ public class RelatoriosController {
 	
 	@PostMapping("/vendasEmitidas")
 	public ResponseEntity<byte[]> gerarRelatorioVendasEmitidas(PeriodoRelatorio periodoRelatorio) throws Exception {
-			
-		byte[] relatorio = relatorioService.gerarRelatorioVendasEmitidas(periodoRelatorio);
+		byte[] relatorio = relatorioHtmlPdfService.gerarRelatorioVendasEmitidas(periodoRelatorio);
 		
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+				.header("Content-Disposition", "inline; filename=relatorio-vendas-emitidas.pdf")
 				.body(relatorio);
 	}
 
