@@ -14,8 +14,8 @@ Sistema de gerenciamento de cervejaria desenvolvido com Spring Boot 3.x e Angula
 - **H2 Database** - Banco de dados em memória para desenvolvimento
 
 ### Frontend
-- **Angular 17** - Framework SPA
-- **TypeScript 5.3** - Linguagem de programação tipada
+- **Angular 21.2.7** - Framework SPA
+- **TypeScript 5.9** - Linguagem de programação tipada
 - **RxJS** - Programação reativa
 
 ### Testes
@@ -125,9 +125,9 @@ Este projeto foi migrado de:
 
 ### Plano de migração faseada do Angular
 
-- Fase 1: alinhar todas as dependências do frontend na última base estável do Angular 17 e bloquear upgrades major automáticos parciais.
-- Fase 2: executar migração coordenada do Angular 17 para 18 com atualização conjunta de framework, CLI, builder e compiler-cli.
-- Fase 3: repetir o mesmo processo para 19+ apenas após build e testes verdes em cada etapa.
+- Fase 1 (concluída em 2026-04-13): alinhar dependências do frontend em versão coordenada e manter bloqueio de upgrades major automáticos parciais no Dependabot.
+- Fase 2 (baseline atual): manter upgrades coordenados por major a partir do Angular 21 (framework, CLI, builder, compiler-cli, zone.js e TypeScript compatível), sempre com validação de build/testes.
+- Fase 3 (contínua): repetir o processo a cada novo major somente após CI verde e validação funcional mínima.
 
 ## Security Notes (2026-04-13)
 
