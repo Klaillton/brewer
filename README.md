@@ -129,6 +129,14 @@ Este projeto foi migrado de:
 - Fase 2: executar migração coordenada do Angular 17 para 18 com atualização conjunta de framework, CLI, builder e compiler-cli.
 - Fase 3: repetir o mesmo processo para 19+ apenas após build e testes verdes em cada etapa.
 
+## Security Notes (2026-04-13)
+
+- Estado final verificado: 0 alertas open no Dependabot e 0 alertas open no Code Scanning.
+- Backlog de PRs de seguranca/dependencias: 0 PRs abertas ao final da rodada.
+- Principais frentes executadas: upgrade coordenado do Angular, remocao do fluxo legado com JasperReports, hardening de DOM/XSS em JS de primeira parte e conciliacao operacional do scanner.
+- Resumo tecnico completo: `docs/security-remediation-summary-2026-04-13.md`.
+- PRs-chave da rodada: #54, #55, #56, #57, #58, #59, #60 e #52.
+
 ## Licença
 
 Este projeto é baseado no curso AlgaWorks e serve apenas para fins educacionais.
