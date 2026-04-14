@@ -20,8 +20,7 @@
 						<h1 th:text="#{cidade.pesquisa.titulo}">Pesquisa de cidades</h1>
 					</div>
 
-					<div class="col-xs-2" sec:authorize-url="/cidades/novo"> <!-- usar esta forma <<<- ou 
-					esta forma ->>> tem o mesmo efeito sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')" -->
+					<div class="col-xs-2" sec:authorize="hasAuthority('ROLE_CADASTRAR_CIDADE')"> <!-- compatível com Spring Security 6 -->
 						<div class="aw-page-header-controls">
 							<a class="btn  btn-default" th:href="@{/cidades/novo}"> <i
 								class="glyphicon  glyphicon-plus-sign"></i> <span
