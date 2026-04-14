@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/LayoutSimples}">
+
+<th:block layout:fragment="conteudo">
+	<div class="aw-error-panel">
+		<h1 class="aw-error-panel__code">
+			<i class="fa  fa-exclamation-triangle"></i>
+			Erro
+		</h1>
+
+		<h2 class="aw-error-panel__title">Ocorreu um problema ao processar a requisição</h2>
+
+		<div class="aw-error-panel__description">
+			Tente novamente em instantes. Se o problema persistir, volte para a página anterior.
+			<br /> <br />
+			<a href="javascript:history.back()" class="btn  btn-primary">Voltar</a>
+		</div>
+	</div>
+</th:block>
+
+</html>

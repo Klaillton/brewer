@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.dto.VendaMes;
 import com.algaworks.brewer.dto.VendaOrigem;
+import com.algaworks.brewer.model.Origem;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.TipoPessoa;
 import com.algaworks.brewer.model.Venda;
@@ -98,16 +99,34 @@ public class VendasImpl implements VendasQueries {
 		return optional.orElse(BigDecimal.ZERO);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<VendaMes> totalPorMes() {
-		List<VendaMes> vendasMes = manager.createNamedQuery("Vendas.totalPorMes").getResultList();
-
 		LocalDate hoje = LocalDate.now();
+		LocalDateTime inicio = LocalDateTime.of(hoje.minusMonths(5).withDayOfMonth(1), LocalTime.MIN);
+
+		List<Object[]> resultados = manager.createQuery(
+				"select year(v.dataCriacao), month(v.dataCriacao), count(v) "
+						+ "from Venda v "
+						+ "where v.dataCriacao >= :inicio and v.status = :status "
+						+ "group by year(v.dataCriacao), month(v.dataCriacao) "
+						+ "order by year(v.dataCriacao) desc, month(v.dataCriacao) desc",
+				Object[].class)
+				.setParameter("inicio", inicio)
+				.setParameter("status", StatusVenda.EMITIDA)
+				.getResultList();
+
+		List<VendaMes> vendasMes = new ArrayList<>();
+		for (Object[] resultado : resultados) {
+			int ano = ((Number) resultado[0]).intValue();
+			int mes = ((Number) resultado[1]).intValue();
+			int total = ((Number) resultado[2]).intValue();
+			vendasMes.add(new VendaMes(String.format("%d/%02d", ano, mes), total));
+		}
+
 		for (int i = 1; i <= 6; i++) {
 			String mesIdeal = String.format("%d/%02d", hoje.getYear(), hoje.getMonthValue());
 
-			boolean possuiMes = vendasMes.stream().filter(v -> v.getMes().equals(mesIdeal)).findAny().isPresent();
+			boolean possuiMes = vendasMes.stream().anyMatch(v -> v.getMes().equals(mesIdeal));
 			if (!possuiMes) {
 				vendasMes.add(i - 1, new VendaMes(mesIdeal, 0));
 			}
@@ -120,15 +139,38 @@ public class VendasImpl implements VendasQueries {
 
 	@Override
 	public List<VendaOrigem> totalPorOrigem() {
-		List<VendaOrigem> vendasNacionalidade = manager.createNamedQuery("Vendas.porOrigem", VendaOrigem.class)
+		LocalDate now = LocalDate.now();
+		LocalDateTime inicio = LocalDateTime.of(now.minusMonths(5).withDayOfMonth(1), LocalTime.MIN);
+
+		List<Object[]> resultados = manager.createQuery(
+				"select year(v.dataCriacao), month(v.dataCriacao), "
+						+ "coalesce(sum(case when c.origem = :nacional then i.quantidade else 0 end), 0), "
+						+ "coalesce(sum(case when c.origem = :internacional then i.quantidade else 0 end), 0) "
+						+ "from ItemVenda i join i.venda v join i.cerveja c "
+						+ "where v.dataCriacao >= :inicio and v.status = :status "
+						+ "group by year(v.dataCriacao), month(v.dataCriacao) "
+						+ "order by year(v.dataCriacao) desc, month(v.dataCriacao) desc",
+				Object[].class)
+				.setParameter("inicio", inicio)
+				.setParameter("status", StatusVenda.EMITIDA)
+				.setParameter("nacional", Origem.NACIONAL)
+				.setParameter("internacional", Origem.INTERNACIONAL)
 				.getResultList();
 
-		LocalDate now = LocalDate.now();
+		List<VendaOrigem> vendasNacionalidade = new ArrayList<>();
+		for (Object[] resultado : resultados) {
+			int ano = ((Number) resultado[0]).intValue();
+			int mes = ((Number) resultado[1]).intValue();
+			int totalNacional = ((Number) resultado[2]).intValue();
+			int totalInternacional = ((Number) resultado[3]).intValue();
+			vendasNacionalidade.add(
+					new VendaOrigem(String.format("%d/%02d", ano, mes), totalNacional, totalInternacional));
+		}
+
 		for (int i = 1; i <= 6; i++) {
 			String mesIdeal = String.format("%d/%02d", now.getYear(), now.getMonth().getValue());
 
-			boolean possuiMes = vendasNacionalidade.stream().filter(v -> v.getMes().equals(mesIdeal)).findAny()
-					.isPresent();
+			boolean possuiMes = vendasNacionalidade.stream().anyMatch(v -> v.getMes().equals(mesIdeal));
 			if (!possuiMes) {
 				vendasNacionalidade.add(i - 1, new VendaOrigem(mesIdeal, 0, 0));
 			}
