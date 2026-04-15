@@ -151,7 +151,7 @@ public class VendasController {
 	@GetMapping
 	public ModelAndView pesquisar(VendaFilter vendaFilter,
 			@PageableDefault(size = 10) Pageable pageable, HttpServletRequest httpServletRequest) {
-		ModelAndView mv = new ModelAndView("/venda/PesquisaVendas");
+		ModelAndView mv = new ModelAndView("venda/PesquisaVendas");
 		mv.addObject("todosStatus", StatusVenda.values());
 		mv.addObject("tiposPessoa", TipoPessoa.values());
 		
@@ -181,7 +181,7 @@ public class VendasController {
 		try {
 			cadastroVendaService.cancelar(venda);
 		} catch (AccessDeniedException e) {
-			return new ModelAndView("/403");
+			return new ModelAndView("403");
 		}
 		
 		attributes.addFlashAttribute("mensagem", "Venda cancelada com sucesso");
