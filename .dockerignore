@@ -1,0 +1,26 @@
+# Build output
+target/
+
+# Frontend dependencies e build
+frontend/node_modules/
+frontend/dist/
+
+# E2E
+e2e/node_modules/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log
+
+# Variáveis de ambiente locais (não enviar segredos para a imagem)
+.env
+.env.*
+!.env.example
