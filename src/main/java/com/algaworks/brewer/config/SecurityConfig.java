@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,7 +21,9 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/layout/**", "/images/**", "/stylesheets/**", "/static/**").permitAll()
 				.requestMatchers("/h2-console/**").permitAll()
+				.requestMatchers("/actuator/**").permitAll()
 				.requestMatchers("/cidades/novo").hasRole("CADASTRAR_CIDADE")
 				.requestMatchers("/usuarios/**").hasRole("CADASTRAR_USUARIO")
 				.requestMatchers("/api/estados").permitAll()
@@ -51,15 +52,6 @@ public class SecurityConfig {
 			);
 		
 		return http.build();
-	}
-
-	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring()
-			.requestMatchers("/layout/**")
-			.requestMatchers("/images/**")
-			.requestMatchers("/stylesheets/**")
-			.requestMatchers("/static/**");
 	}
 
 	@Bean
