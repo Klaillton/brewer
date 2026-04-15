@@ -46,3 +46,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /target/
+
+# Variáveis de ambiente locais (contém credenciais)
+.env
+.env.*
+!.env.example

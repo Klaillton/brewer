@@ -73,7 +73,7 @@
 							<td class="text-right" th:text="${cliente.cpfOuCnpj}">111.111.111-11</td>
 							<td class="text-right" th:text="${cliente.telefone}">(11) 99999-9999</td>
 							<td class="text-right"
-								th:text="${cliente.endereco.nomeCidadeSiglaEstado}">
+								th:text="${cliente.endereco?.nomeCidadeSiglaEstado}">
 							</td>
 								
 							<td class="text-center" sec:authorize="hasRole('ROLE_CADASTRAR_CIDADE')">
