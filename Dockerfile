@@ -12,12 +12,12 @@ COPY src ./src
 RUN mvn package -DskipTests -B
 
 # ─── Stage 2: Runtime ─────────────────────────────────────────────────────────
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
 # Cria usuário não-root para executar a aplicação
-RUN addgroup -S brewer && adduser -S brewer -G brewer
+RUN groupadd -r brewer && useradd -r -g brewer brewer
 
 COPY --from=build /app/target/brewer.jar app.jar
 
