@@ -1,56 +1,67 @@
 # Security Policy
 
-## Supported Versions
+## Versões Suportadas
 
-This repository is maintained as a study project and does not have multiple
-supported release branches.
+Este é um projeto de estudo/portfólio. Apenas o branch `master` recebe correções de segurança.
 
-| Version | Supported |
-| ------- | --------- |
-| master  | Yes       |
-| Older branches or forks | No |
+| Versão / Branch | Suportada |
+|---|---|
+| `master` | ✅ Sim |
+| Branches antigas ou forks | ❌ Não |
 
-## Reporting a Vulnerability
+## Reportando uma Vulnerabilidade
 
-If you believe you have found a security vulnerability, do not open a public
-issue.
+**Não abra uma issue pública** para relatar vulnerabilidades de segurança.
 
-Please use GitHub's private vulnerability reporting flow for this repository:
+Use o fluxo de **reporte privado** do GitHub:
 
-- Open the repository Security tab.
-- Use Report a vulnerability to submit the details privately.
+1. Acesse a aba **Security** do repositório
+2. Clique em **Report a vulnerability**
+3. Descreva o problema com o máximo de detalhes
 
-When reporting, include:
+Ao reportar, inclua:
+- Descrição clara da vulnerabilidade e área afetada
+- Passos para reprodução ou prova de conceito
+- Avaliação de impacto (se conhecida)
+- Sugestão de correção (se disponível)
 
-- A clear description of the issue and affected area.
-- Reproduction steps or a proof of concept.
-- Impact assessment, if known.
-- Suggested remediation, if available.
+**Prazo de resposta esperado:** confirmação inicial em até 5 dias úteis.
 
-Best effort response targets:
+Por favor, evite divulgação pública até que o problema tenha sido revisado e uma correção ou mitigação esteja disponível.
 
-- Initial acknowledgement within 5 business days.
-- Follow-up after triage when the report is validated.
+---
 
-Please avoid public disclosure until the issue has been reviewed and a fix or
-mitigation is available.# Security Policy
+## Práticas de Segurança do Projeto
 
-## Supported Versions
+### Autenticação e Autorização
+- Autenticação via **form login** com Spring Security 6
+- Senhas armazenadas com **BCrypt** (fator de custo padrão do Spring Security)
+- Controle de acesso baseado em **roles** (`ROLE_CADASTRAR_CIDADE`, `ROLE_CADASTRAR_USUARIO`, `ROLE_CANCELAR_VENDA`) e **grupos** (Administrador, Vendedor)
+- Proteção contra **CSRF** habilitada por padrão no Spring Security
+- Cabeçalhos de segurança HTTP configurados via Spring Security (X-Content-Type-Options, X-Frame-Options, etc.)
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+### Banco de Dados
+- Migrations versionadas com **Flyway** — sem DDL automático em produção
+- Queries parametrizadas via **Spring Data JPA / JPQL** — sem SQL concatenado (proteção contra SQL Injection)
+- Credenciais do banco injetadas por **variáveis de ambiente** (nunca em código ou no repositório)
+- Arquivo `.env` listado no `.gitignore`
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+### Upload de Arquivos
+- Validação de tipo MIME em uploads de fotos de cervejas
+- Tamanho máximo configurado (10 MB)
+- Armazenamento em **AWS S3** (produção) ou diretório local — sem execução de arquivos enviados
 
-## Reporting a Vulnerability
+### Docker / Infraestrutura
+- Container da aplicação executa com **usuário não-root** (`brewer`)
+- Jar com permissões `644` (não executável diretamente pelo sistema)
+- Imagem de runtime baseada em `eclipse-temurin:17-jre` (Debian) — sem ferramentas de build na imagem final
+- Secrets via variáveis de ambiente no `docker-compose.yml` com suporte a arquivo `.env`
 
-Use this section to tell people how to report a vulnerability.
+### Dependências
+- **Dependabot** configurado para atualização automática de dependências Maven e npm
+- **GitHub Actions OSSAR** (análise estática de segurança) executa em cada push/PR para `master`
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+### O que NÃO está implementado (escopo de estudo)
+- HTTPS / TLS (esperado ser terminado no load balancer/proxy reverso)
+- Rate limiting / proteção contra brute force no login
+- Auditoria de ações (log de quem fez o quê)
