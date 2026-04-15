@@ -10,9 +10,11 @@ import java.nio.file.Paths;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.algaworks.brewer.storage.FotoStorage;
 
@@ -25,6 +27,9 @@ public class FotoStorageLocal implements FotoStorage {
 
 	private static final Logger logger = LoggerFactory.getLogger(FotoStorageLocal.class);
 	private static final String THUMBNAIL_PREFIX = "thumbnail.";
+	
+	@Value("${server.servlet.context-path:/}")
+	private String contextPath = "/";
 	
 	private Path local;
 	
@@ -86,7 +91,11 @@ public class FotoStorageLocal implements FotoStorage {
 	
 	@Override
 	public String getUrl(String foto) {
-		return "http://localhost:8080/brewer/fotos/" + foto;
+		String basePath = (contextPath == null || contextPath.isBlank() || "/".equals(contextPath)) ? "" : contextPath;
+		return UriComponentsBuilder.fromPath(basePath)
+				.path("/fotos/")
+				.path(foto)
+				.toUriString();
 	}
 	
 	private void criarPastas() {
