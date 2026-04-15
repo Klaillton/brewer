@@ -27,10 +27,12 @@
 					<label for="dataInicio" th:text="#{vendasEmitidas.dataCriacao}">Data de criação</label>
 					<div class="form-inline">
 						<input type="text" class="form-control  aw-form-control-inline-sm  js-date" 
-							id="dataInicio" th:field="*{dataInicio}" autocomplete="off" required/>
+							id="dataInicio" th:field="*{dataInicio}" autocomplete="off" bw-required
+							brewer:classforerror="dataInicio"/>
 						<label for="a" class="aw-form-label-between">a</label>
 						<input type="text" class="form-control  aw-form-control-inline-sm  js-date" 
-							id="dataFim" th:field="*{dataFim}" autocomplete="off" required/>
+							id="dataFim" th:field="*{dataFim}" autocomplete="off" bw-required
+							brewer:classforerror="dataFim"/>
 					</div>
 				</div>
 			</div>
