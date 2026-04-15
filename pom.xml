@@ -255,6 +255,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <artifactId>junit-vintage-engine</artifactId>
 <scope>test</scope>
 </dependency>
-</dependencies>
 
-</project>
+        <!-- Observability: Actuator + Micrometer OTLP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-otlp</artifactId>
+        </dependency>
