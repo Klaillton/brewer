@@ -61,6 +61,7 @@ public class Venda {
 	private Usuario usuario;
 	
 	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "varchar(30)")
 	private StatusVenda status = StatusVenda.ORCAMENTO;
 
 	@OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)

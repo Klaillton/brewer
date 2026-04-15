@@ -70,10 +70,12 @@ public class Cerveja implements Serializable {
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "varchar(50)")
 	private Origem origem;
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "varchar(50)")
 	private Sabor sabor;
 	
 	@ManyToOne

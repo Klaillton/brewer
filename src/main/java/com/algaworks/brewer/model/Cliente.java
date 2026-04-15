@@ -48,7 +48,7 @@ public class Cliente implements Serializable{
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	@Column(name = "tipo_pessoa")
+	@Column(name = "tipo_pessoa", columnDefinition = "varchar(15)")
 	private TipoPessoa tipoPessoa;
 
 	@NotBlank
