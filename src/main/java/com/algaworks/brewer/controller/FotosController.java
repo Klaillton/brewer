@@ -1,6 +1,9 @@
 package com.algaworks.brewer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.MediaTypeFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,8 +39,11 @@ public class FotosController {
 	
 	
 	@GetMapping("/{nome:.*}")
-	public byte[] recuperar(@PathVariable String nome) {
-		return fotoStorage.recuperar(nome);
+	public ResponseEntity<byte[]> recuperar(@PathVariable String nome) {
+		MediaType mediaType = MediaTypeFactory.getMediaType(nome).orElse(MediaType.APPLICATION_OCTET_STREAM);
+		return ResponseEntity.ok()
+				.contentType(mediaType)
+				.body(fotoStorage.recuperar(nome));
 	}
 	
 }
