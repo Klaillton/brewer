@@ -101,9 +101,10 @@ docker compose up --build
 # http://localhost:8081
 ```
 
-O Flyway aplica automaticamente as migrations V01–V15 na primeira inicialização, incluindo dados de demonstração (2 vendedores, 3 clientes, 10 cervejas e 24 vendas).
+O Flyway aplica automaticamente as migrations V01–V16 na primeira inicialização, incluindo dados de demonstração (2 vendedores, 3 clientes, 10 cervejas e 24 vendas).
 
-**Credenciais padrão:** `admin@brewer.com` / `admin123`
+Por hardening de segurança, não há mais credencial administrativa padrão ativa após as migrations.
+Para criar um admin local manualmente, use o script `docs/sql/bootstrap-local-admin.sql`.
 
 ### Serviços Docker
 
@@ -164,6 +165,14 @@ Depois execute os testes do backend:
 mvn test
 ```
 
+### Bootstrap manual de admin local
+
+Para ambientes locais, gere um hash BCrypt, ajuste nome/e-mail e execute:
+
+```bash
+docker compose exec -T db mariadb -uroot -proot brewer < docs/sql/bootstrap-local-admin.sql
+```
+
 ## Configuração
 
 ### Perfis de Aplicação
@@ -220,6 +229,7 @@ O sistema usa grupos e permissões granulares:
 | V13 | Role `ROLE_CANCELAR_VENDA` |
 | V14 | Estados e cidades do Brasil |
 | V15 | Dados de demonstração: 2 vendedores, 3 clientes, 10 cervejas, 24 vendas |
+| V16 | Desativa usuário admin padrão legado e remove vínculo administrativo (hardening) |
 
 ## CI/CD
 
