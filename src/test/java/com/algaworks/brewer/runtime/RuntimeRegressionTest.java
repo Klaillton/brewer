@@ -39,4 +39,21 @@ class RuntimeRegressionTest {
         mockMvc.perform(get("/api/vendas/stats/por-mes"))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    @WithMockUser(username = "admin@brewer.com", roles = { "CADASTRAR_CIDADE" })
+    void vendasPageShouldAcceptSortingByNestedFields() throws Exception {
+        mockMvc.perform(get("/vendas")
+                        .param("sort", "cliente.nome,asc")
+                        .param("sort", "usuario.nome,desc"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "admin@brewer.com", roles = { "CADASTRAR_CIDADE" })
+    void vendasApiShouldAcceptLegacyAndCurrentSortFields() throws Exception {
+        mockMvc.perform(get("/api/vendas")
+                        .param("sort", "c.nome,asc"))
+                .andExpect(status().isOk());
+    }
 }
