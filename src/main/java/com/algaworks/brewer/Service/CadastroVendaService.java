@@ -13,6 +13,7 @@ import com.algaworks.brewer.Service.event.venda.CancelaVendaEvent;
 import com.algaworks.brewer.Service.event.venda.VendaEvent;
 import com.algaworks.brewer.model.StatusVenda;
 import com.algaworks.brewer.model.Venda;
+import com.algaworks.brewer.repository.Cervejas;
 import com.algaworks.brewer.repository.Vendas;
 
 @Service
@@ -20,6 +21,9 @@ public class CadastroVendaService {
 
 	@Autowired
 	private Vendas vendas;
+
+	@Autowired
+	private Cervejas cervejas;
 	
 	@Autowired
 	private ApplicationEventPublisher publisher;
@@ -49,6 +53,9 @@ public class CadastroVendaService {
 //			tem de verificar um metodo de retornar msg para o usuario na tela*/
 //		}
 		
+		venda.getItens().forEach(item ->
+				item.setCerveja(cervejas.getReferenceById(item.getCerveja().getCodigo())));
+
 		return vendas.saveAndFlush(venda); /*o metodo saveAndFlush ao realizar o salvamento no BD, 
 		retorna o resultado para o objeto que chama o metodo*/
 	}
