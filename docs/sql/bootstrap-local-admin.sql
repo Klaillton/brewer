@@ -3,9 +3,9 @@
 -- 2) Ajuste nome/email se desejar.
 -- 3) Execute no banco alvo.
 
-SET @admin_nome  = 'brewer';
-SET @admin_email = 'brewer@brewer.com';
-SET @admin_hash  = '$2a$10$ZjtZblwv5OsmfDTIWO9ZiuuYDVv8vqNKirhhkj94U8Vz.zgBj3soK';
+SET @admin_nome  = 'Admin Local';
+SET @admin_email = 'admin@local';
+SET @admin_hash  = 'SUBSTITUIR_POR_HASH_BCRYPT';
 
 INSERT INTO usuario (nome, email, senha, ativo)
 SELECT @admin_nome, @admin_email, @admin_hash, 1
