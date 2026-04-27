@@ -98,7 +98,7 @@ public class Cerveja implements Serializable {
 	private String urlThumbnailFoto;
 	
 
-	@PrePersist @PreUpdate @PostLoad
+	@PrePersist @PreUpdate
 	private void prePersistUpdate() {
 		sku = sku.toUpperCase();
 	}
