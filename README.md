@@ -150,6 +150,20 @@ npx playwright install
 npm test
 ```
 
+### Banco de testes para profile test
+
+Para provisionar o schema de testes e permissões em um servidor novo:
+
+```bash
+docker compose exec -T db mariadb -uroot -proot < docs/sql/bootstrap-test-db.sql
+```
+
+Depois execute os testes do backend:
+
+```bash
+mvn test
+```
+
 ## Configuração
 
 ### Perfis de Aplicação
