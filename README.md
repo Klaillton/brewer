@@ -151,6 +151,8 @@ npx playwright install
 npm test
 ```
 
+O diretório E2E agora mantém lockfile para auditorias reproduzíveis de dependências via `npm audit`.
+
 ### Banco de testes para profile test
 
 Para provisionar o schema de testes e permissões em um servidor novo:
@@ -234,7 +236,19 @@ O sistema usa grupos e permissões granulares:
 ## CI/CD
 
 - **GitHub Actions** — análise estática de segurança (OSSAR) em push/PR para `master`
+- **GitHub Actions** — auditoria Java com OWASP Dependency-Check em push/PR/schedule
 - **Dependabot** — atualizações automáticas de dependências Maven e npm
+
+### Auditoria Java de dependências
+
+Execução local:
+
+```bash
+mvn -B -DskipTests dependency-check:check
+```
+
+Para melhor desempenho e menos rate limiting, configure a variável de ambiente `NVD_API_KEY` localmente ou o secret `NVD_API_KEY` no GitHub Actions.
+O relatório HTML é gerado em `target/dependency-check-report.html`.
 - Spring MVC 5.x → Spring Boot 3.2.5
 - javax.* → jakarta.* (Jakarta EE)
 - Hibernate Criteria API → JPA Criteria API
