@@ -16,12 +16,14 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -48,6 +50,7 @@ public class VendasImpl implements VendasQueries {
 
 		List<Predicate> predicates = adicionarFiltro(filtro, builder, root);
 		query.where(predicates.toArray(new Predicate[0]));
+		adicionarOrdenacao(pageable, builder, query, root);
 
 		TypedQuery<Venda> typedQuery = manager.createQuery(query);
 		typedQuery.setFirstResult((int) pageable.getOffset());
@@ -236,6 +239,44 @@ public class VendasImpl implements VendasQueries {
 		}
 
 		return predicates;
+	}
+
+	private void adicionarOrdenacao(Pageable pageable, CriteriaBuilder builder,
+			CriteriaQuery<Venda> query, Root<Venda> root) {
+		if (pageable == null || pageable.getSort().isUnsorted()) {
+			return;
+		}
+
+		List<jakarta.persistence.criteria.Order> orders = new ArrayList<>();
+		for (Sort.Order sortOrder : pageable.getSort()) {
+			String property = normalizarPropriedadeOrdenacao(sortOrder.getProperty());
+			Path<?> path = resolverPath(root, property);
+			orders.add(sortOrder.isAscending() ? builder.asc(path) : builder.desc(path));
+		}
+
+		if (!orders.isEmpty()) {
+			query.orderBy(orders);
+		}
+	}
+
+	private String normalizarPropriedadeOrdenacao(String propriedade) {
+		if ("c.nome".equals(propriedade)) {
+			return "cliente.nome";
+		}
+
+		if ("usuario".equals(propriedade)) {
+			return "usuario.nome";
+		}
+
+		return propriedade;
+	}
+
+	private Path<?> resolverPath(Root<Venda> root, String propriedade) {
+		Path<?> path = root;
+		for (String trecho : propriedade.split("\\.")) {
+			path = path.get(trecho);
+		}
+		return path;
 	}
 
 }
