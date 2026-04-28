@@ -1,0 +1,27 @@
+{
+  "name": "brewer-extension-pack",
+  "displayName": "Brewer Extension Pack",
+  "description": "Extension pack recomendada para desenvolvimento do projeto Brewer.",
+  "version": "0.0.1",
+  "publisher": "klaillton",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Extension Packs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Klaillton/brewer.git"
+  },
+  "extensionPack": [
+    "vscjava.vscode-java-pack",
+    "vmware.vscode-boot-dev-pack",
+    "redhat.java",
+    "vscjava.vscode-maven",
+    "angular.ng-template",
+    "ms-playwright.playwright",
+    "ms-azuretools.vscode-docker",
+    "editorconfig.editorconfig"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-21",
+      "path": "/home/dante/.sdkman/candidates/java/21-tem",
+      "default": true
+    }
+  ],
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.import.maven.enabled": true,
+  "java.import.gradle.enabled": false,
+  "java.compile.nullAnalysis.mode": "automatic",
+  "maven.executable.path": "mvn",
+  "editor.formatOnSave": true
+}
