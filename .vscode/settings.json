@@ -1,4 +1,5 @@
 {
+  "java.jdt.ls.java.home": "/home/dante/.sdkman/candidates/java/21-tem",
   "java.configuration.runtimes": [
     {
       "name": "JavaSE-21",
