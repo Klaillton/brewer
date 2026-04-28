@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "vscjava.vscode-java-pack",
+    "vmware.vscode-boot-dev-pack",
+    "redhat.java",
+    "vscjava.vscode-maven",
+    "angular.ng-template",
+    "ms-playwright.playwright",
+    "ms-azuretools.vscode-docker",
+    "editorconfig.editorconfig"
+  ]
+}
