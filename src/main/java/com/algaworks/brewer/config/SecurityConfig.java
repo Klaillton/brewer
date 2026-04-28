@@ -39,12 +39,13 @@ public class SecurityConfig {
 					.requestMatchers("/usuarios/**").hasRole("CADASTRAR_USUARIO")
 					.requestMatchers("/api/estados").permitAll()
 					.requestMatchers("/api/cervejas/search").permitAll()
-					.requestMatchers("/api/**").authenticated()
-					.anyRequest().authenticated();
+					.requestMatchers("/api/**").authenticated();
 
 				if (allowH2Console) {
 					authorize.requestMatchers("/h2-console/**").permitAll();
 				}
+
+				authorize.anyRequest().authenticated();
 			})
 			.formLogin(form -> form
 				.loginPage("/login")

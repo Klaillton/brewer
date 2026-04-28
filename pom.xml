@@ -6,10 +6,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <modelVersion>4.0.0</modelVersion>
 
 <parent>
-<groupId>org.springframework.boot</groupId>
-<artifactId>spring-boot-starter-parent</artifactId>
-<version>3.2.5</version>
-<relativePath/>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-parent</artifactId>
+	<version>3.5.3</version>
+	<relativePath/>
 </parent>
 
 <groupId>com.algaworks</groupId>
@@ -21,7 +21,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <properties>
 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-<java.version>17</java.version>
+<java.version>25</java.version>
 
 <!-- OWASP Dependency Check -->
 <dependency-check.version>12.2.1</dependency-check.version>
