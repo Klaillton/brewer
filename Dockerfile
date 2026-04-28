@@ -21,12 +21,17 @@ WORKDIR /app
 # Instala wget para o HEALTHCHECK e cria usuário não-root
 RUN apt-get update && apt-get install -y --no-install-recommends wget \
     && rm -rf /var/lib/apt/lists/* \
-    && addgroup --system brewer && adduser --system --ingroup brewer brewer
+  && groupadd -g 10001 brewer \
+  && useradd -u 10001 -g brewer -M -s /usr/sbin/nologin brewer \
+  && mkdir -p /tmp \
+  && chown -R brewer:brewer /tmp
 
 COPY --from=build /app/target/brewer.jar app.jar
 
 RUN chown brewer:brewer app.jar && \
     chmod 644 app.jar
+
+ENV JAVA_TOOL_OPTIONS="-Djava.io.tmpdir=/tmp"
 
 USER brewer
 

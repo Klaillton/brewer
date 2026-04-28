@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brewer
+  namespace: brewer
+  labels:
+    app.kubernetes.io/name: brewer
+    app.kubernetes.io/part-of: brewer
+    app.kubernetes.io/version: "latest"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: brewer
+  template:
+    metadata:
+      labels:
+        app: brewer
+        app.kubernetes.io/name: brewer
+        app.kubernetes.io/part-of: brewer
+      annotations:
+        # Instrui o Prometheus a fazer scrape deste pod diretamente
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8080"
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: brewer
+          # Imagem construída localmente via: docker build -t brewer:latest .
+          # Em ambiente K3s com docker como runtime, a imagem fica disponível
+          # automaticamente. Ver deploy.sh para o fluxo completo.
+          image: brewer:latest
+          # IfNotPresent evita pull de registry inexistente para imagem local
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            # ── Spring Profile ──────────────────────────────────────────────
+            - name: SPRING_PROFILES_ACTIVE
+              value: "docker,prod"
+            # ── Database ────────────────────────────────────────────────────
+            - name: DB_HOST
+              value: "mariadb.brewer.svc.cluster.local"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: brewer-secrets
+                  key: db-name
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: brewer-secrets
+                  key: db-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: brewer-secrets
+                  key: db-password
+            # ── Observability: OTel Collector no namespace observability ────
+            # DNS interno K8s: <service>.<namespace>.svc.cluster.local
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://otel-collector.observability.svc.cluster.local:4318"
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          startupProbe:
+            httpGet:
+              path: /login
+              port: 8080
+            failureThreshold: 12
+            periodSeconds: 20
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+            initialDelaySeconds: 0
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8080
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 6
+          resources:
+            # Dimensionado para Raspberry Pi 4 (4 GB RAM)
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"
+      volumes:
+        - name: tmp
+          emptyDir: {}

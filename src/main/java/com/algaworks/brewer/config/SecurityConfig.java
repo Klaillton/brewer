@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -51,12 +52,16 @@ public class SecurityConfig {
 			)
 			.logout(logout -> logout
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.invalidateHttpSession(true)
+				.clearAuthentication(true)
+				.deleteCookies("JSESSIONID")
 			)
 			.exceptionHandling(exception -> exception
 				.accessDeniedPage("/403")
 			)
 			.sessionManagement(session -> session
 				.invalidSessionUrl("/login")
+				.sessionFixation(sessionFixation -> sessionFixation.migrateSession())
 			)
 			.csrf(csrf -> {
 				csrf.ignoringRequestMatchers("/api/**");
@@ -65,8 +70,24 @@ public class SecurityConfig {
 				}
 			})
 			.headers(headers -> {
+				headers.contentTypeOptions(contentType -> {});
+				headers.referrerPolicy(referrer -> referrer.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN));
+				headers.permissionsPolicy(permissions -> permissions.policy("camera=(), geolocation=(), microphone=(), payment=(), usb=()"));
+				headers.contentSecurityPolicy(csp -> csp.policyDirectives(
+					"default-src 'self'; " +
+					"img-src 'self' data: https:; " +
+					"style-src 'self' 'unsafe-inline' https:; " +
+					"script-src 'self' 'unsafe-inline'; " +
+					"font-src 'self' data:; " +
+					"frame-ancestors 'self'; " +
+					"object-src 'none'; " +
+					"base-uri 'self'; " +
+					"form-action 'self'"
+				));
 				if (allowH2Console) {
 					headers.frameOptions(frame -> frame.sameOrigin());
+				} else {
+					headers.frameOptions(frame -> frame.deny());
 				}
 			});
 		
