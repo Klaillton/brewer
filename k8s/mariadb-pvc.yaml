@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-data
+  namespace: brewer
+  labels:
+    app.kubernetes.io/name: mariadb
+    app.kubernetes.io/part-of: brewer
+spec:
+  accessModes:
+    - ReadWriteOnce
+  # K3s provisiona automaticamente via local-path-provisioner
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 2Gi

@@ -51,3 +51,7 @@ Temporary Items
 .env
 .env.*
 !.env.example
+
+# Segredos locais para Kubernetes (nunca versionar)
+k8s/.secret.env
+k8s/.secret.*.env

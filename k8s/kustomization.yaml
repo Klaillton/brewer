@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Aplica todos os recursos do namespace brewer
+resources:
+  - namespace.yaml
+  - network-policy.yaml
+  - mariadb-pvc.yaml
+  - mariadb-deployment.yaml
+  - mariadb-service.yaml
+  - app-deployment.yaml
+  - app-service.yaml
+  - app-ingress.yaml

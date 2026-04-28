@@ -1,0 +1,50 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# Patch no ConfigMap do Prometheus (namespace observability)
+# Adiciona scrape job para a aplicação brewer no namespace brewer.
+#
+# O Prometheus usa DNS interno do cluster para resolver o serviço:
+#   brewer.brewer.svc.cluster.local:80
+#
+# Aplicado via: kubectl apply -f k8s/observability/prometheus-patch.yaml
+# ──────────────────────────────────────────────────────────────────────────────
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: observability
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+
+    scrape_configs:
+      # Coleta de saude do proprio Prometheus.
+      - job_name: prometheus
+        static_configs:
+          - targets: ['localhost:9090']
+
+      # Coleta metrics publicadas pelo OTel Collector.
+      # Porta 8889: metricas de aplicacao exportadas via OTel Prometheus exporter.
+      - job_name: otel-collector-metrics
+        static_configs:
+          - targets: ['otel-collector:8889']
+
+      # Porta 8888: metricas internas do proprio OTel Collector
+      # (spans recebidos, exportados, falhas, tamanho de fila, etc.).
+      - job_name: otel-collector-internal
+        static_configs:
+          - targets: ['otel-collector:8888']
+
+      # node-exporter: metricas do sistema operacional host
+      # (CPU, memoria, disco, rede, load average, filesystem).
+      - job_name: node-exporter
+        static_configs:
+          - targets: ['node-exporter:9100']
+
+      # Brewer: scrape direto do endpoint /actuator/prometheus da aplicacao.
+      # DNS interno K8s: <service>.<namespace>.svc.cluster.local
+      # A aplicacao expoe metricas via Micrometer + micrometer-registry-prometheus.
+      - job_name: brewer
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['brewer.brewer.svc.cluster.local:80']

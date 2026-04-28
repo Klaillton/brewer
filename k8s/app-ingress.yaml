@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: brewer
+  namespace: brewer
+  labels:
+    app.kubernetes.io/name: brewer
+    app.kubernetes.io/part-of: brewer
+spec:
+  # Traefik é o ingress controller padrão do K3s
+  ingressClassName: traefik
+  rules:
+    # Acesse via: http://brewer.local (adicionar ao /etc/hosts da máquina cliente)
+    # ou via IP direto: http://192.168.1.101 (com header Host: brewer.local)
+    - host: brewer.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: brewer
+                port:
+                  name: http
