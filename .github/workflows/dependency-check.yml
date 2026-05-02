@@ -30,18 +30,44 @@ jobs:
 
       # Cache the actual Dependency-Check data (NVD cache + embedded DB).
       # Caching Maven artifacts under ~/.m2 can preserve broken/incompatible DC internals.
+      # The key includes run_id so a corrupt DB from a failed run is never re-used.
       - name: Cache Dependency-Check data
         uses: actions/cache@v4
         with:
           path: ~/.dependency-check/data
-          key: dependency-check-data-${{ runner.os }}-${{ hashFiles('pom.xml') }}
-          restore-keys: |
-            dependency-check-data-${{ runner.os }}-
+          key: dependency-check-data-${{ runner.os }}-${{ hashFiles('pom.xml') }}-${{ github.run_id }}
+
+      # If a previous run left a corrupt H2 MVStore file, remove it so the tool
+      # starts fresh rather than crashing with ClosedChannelException / connectionPool null.
+      - name: Clear dependency-check data if H2 database is corrupt
+        run: |
+          DC_DATA="$HOME/.dependency-check/data"
+          if [ -d "$DC_DATA" ]; then
+            # H2 MVStore files use the .mv.db extension; check for zero-length or clearly
+            # truncated files (size < 4 KB) which indicate an interrupted prior write.
+            find "$DC_DATA" -name "*.mv.db" | while read db; do
+              size=$(wc -c < "$db" 2>/dev/null || echo 0)
+              if [ "$size" -lt 4096 ]; then
+                echo "Removing suspect DB file: $db (size=${size})"
+                rm -rf "$DC_DATA"
+                break
+              fi
+            done
+          fi
 
       - name: Run OWASP Dependency-Check
         env:
           NVD_API_KEY: ${{ secrets['NVD_API_KEY'] }}
-        run: mvn -B -DskipTests dependency-check:check -Ddependency-check.data.directory="$HOME/.dependency-check/data"
+        run: |
+          mvn -B -DskipTests dependency-check:check \
+            -Ddependency-check.data.directory="$HOME/.dependency-check/data" \
+            -DnvdApiDelay=2000
+
+      # If the scan failed, remove the data dir so the cache step does not persist a
+      # broken H2 database that would corrupt the next run.
+      - name: Clear dependency-check data on failure
+        if: failure()
+        run: rm -rf "$HOME/.dependency-check/data"
 
       - name: Upload Dependency-Check report
         if: always()

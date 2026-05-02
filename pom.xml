@@ -89,6 +89,12 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <format>HTML</format>
 <failBuildOnCVSS>7</failBuildOnCVSS>
 <nvdApiKeyEnvironmentVariable>NVD_API_KEY</nvdApiKeyEnvironmentVariable>
+<!-- Explicit data directory; CI overrides via -D flag. -->
+<dataDirectory>${user.home}/.dependency-check/data</dataDirectory>
+<!-- Retry up to 10 times on transient NVD API / DB errors. -->
+<nvdMaxRetryCount>10</nvdMaxRetryCount>
+<!-- 2-second delay between NVD API pages reduces concurrent write pressure on H2. -->
+<nvdApiDelay>2000</nvdApiDelay>
 </configuration>
 </plugin>
 </plugins>
