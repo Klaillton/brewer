@@ -28,18 +28,20 @@ jobs:
           java-version: '17'
           cache: maven
 
+      # Cache the actual Dependency-Check data (NVD cache + embedded DB).
+      # Caching Maven artifacts under ~/.m2 can preserve broken/incompatible DC internals.
       - name: Cache Dependency-Check data
         uses: actions/cache@v4
         with:
-          path: ~/.m2/repository/org/owasp
-          key: dependency-check-${{ runner.os }}-${{ hashFiles('pom.xml') }}
+          path: ~/.dependency-check/data
+          key: dependency-check-data-${{ runner.os }}-${{ hashFiles('pom.xml') }}
           restore-keys: |
-            dependency-check-${{ runner.os }}-
+            dependency-check-data-${{ runner.os }}-
 
       - name: Run OWASP Dependency-Check
         env:
           NVD_API_KEY: ${{ secrets['NVD_API_KEY'] }}
-        run: mvn -B -DskipTests dependency-check:check
+        run: mvn -B -DskipTests dependency-check:check -Ddependency-check.data.directory="$HOME/.dependency-check/data"
 
       - name: Upload Dependency-Check report
         if: always()
