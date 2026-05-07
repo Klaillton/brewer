@@ -1,0 +1,23 @@
+# Override para integrar a stack Brewer com uma rede de observabilidade compartilhada.
+#
+# Pré-requisito: crie a rede antes de iniciar:
+#   docker network create observability-shared
+#
+# Uso:
+#   docker compose -f docker-compose.yml -f docker-compose.observability.yml up
+#
+# Isso conecta o serviço 'app' à rede 'observability-shared', permitindo
+# que ele alcance o OTel Collector em http://otel-collector:4318.
+
+services:
+  app:
+    networks:
+      - default
+      - observability-shared
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+
+networks:
+  observability-shared:
+    name: observability-shared
+    external: true

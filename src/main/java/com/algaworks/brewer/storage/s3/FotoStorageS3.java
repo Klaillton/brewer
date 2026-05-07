@@ -8,6 +8,7 @@ import java.io.InputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -31,7 +32,8 @@ public class FotoStorageS3 implements FotoStorage {
 	
 	private static final Logger logger = LoggerFactory.getLogger(FotoStorageS3.class);
 
-	private static final String BUCKET = "aw-brewer-klaillton";
+	@Value("${aws.s3.bucket}")
+	private String bucket;
 
 	@Autowired
 	private AmazonS3 amazonS3;
@@ -51,7 +53,7 @@ public class FotoStorageS3 implements FotoStorage {
 
 				enviarThumbnail(novoNome, arquivo, acl);
 				
-				System.out.println("Enviou foto e thumbnail!");
+				logger.info("Foto e thumbnail enviados para o S3: {}", novoNome);
 
 			} catch (IOException e) {
 				throw new RuntimeException("Erro salvando arquivo no S3");
@@ -62,11 +64,11 @@ public class FotoStorageS3 implements FotoStorage {
 
 	@Override
 	public byte[] recuperar(String foto) {
-		InputStream is = amazonS3.getObject(BUCKET, foto).getObjectContent();
+		InputStream is = amazonS3.getObject(bucket, foto).getObjectContent();
 		try {
 			return IOUtils.toByteArray(is);
 		} catch (IOException e) { 
-			logger.error("Não conseguiu recuperar foto do S3");
+			logger.error("Não conseguiu recuperar foto do S3: {}", foto);
 		}
 		
 		return null;
@@ -79,13 +81,13 @@ public class FotoStorageS3 implements FotoStorage {
 
 	@Override
 	public void excluir(String foto) {
-		amazonS3.deleteObjects(new DeleteObjectsRequest(BUCKET).withKeys(foto, THUMBNAIL_PREFIX + foto));
+		amazonS3.deleteObjects(new DeleteObjectsRequest(bucket).withKeys(foto, THUMBNAIL_PREFIX + foto));
 	}
 
 	@Override
 	public String getUrl(String foto) {
-		if (!StringUtils.isEmpty(foto)) {
-			 return "https://s3-sa-east-1.amazonaws.com/aw-brewer-klaillton/" + foto;
+		if (StringUtils.hasText(foto)) {
+			return amazonS3.getUrl(bucket, foto).toString();
 		}
 		
 		return null;
@@ -97,7 +99,7 @@ public class FotoStorageS3 implements FotoStorage {
 		metadata.setContentType(arquivo.getContentType());
 		metadata.setContentLength(arquivo.getSize());
 		amazonS3.putObject(
-				new PutObjectRequest(BUCKET, novoNome, arquivo.getInputStream(), metadata).withAccessControlList(acl));
+				new PutObjectRequest(bucket, novoNome, arquivo.getInputStream(), metadata).withAccessControlList(acl));
 		return metadata;
 	}
 
@@ -109,7 +111,7 @@ public class FotoStorageS3 implements FotoStorage {
 		ObjectMetadata thumbMetadata = new ObjectMetadata();
 		thumbMetadata.setContentType(arquivo.getContentType());
 		thumbMetadata.setContentLength(array.length);
-		amazonS3.putObject(new PutObjectRequest(BUCKET, THUMBNAIL_PREFIX + novoNome, is, thumbMetadata)
+		amazonS3.putObject(new PutObjectRequest(bucket, THUMBNAIL_PREFIX + novoNome, is, thumbMetadata)
 				.withAccessControlList(acl));
 	}
 
