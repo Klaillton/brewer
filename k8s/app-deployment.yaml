@@ -82,14 +82,14 @@ spec:
               mountPath: /tmp
           startupProbe:
             httpGet:
-              path: /login
+              path: /actuator/health/liveness
               port: 8080
             failureThreshold: 12
             periodSeconds: 20
             timeoutSeconds: 5
           livenessProbe:
             httpGet:
-              path: /login
+              path: /actuator/health/liveness
               port: 8080
             initialDelaySeconds: 0
             periodSeconds: 30
@@ -97,7 +97,7 @@ spec:
             failureThreshold: 3
           readinessProbe:
             httpGet:
-              path: /login
+              path: /actuator/health/readiness
               port: 8080
             initialDelaySeconds: 0
             periodSeconds: 10

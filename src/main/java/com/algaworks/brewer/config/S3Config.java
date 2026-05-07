@@ -20,18 +20,22 @@ public class S3Config {
 	@Value("${aws.secret.access.key:}")
 	private String secretAccessKey;
 
+	@Value("${aws.s3.region:us-east-1}")
+	private String region;
+
 	@Bean
 	public AmazonS3 amazonS3() {
+		Regions awsRegion = Regions.fromName(region);
 		if (accessKeyId == null || accessKeyId.isEmpty() || secretAccessKey == null || secretAccessKey.isEmpty()) {
 			return AmazonS3ClientBuilder.standard()
-				.withRegion(Regions.US_EAST_1)
+				.withRegion(awsRegion)
 				.build();
 		}
 		
 		AWSCredentials credentials = new BasicAWSCredentials(accessKeyId, secretAccessKey);
 		return AmazonS3ClientBuilder.standard()
 			.withCredentials(new AWSStaticCredentialsProvider(credentials))
-			.withRegion(Regions.US_EAST_1)
+			.withRegion(awsRegion)
 			.build();
 	}
 

@@ -1,6 +1,6 @@
 # Brewer — Sistema de Gerenciamento de Cervejaria
 
-Sistema web para gestão de cervejaria: cadastro de cervejas, clientes, vendas, relatórios e controle de usuários. Desenvolvido com Spring Boot 3 (MVC + REST) e Angular, com suporte a deploy via Docker.
+Sistema web para gestão de cervejaria: cadastro de cervejas, clientes, vendas, relatórios e controle de usuários. Desenvolvido com Spring Boot 3 (MVC + REST) e Angular, com suporte a deploy via Docker e Kubernetes (K3s).
 
 ## Tecnologias
 
@@ -30,6 +30,8 @@ Sistema web para gestão de cervejaria: cadastro de cervejas, clientes, vendas, 
 |---|---|---|
 | Docker | — | Containerização |
 | Docker Compose | — | Orquestração local |
+| Kubernetes (K3s) | — | Orquestração em cluster (manifests em `k8s/`) |
+| Kustomize | — | Gestão declarativa dos manifests Kubernetes |
 | eclipse-temurin:17-jre | — | Imagem base de runtime (suporta ARM64) |
 
 ### Testes
@@ -42,11 +44,27 @@ Sistema web para gestão de cervejaria: cadastro de cervejas, clientes, vendas, 
 
 ```
 brewer/
-├── Dockerfile                  # Imagem Docker multi-stage
-├── docker-compose.yml          # Orquestração app + MariaDB
+├── Dockerfile                  # Imagem Docker multi-stage (UID 10001, read-only FS)
+├── docker-compose.yml          # Orquestração app + MariaDB (hardened)
+├── deploy.sh                   # Build + deploy no K3s (kubectl apply + rollout)
 ├── .env.example                # Template de variáveis de ambiente
 ├── Procfile                    # Deploy Heroku/Render
 ├── pom.xml                     # Build Maven
+├── k8s/                        # Manifests Kubernetes para K3s
+│   ├── kustomization.yaml      # Ponto de entrada Kustomize
+│   ├── namespace.yaml          # Namespace brewer
+│   ├── network-policy.yaml     # NetworkPolicy default-deny + allow explícito
+│   ├── app-deployment.yaml     # Deployment da aplicação
+│   ├── app-service.yaml        # Service da aplicação
+│   ├── app-ingress.yaml        # Ingress Traefik
+│   ├── mariadb-deployment.yaml # Deployment do MariaDB
+│   ├── mariadb-service.yaml    # Service do MariaDB
+│   ├── mariadb-pvc.yaml        # PersistentVolumeClaim do MariaDB
+│   ├── .secret.env.example     # Template de credenciais (não versionado)
+│   └── observability/
+│       └── prometheus-patch.yaml # Scrape annotations para Prometheus
+├── scripts/
+│   └── rotate-k8s-secret.sh   # Rotação segura de K8s Secret + ALTER USER MariaDB
 ├── src/
 │   └── main/
 │       ├── java/com/algaworks/brewer/
@@ -60,7 +78,7 @@ brewer/
 │       │   └── storage/        # Abstração de armazenamento (S3 / local)
 │       └── resources/
 │           ├── application.properties
-│           ├── db/migration/   # Scripts Flyway (V01…V15)
+│           ├── db/migration/   # Scripts Flyway (V01…V16)
 │           ├── templates/      # Views Thymeleaf
 │           └── relatorios/     # Templates JasperReports (.jasper)
 ├── frontend/                   # Aplicação Angular
@@ -112,6 +130,39 @@ Para criar um admin local manualmente, use o script `docs/sql/bootstrap-local-ad
 |---|---|---|---|
 | Aplicação | `brewer-app` | `8081` | `8080` |
 | MariaDB | `brewer-db` | `3306` | `3306` |
+
+## Executando no Kubernetes (K3s)
+
+> Pré-requisitos: K3s instalado com Docker como container runtime, `kubectl` configurado e `kustomize` disponível (integrado no `kubectl >= 1.14`).
+
+```bash
+# 1. Copie e edite o arquivo de credenciais (não é versionado)
+cp k8s/.secret.env.example k8s/.secret.env
+# Edite k8s/.secret.env com as senhas reais
+
+# 2. Build da imagem Docker e deploy completo no K3s
+./deploy.sh
+
+# 3. (opcional) Apenas aplicar os manifests sem rebuild da imagem
+./deploy.sh --skip-build
+
+# 4. (opcional) Remover todos os recursos do namespace brewer
+./deploy.sh --delete
+```
+
+O script `deploy.sh` faz:
+- Build da imagem Docker `brewer:latest`
+- Cria/atualiza o K8s Secret a partir de `k8s/.secret.env` via `scripts/rotate-k8s-secret.sh`
+- Aplica os manifests com `kubectl apply -k k8s/`
+- Aguarda o rollout com `kubectl rollout status`
+
+### Rotação de credenciais no K3s
+
+```bash
+scripts/rotate-k8s-secret.sh --file k8s/.secret.env
+```
+
+O script atualiza o K8s Secret e executa `ALTER USER` no MariaDB em execução.
 
 ## Executando Localmente (sem Docker)
 
