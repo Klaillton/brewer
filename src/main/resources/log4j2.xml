@@ -3,8 +3,11 @@
 <Configuration status="WARN">
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %logger{36}: %msg%n" />
+			<!-- Inclui traceId/spanId no padrão para correlação no Grafana -->
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level [%X{traceId},%X{spanId}] %logger{36}: %msg%n" />
 		</Console>
+		<!-- Envia logs via OTLP para o OTel Collector → Loki -->
+		<OpenTelemetry name="OtelAppender" />
 	</Appenders>
 	
 	<Loggers>
@@ -15,6 +18,7 @@
 		
 		<Root level="info">
 			<AppenderRef ref="Console" />
+			<AppenderRef ref="OtelAppender" />
 		</Root>
 	</Loggers>
 </Configuration>
