@@ -2,6 +2,8 @@ package com.algaworks.brewer.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,6 +32,7 @@ public class ItemVenda {
 	@JoinColumn(name = "codigo_cerveja")
 	private Cerveja cerveja;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "codigo_venda")
 	private Venda venda;
