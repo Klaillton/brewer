@@ -24,7 +24,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <java.version>25</java.version>
 
 <!-- OWASP Dependency Check -->
-<dependency-check.version>12.2.1</dependency-check.version>
+<dependency-check.version>12.2.2</dependency-check.version>
 
 <!-- Flyway -->
 <flyway.version>10.10.0</flyway.version>
