@@ -2,8 +2,6 @@ package com.algaworks.brewer.dto;
 
 import java.math.BigDecimal;
 
-import org.springframework.util.StringUtils;
-
 import com.algaworks.brewer.model.Origem;
 
 public class CervejaDTO {
@@ -28,7 +26,7 @@ public class CervejaDTO {
 		this.nome = nome;
 		this.origem = origem.getDescricao();
 		this.valor = valor;
-		this.foto = StringUtils.isEmpty(foto) ? "cerveja-mock.png" : foto;
+		this.foto = (foto == null || foto.isEmpty()) ? "cerveja-mock.png" : foto;
 	}
 
 	public Long getCodigo() {
