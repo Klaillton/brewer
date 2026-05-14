@@ -1,4 +1,4 @@
-package com.algaworks.brewer.Service;
+package com.algaworks.brewer.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.algaworks.brewer.Service.StatusUsuario;
 import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.repository.Usuarios;
 
