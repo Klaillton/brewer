@@ -56,7 +56,7 @@
 ## Fase 2 — Service layer (lógica de negócio) ✅ CONCLUÍDA
 
 **Estratégia**: testes unitários com Mockito — sem Spring context, sem banco.  
-**Branch**: `copilot/prepare-execute-phase-3`  
+**Branch**: `copilot/prepare-execute-phase-2`  
 **PR**: Em andamento
 
 | Classe alvo | Dependências a mockar | Cenários principais |
@@ -90,7 +90,7 @@
 ## Fase 3 — REST Controllers (api/) ✅ CONCLUÍDA
 
 **Estratégia**: testes de controller com `MockMvc` (standalone) + Mockito — sem Spring context, sem banco.  
-**Branch**: `copilot/prepare-execute-phase-2`  
+**Branch**: `copilot/prepare-execute-phase-3`  
 **PR**: Em andamento
 
 | Controller | Endpoints | Cenários |
