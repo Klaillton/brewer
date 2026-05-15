@@ -33,7 +33,7 @@ playwright-cli video-stop
 
 ```bash
 # Include context in filename
-playwright-cli video-start recordings/login-flow-2024-01-15.webm
+playwright-cli video-start recordings/login-flow-2026-05-15.webm
 playwright-cli video-start recordings/checkout-test-run-42.webm
 ```
 
