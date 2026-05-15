@@ -53,10 +53,11 @@
 
 ---
 
-## Fase 2 — Service layer (lógica de negócio) 🔜 PRÓXIMA
+## Fase 2 — Service layer (lógica de negócio) ✅ CONCLUÍDA
 
 **Estratégia**: testes unitários com Mockito — sem Spring context, sem banco.  
-**Branch sugerida**: `test/phase-2-service-layer`
+**Branch**: `copilot/prepare-execute-phase-2`  
+**PR**: Em andamento
 
 | Classe alvo | Dependências a mockar | Cenários principais |
 |-------------|----------------------|---------------------|
@@ -66,10 +67,23 @@
 | `CadastroUsuarioService` | `Usuarios` | usuário duplicado → `UsuarioJaCadastradoException`; senha obrigatória → `SenhaObrigatoriaUsuarioException` |
 | `CadastroCervejaService` | `Cervejas`, `FotoStorage` | salvar com foto nova; substituir foto existente; excluir foto antiga |
 | `CadastroVendaService` | `Vendas`, `ApplicationEventPublisher` | emitir venda; cancelar venda; publicar eventos `VendaEvent`/`CancelaVendaEvent` |
-| `VendaListener` | `CadastroVendaService` | processar `VendaEvent`; processar `CancelaVendaEvent` |
+| `VendaListener` | `Cervejas` | processar `VendaEvent`; processar `CancelaVendaEvent` |
 | `AppUserDetailsService` | `Usuarios` | usuário encontrado → `UsuarioSistema`; não encontrado → `UsernameNotFoundException` |
 
-**Estimativa de novos métodos**: ~25–35
+### Arquivos de teste adicionados
+
+| Arquivo de teste | Pacote | Métodos | Classes cobertas |
+|-----------------|--------|---------|-----------------|
+| `CadastroEstiloServiceTest.java` | `Service` | 3 | `CadastroEstiloService` |
+| `CadastroCidadeServiceTest.java` | `Service` | 3 | `CadastroCidadeService` |
+| `CadastroClienteServiceTest.java` | `Service` | 3 | `CadastroClienteService` |
+| `CadastroUsuarioServiceTest.java` | `Service` | 6 | `CadastroUsuarioService` |
+| `CadastroCervejaServiceTest.java` | `Service` | 3 | `CadastroCervejaService` |
+| `CadastroVendaServiceTest.java` | `Service` | 7 | `CadastroVendaService` |
+| `VendaListenerTest.java` | `Service.event.venda` | 2 | `VendaListener` |
+| `AppUserDetailsServiceTest.java` | `security` | 2 | `AppUserDetailsService` |
+
+**Novos métodos de teste na fase 2**: 29
 
 ---
 
@@ -118,7 +132,7 @@
 |------|--------|--------|-----------------|-----------|
 | 0 (baseline) | Testes pré-existentes | ✅ | 14 | — |
 | 1 | Domínio, helpers, utilitários | ✅ | +42 | PR #103 |
-| 2 | Service layer | 🔜 | +~30 | A criar |
+| 2 | Service layer | ✅ | +29 | PR atual |
 | 3 | REST Controllers | ⏳ | +~25 | A criar |
 | 4 | repository.helper.* | ⏳ | +~35 | A criar |
 | **Total estimado** | | | **~146** | |
