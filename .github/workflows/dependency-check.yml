@@ -57,10 +57,11 @@ jobs:
 
       - name: Run OWASP Dependency-Check
         env:
-          NVD_API_KEY: ${{ secrets['NVD_API_KEY'] }}
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
           mvn -B -DskipTests dependency-check:check \
             -Ddependency-check.data.directory="$HOME/.dependency-check/data" \
+            -DnvdApiKeyEnvironmentVariable=NVD_API_KEY \
             -DnvdApiDelay=2000
 
       # If the scan failed, remove the data dir so the cache step does not persist a
