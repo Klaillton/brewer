@@ -57,7 +57,7 @@ jobs:
 
       - name: Run OWASP Dependency-Check
         env:
-          NVD_API_KEY: ${{ secrets['NVD_API_KEY'] }}
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
           mvn -B -DskipTests dependency-check:check \
             -Ddependency-check.data.directory="$HOME/.dependency-check/data" \
