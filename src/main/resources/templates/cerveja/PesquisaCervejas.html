@@ -4,8 +4,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/LayoutPadrao}"
 	xmlns:brewer="http://brewer.algaworks.com"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
-	xmlns:data="http://www.thymeleaf.org/extras/data">
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
 <title th:text="#{cerveja.pesquisa.titulo}">Pesquisa de cervejas</title>
@@ -144,9 +143,8 @@
 									th:href="@{/cervejas/{codigo}(codigo=${cerveja.codigo})}"> 
 									<i class="glyphicon glyphicon-pencil"></i>
 								</a> 
-								<a class="btn btn-link btn-xs js-tooltip  js-exclusao-btn" title="Excluir" href="#" 
-									data:url="@{/cervejas/{codigo}(codigo=${cerveja.codigo})}"
-									data:objeto="${cerveja.nome}"> 
+								<a class="btn btn-link btn-xs js-tooltip  js-exclusao-btn" title="Excluir" href="#"
+									th:attr="data-url=@{/cervejas/{codigo}(codigo=${cerveja.codigo})},data-objeto=${cerveja.nome}">
 									<i class="glyphicon glyphicon-remove"></i>
 								</a>
 							</td>
