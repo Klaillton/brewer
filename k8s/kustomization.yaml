@@ -10,4 +10,5 @@ resources:
   - mariadb-service.yaml
   - app-deployment.yaml
   - app-service.yaml
+  - cert-manager-issuer.yaml
   - app-ingress.yaml

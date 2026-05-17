@@ -55,3 +55,6 @@ Temporary Items
 # Segredos locais para Kubernetes (nunca versionar)
 k8s/.secret.env
 k8s/.secret.*.env
+
+# Certificados TLS de desenvolvimento (gerados por scripts/generate-dev-certs.sh)
+nginx/certs/
