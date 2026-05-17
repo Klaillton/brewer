@@ -6,12 +6,23 @@ metadata:
   labels:
     app.kubernetes.io/name: brewer
     app.kubernetes.io/part-of: brewer
+  annotations:
+    # cert-manager emite o certificado TLS via CA local confiável (brewer-local-ca-issuer).
+    # Para Let's Encrypt, troque por "letsencrypt-prod" (ver cert-manager-issuer.yaml).
+    cert-manager.io/cluster-issuer: brewer-local-ca-issuer
+    # Redireciona HTTP → HTTPS via Traefik middleware
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
 spec:
   # Traefik é o ingress controller padrão do K3s
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - brewer.local
+      # cert-manager armazena o certificado gerado neste Secret
+      secretName: brewer-tls
   rules:
-    # Acesse via: http://brewer.local (adicionar ao /etc/hosts da máquina cliente)
-    # ou via IP direto: http://192.168.1.101 (com header Host: brewer.local)
+    # Acesse via: https://brewer.local (adicionar ao /etc/hosts da máquina cliente)
     - host: brewer.local
       http:
         paths:
