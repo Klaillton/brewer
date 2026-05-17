@@ -2,7 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:data="http://www.thymeleaf.org/extras/data"
 	xmlns:brewer="http://brewer.algaworks.com"
 	layout:decorate="~{layout/LayoutPadrao}">
 
@@ -62,8 +61,7 @@
 								<input type="radio" th:id="|id_${tipoPessoa}|"
 									class="js-radio-tipo-pessoa" th:field="*{tipoPessoa}"
 									th:value="${tipoPessoa}"
-									data:documento="${tipoPessoa.documento}"
-									data:mascara="${tipoPessoa.mascara}"> <label
+									th:attr="data-documento=${tipoPessoa.documento},data-mascara=${tipoPessoa.mascara}"> <label
 									class="control-label" th:for="|id_${tipoPessoa}|"
 									th:text="${tipoPessoa.descricao}">Física</label>
 							</div>
@@ -128,7 +126,7 @@
 					<label for="cidade" th:text="#{cliente.cidade}">Cidade</label>
 					<div class="bw-field-action">
 						<input type="hidden" id="inputHiddenCidadeSelecionada" th:value="*{endereco.cidade} != null ? *{endereco.cidade.codigo}" />
-						<select id="cidade" class="form-control" data:url="@{/cidades}"
+						<select id="cidade" class="form-control" th:attr="data-url=@{/cidades}"
 							th:field="*{endereco.cidade}">
 						</select>
 
