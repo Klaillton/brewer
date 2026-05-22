@@ -95,7 +95,7 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
   - contrato (OpenAPI);
   - E2E (Playwright) para jornadas ponta a ponta.
 - **Cobertura**:
-  - meta aspiracional de médio prazo: **98%**;
+  - meta aspiracional (quando viável): **98%**;
   - gate inicial recomendado: **90% em módulos novos/alterados**, com evolução progressiva para **95%** e depois **98%** nos fluxos críticos.
 - **Qualidade/Security gates no CI**:
   - testes backend + frontend;
