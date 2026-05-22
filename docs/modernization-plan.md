@@ -1,4 +1,4 @@
-# Plano de Arquitetura Greenfield — referência para novo repositório
+# Plano de Arquitetura greenfield — referência para novo repositório
 
 ## 1) Objetivo
 
@@ -56,7 +56,7 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
 
 ## 5) Planejamento de execução por fases (novo repositório)
 
-### Fase 0 — Concepção e contratos (1 sprint)
+### Fase 0 — Planejamento inicial e contratos (1 sprint)
 - Levantar jornadas e regras de negócio no repositório de origem.
 - Publicar contrato OpenAPI inicial dos recursos prioritários.
 - Definir NFRs (latência, disponibilidade, segurança, cobertura).
@@ -84,7 +84,7 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
 ### Fase 5 — Transferência, endurecimento e entrada em produção (1 sprint)
 - Consolidar documentação operacional e de suporte.
 - Publicar runbooks e checklist de readiness para produção.
-- Realizar handoff formal para o time do novo repositório.
+- Realizar transferência formal para o time do novo repositório.
 
 ## 6) Plano de testes e validação (meta 98%)
 
