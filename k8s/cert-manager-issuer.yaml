@@ -1,0 +1,144 @@
+# ─── cert-manager: CA local confiável para brewer.local ───────────────────────
+#
+# Estratégia em 3 passos:
+#   1. selfsigned-bootstrapper → emite o certificado da CA local
+#   2. brewer-local-ca (Certificate) → o certificado raiz da CA, guardado
+#      no namespace cert-manager (exigido por ClusterIssuer do tipo CA)
+#   3. brewer-local-ca-issuer (ClusterIssuer) → assina os certificados do servidor
+#
+# Pré-requisito: cert-manager instalado no cluster.
+# Para K3s:
+#   kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
+#   kubectl wait --namespace cert-manager --for=condition=ready pod \
+#     --selector=app.kubernetes.io/instance=cert-manager --timeout=120s
+#
+# Para confiar no certificado no browser/sistema operacional, veja o script:
+#   scripts/trust-dev-ca.sh
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ─── 1. Bootstrapper (autoassinado, apenas para criar a CA) ───────────────────
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: selfsigned-bootstrapper
+  labels:
+    app.kubernetes.io/part-of: brewer
+spec:
+  selfSigned: {}
+
+---
+# ─── 2. Certificado raiz da CA local ─────────────────────────────────────────
+# Fica no namespace cert-manager porque o ClusterIssuer CA lê de lá.
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: brewer-local-ca
+  namespace: cert-manager
+  labels:
+    app.kubernetes.io/part-of: brewer
+spec:
+  isCA: true
+  commonName: "Brewer Local CA"
+  subject:
+    organizations:
+      - Brewer Dev
+  secretName: brewer-local-ca-tls
+  duration: 87600h   # 10 anos
+  renewBefore: 720h  # renova 30 dias antes de expirar
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  issuerRef:
+    name: selfsigned-bootstrapper
+    kind: ClusterIssuer
+    group: cert-manager.io
+
+---
+# ─── 3. CA Issuer — assina certificados de servidor ──────────────────────────
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: brewer-local-ca-issuer
+  labels:
+    app.kubernetes.io/part-of: brewer
+spec:
+  ca:
+    # Segredo gerado pelo Certificate acima (namespace cert-manager)
+    secretName: brewer-local-ca-tls
+
+---
+# ─── Let's Encrypt Staging (testes com domínio real) ─────────────────────────
+# Descomente, ajuste o campo "email" e troque a anotação do Ingress para usar.
+#
+# apiVersion: cert-manager.io/v1
+# kind: ClusterIssuer
+# metadata:
+#   name: letsencrypt-staging
+# spec:
+#   acme:
+#     server: https://acme-staging-v02.api.letsencrypt.org/directory
+#     email: seu-email@exemplo.com
+#     privateKeySecretRef:
+#       name: letsencrypt-staging-key
+#     solvers:
+#       - http01:
+#           ingress:
+#             ingressClassName: traefik
+
+---
+# ─── Let's Encrypt Produção (domínio real) ────────────────────────────────────
+# Descomente e ajuste quando o app estiver em produção com domínio público.
+#
+# apiVersion: cert-manager.io/v1
+# kind: ClusterIssuer
+# metadata:
+#   name: letsencrypt-prod
+# spec:
+#   acme:
+#     server: https://acme-v02.api.letsencrypt.org/directory
+#     email: seu-email@exemplo.com
+#     privateKeySecretRef:
+#       name: letsencrypt-prod-key
+#     solvers:
+#       - http01:
+#           ingress:
+#             ingressClassName: traefik
+
+
+---
+# ─── Let's Encrypt Staging (testes com domínio real) ─────────────────────────
+# Descomente, ajuste o campo "email" e troque o host no Ingress para usar.
+#
+# apiVersion: cert-manager.io/v1
+# kind: ClusterIssuer
+# metadata:
+#   name: letsencrypt-staging
+# spec:
+#   acme:
+#     server: https://acme-staging-v02.api.letsencrypt.org/directory
+#     email: seu-email@exemplo.com
+#     privateKeySecretRef:
+#       name: letsencrypt-staging-key
+#     solvers:
+#       - http01:
+#           ingress:
+#             ingressClassName: traefik
+
+---
+# ─── Let's Encrypt Produção (domínio real) ────────────────────────────────────
+# Descomente e ajuste quando o app estiver em produção com domínio público.
+#
+# apiVersion: cert-manager.io/v1
+# kind: ClusterIssuer
+# metadata:
+#   name: letsencrypt-prod
+# spec:
+#   acme:
+#     server: https://acme-v02.api.letsencrypt.org/directory
+#     email: seu-email@exemplo.com
+#     privateKeySecretRef:
+#       name: letsencrypt-prod-key
+#     solvers:
+#       - http01:
+#           ingress:
+#             ingressClassName: traefik

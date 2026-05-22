@@ -57,19 +57,11 @@ jobs:
 
       - name: Run OWASP Dependency-Check
         env:
-          SECRETS_NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
-          DC_NVD_ARGS=""
-          if [ -n "${SECRETS_NVD_API_KEY}" ]; then
-            export NVD_API_KEY="${SECRETS_NVD_API_KEY}"
-            DC_NVD_ARGS="-DnvdApiKeyEnvironmentVariable=NVD_API_KEY"
-          else
-            echo "NVD_API_KEY secret not configured; running without API key (may be slower)."
-          fi
-
           mvn -B -DskipTests dependency-check:check \
             -Ddependency-check.data.directory="$HOME/.dependency-check/data" \
-            ${DC_NVD_ARGS} \
+            -DnvdApiKeyEnvironmentVariable=NVD_API_KEY \
             -DnvdApiDelay=2000
 
       # If the scan failed, remove the data dir so the cache step does not persist a

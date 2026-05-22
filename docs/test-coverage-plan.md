@@ -53,10 +53,11 @@
 
 ---
 
-## Fase 2 — Service layer (lógica de negócio) 🔜 PRÓXIMA
+## Fase 2 — Service layer (lógica de negócio) ✅ CONCLUÍDA
 
 **Estratégia**: testes unitários com Mockito — sem Spring context, sem banco.  
-**Branch sugerida**: `test/phase-2-service-layer`
+**Branch**: `copilot/prepare-execute-phase-2`  
+**PR**: Em andamento
 
 | Classe alvo | Dependências a mockar | Cenários principais |
 |-------------|----------------------|---------------------|
@@ -66,29 +67,55 @@
 | `CadastroUsuarioService` | `Usuarios` | usuário duplicado → `UsuarioJaCadastradoException`; senha obrigatória → `SenhaObrigatoriaUsuarioException` |
 | `CadastroCervejaService` | `Cervejas`, `FotoStorage` | salvar com foto nova; substituir foto existente; excluir foto antiga |
 | `CadastroVendaService` | `Vendas`, `ApplicationEventPublisher` | emitir venda; cancelar venda; publicar eventos `VendaEvent`/`CancelaVendaEvent` |
-| `VendaListener` | `CadastroVendaService` | processar `VendaEvent`; processar `CancelaVendaEvent` |
+| `VendaListener` | `Cervejas` | processar `VendaEvent`; processar `CancelaVendaEvent` |
 | `AppUserDetailsService` | `Usuarios` | usuário encontrado → `UsuarioSistema`; não encontrado → `UsernameNotFoundException` |
 
-**Estimativa de novos métodos**: ~25–35
+### Arquivos de teste adicionados
+
+| Arquivo de teste | Pacote | Métodos | Classes cobertas |
+|-----------------|--------|---------|-----------------|
+| `CadastroEstiloServiceTest.java` | `Service` | 3 | `CadastroEstiloService` |
+| `CadastroCidadeServiceTest.java` | `Service` | 3 | `CadastroCidadeService` |
+| `CadastroClienteServiceTest.java` | `Service` | 3 | `CadastroClienteService` |
+| `CadastroUsuarioServiceTest.java` | `Service` | 6 | `CadastroUsuarioService` |
+| `CadastroCervejaServiceTest.java` | `Service` | 3 | `CadastroCervejaService` |
+| `CadastroVendaServiceTest.java` | `Service` | 7 | `CadastroVendaService` |
+| `VendaListenerTest.java` | `Service.event.venda` | 2 | `VendaListener` |
+| `AppUserDetailsServiceTest.java` | `security` | 2 | `AppUserDetailsService` |
+
+**Novos métodos de teste na fase 2**: 29
 
 ---
 
-## Fase 3 — REST Controllers (api/) ⏳ PLANEJADA
+## Fase 3 — REST Controllers (api/) ✅ CONCLUÍDA
 
-**Estratégia**: `@WebMvcTest` com `MockMvc` + Mockito — Spring MVC slice, sem banco.  
-**Branch sugerida**: `test/phase-3-rest-controllers`
+**Estratégia**: testes de controller com `MockMvc` (standalone) + Mockito — sem Spring context, sem banco.  
+**Branch**: `copilot/prepare-execute-phase-3`  
+**PR**: Em andamento
 
 | Controller | Endpoints | Cenários |
 |------------|-----------|---------|
-| `EstadoRestController` | `GET /estados` | lista retornada; lista vazia |
-| `EstiloRestController` | `GET /estilos` | lista retornada; busca por nome |
-| `CidadeRestController` | `GET /cidades?estado=X` | filtro por estado; sem filtro |
-| `CervejaRestController` | `GET /cervejas/pesquisar` | busca com nome; busca vazia |
-| `ClienteRestController` | `GET /clientes/pesquisar` | busca por nome/CPF/CNPJ |
-| `UsuarioRestController` | `GET /usuarios` | lista; acesso sem autenticação |
-| `VendaRestController` | `GET /vendas/{codigo}` | venda existente; não encontrada → 404 |
+| `EstadoRestController` | `GET /api/estados` | lista retornada; lista vazia |
+| `EstiloRestController` | `GET /api/estilos` | lista retornada; filtro por nome |
+| `CidadeRestController` | `GET /api/cidades`, `GET /api/cidades/estado/{codigo}` | filtro por estado; sem filtro |
+| `CervejaRestController` | `GET /api/cervejas/search` | busca com nome/SKU; busca vazia |
+| `ClienteRestController` | `GET /api/clientes` | busca por nome/CPF/CNPJ |
+| `UsuarioRestController` | `GET /api/usuarios` | lista; acesso sem autenticação |
+| `VendaRestController` | `GET /api/vendas/{codigo}` | venda existente; não encontrada → 404 |
 
-**Estimativa de novos métodos**: ~20–30
+### Arquivos de teste adicionados
+
+| Arquivo de teste | Pacote | Métodos | Classes cobertas |
+|-----------------|--------|---------|-----------------|
+| `EstadoRestControllerTest.java` | `api` | 2 | `EstadoRestController` |
+| `EstiloRestControllerTest.java` | `api` | 2 | `EstiloRestController` |
+| `CidadeRestControllerTest.java` | `api` | 2 | `CidadeRestController` |
+| `CervejaRestControllerTest.java` | `api` | 2 | `CervejaRestController` |
+| `ClienteRestControllerTest.java` | `api` | 2 | `ClienteRestController` |
+| `UsuarioRestControllerTest.java` | `api` | 2 | `UsuarioRestController` |
+| `VendaRestControllerTest.java` | `api` | 2 | `VendaRestController` |
+
+**Novos métodos de teste na fase 3**: 14
 
 ---
 
@@ -118,8 +145,8 @@
 |------|--------|--------|-----------------|-----------|
 | 0 (baseline) | Testes pré-existentes | ✅ | 14 | — |
 | 1 | Domínio, helpers, utilitários | ✅ | +42 | PR #103 |
-| 2 | Service layer | 🔜 | +~30 | A criar |
-| 3 | REST Controllers | ⏳ | +~25 | A criar |
+| 2 | Service layer | ✅ | +29 | PR atual |
+| 3 | REST Controllers | ✅ | +14 | PR atual |
 | 4 | repository.helper.* | ⏳ | +~35 | A criar |
 | **Total estimado** | | | **~146** | |
 

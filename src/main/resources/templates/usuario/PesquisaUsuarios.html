@@ -4,7 +4,6 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/LayoutPadrao}"
 	xmlns:brewer="http://brewer.algaworks.com"
-	xmlns:data="http://www.thymeleaf.org/extras/data"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
@@ -76,12 +75,12 @@
 
 			<div class="aw-datatable-toolbar">
 				<button class="btn btn-default btn-xs js-status-btn disabled"
-					data:status="ATIVAR" data:url="@{/usuarios/status}">
+					data-status="ATIVAR" th:attr="data-url=@{/usuarios/status}">
 					<span th:text="#{usuario.ativar}">Ativar</span>
 				</button>
 
 				<button class="btn btn-default btn-xs js-status-btn disabled"
-					data:status="DESATIVAR" data:url="@{/usuarios/status}">
+					data-status="DESATIVAR" th:attr="data-url=@{/usuarios/status}">
 					<span th:text="#{usuario.desativar}">Desativar</span>
 				</button>
 			</div>
@@ -115,7 +114,7 @@
 						<tr th:each="usuario : ${pagina.conteudo}">
 							<td>
 								<div class="checkbox aw-checkbox-no-margin" th:if="${#authentication.principal.usuario.codigo != usuario.codigo}">
-									<input type="checkbox" class="js-selecao" data:codigo="${usuario.codigo}" /> 
+									<input type="checkbox" class="js-selecao" th:attr="data-codigo=${usuario.codigo}" />
 									<label></label>
 								</div>
 							</td>
@@ -137,10 +136,9 @@
 							<a class="btn  btn-link  btn-xs  js-tooltip" title="Editar" th:href="@{/usuarios/{codigo}(codigo=${usuario.codigo})}"> 
 								<i class="glyphicon glyphicon-pencil"></i>
 							</a> 
-							<a class="btn  btn-link  btn-xs  js-tooltip  js-exclusao-btn" title="Excluir" 
+							<a class="btn  btn-link  btn-xs  js-tooltip  js-exclusao-btn" title="Excluir"
 									th:if="${#authentication.principal.usuario.codigo != usuario.codigo}"
-									data:url="@{/usuarios/{codigo}(codigo=${usuario.codigo})}"
-									data:objeto="${usuario.nome}">  
+									th:attr="data-url=@{/usuarios/{codigo}(codigo=${usuario.codigo})},data-objeto=${usuario.nome}">
 								<i class="glyphicon glyphicon-remove"></i>
 							</a></td>
 						</tr>

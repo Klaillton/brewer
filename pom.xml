@@ -8,7 +8,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <parent>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-parent</artifactId>
-	<version>3.5.3</version>
+	<version>3.5.14</version>
 	<relativePath/>
 </parent>
 
@@ -24,7 +24,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <java.version>25</java.version>
 
 <!-- OWASP Dependency Check -->
-<dependency-check.version>12.2.1</dependency-check.version>
+<dependency-check.version>12.2.2</dependency-check.version>
 
 <!-- Flyway -->
 <flyway.version>10.10.0</flyway.version>
@@ -35,14 +35,13 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <!-- thumbnailator -->
 <thumbnailator.version>0.4.21</thumbnailator.version>
 
-<!-- Thymeleaf extras data attribute -->
-<thymeleaf-extras-data-attribute.version>2.0.1</thymeleaf-extras-data-attribute.version>
-
 <!-- Apache Bean Utils -->
 <commons-beanutils.version>1.11.0</commons-beanutils.version>
 
 <!-- AWS SDK - S3 -->
 <aws-java-sdk-s3.version>1.12.797</aws-java-sdk-s3.version>
+<tomcat.version>10.1.55</tomcat.version>
+<log4j2.version>2.25.4</log4j2.version>
 
 </properties>
 
@@ -194,14 +193,6 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <artifactId>thymeleaf-layout-dialect</artifactId>
 </dependency>
 
-<!-- Thymeleaf extras data attribute -->
-<dependency>
-<groupId>com.github.mxab.thymeleaf.extras</groupId>
-<artifactId>thymeleaf-extras-data-attribute</artifactId>
-<version>${thymeleaf-extras-data-attribute.version}</version>
-<scope>compile</scope>
-</dependency>
-
 <!-- EhCache -->
 <dependency>
 <groupId>org.ehcache</groupId>
@@ -294,22 +285,5 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-        <!-- Distributed Tracing via OTLP -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-otlp</artifactId>
-        </dependency>
-        <!-- Log4j2 → OTel Collector (logs pipeline para Loki) -->
-        <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-log4j-appender-2.17</artifactId>
-            <version>1.32.0-alpha</version>
-            <scope>runtime</scope>
-        </dependency>
-
 </dependencies>
 </project>
