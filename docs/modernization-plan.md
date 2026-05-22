@@ -56,12 +56,12 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
 
 ## 5) Planejamento de execução por fases (novo repositório)
 
-### Fase 0 — Inception e contratos (1 sprint)
+### Fase 0 — Concepção e contratos (1 sprint)
 - Levantar jornadas e regras de negócio no repositório de origem.
 - Publicar contrato OpenAPI inicial dos recursos prioritários.
 - Definir NFRs (latência, disponibilidade, segurança, cobertura).
 
-### Fase 1 — Foundation backend/frontend (1–2 sprints)
+### Fase 1 — Base backend/frontend (1–2 sprints)
 - Criar estrutura base do novo monorepo/repositórios (backend + frontend + IaC).
 - Versionar APIs (`/api/v1`) e padronizar erros (problem+json).
 - Habilitar CORS, rate-limit e política de segurança para APIs públicas.
@@ -81,7 +81,7 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
 - Externalizar configs e segredos por ambiente.
 - Implementar estratégia de deploy progressivo (blue/green ou canary).
 
-### Fase 5 — Handoff, hardening e go-live (1 sprint)
+### Fase 5 — Transferência, endurecimento e entrada em produção (1 sprint)
 - Consolidar documentação operacional e de suporte.
 - Publicar runbooks e checklist de readiness para produção.
 - Realizar handoff formal para o time do novo repositório.
