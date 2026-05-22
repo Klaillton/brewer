@@ -88,6 +88,9 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 <format>HTML</format>
 <failBuildOnCVSS>7</failBuildOnCVSS>
 <nvdApiKeyEnvironmentVariable>NVD_API_KEY</nvdApiKeyEnvironmentVariable>
+<suppressionFiles>
+<suppressionFile>${project.basedir}/dependency-check-suppressions.xml</suppressionFile>
+</suppressionFiles>
 <!-- Explicit data directory; CI overrides via -D flag. -->
 <dataDirectory>${user.home}/.dependency-check/data</dataDirectory>
 <!-- Retry up to 10 times on transient NVD API / DB errors. -->
