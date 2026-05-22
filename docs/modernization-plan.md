@@ -7,7 +7,7 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
 - reset/recuperação de senha;
 - cadastro externo com CAPTCHA;
 - ativação de conta por e-mail;
-- estratégia de testes com meta de cobertura de **98% (se possível)**.
+- estratégia de testes com meta de cobertura de **98% como objetivo aspiracional**.
 
 ## 2) Estado atual (AS-IS)
 
@@ -18,7 +18,7 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
 
 ## 3) Requisitos levantados
 
-## 3.1 Funcionais
+### 3.1 Funcionais
 - Expor funcionalidades de negócio por APIs versionadas (`/api/v1`), sem dependência de renderização server-side.
 - Implementar **Perfil do Usuário**:
   - visualizar/editar dados básicos;
@@ -33,7 +33,7 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
   - validação anti-bot com CAPTCHA;
   - ativação de conta via link por e-mail.
 
-## 3.2 Não funcionais
+### 3.2 Não funcionais
 - Stack alvo: **Angular + Spring Boot (Java 25)**.
 - Desacoplamento por contrato de API (OpenAPI).
 - Estratégia **multi-cloud** com portabilidade (evitar lock-in).
@@ -57,33 +57,33 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
 
 ## 5) Planejamento de execução por fases
 
-## Fase 0 — Descoberta e contratos (1 sprint)
+### Fase 0 — Descoberta e contratos (1 sprint)
 - Mapear jornadas atuais MVC e SPA.
 - Publicar contrato OpenAPI inicial dos recursos já existentes.
 - Definir NFRs (latência, disponibilidade, segurança, cobertura).
 
-## Fase 1 — Base de desacoplamento (1–2 sprints)
+### Fase 1 — Base de desacoplamento (1–2 sprints)
 - Versionar APIs (`/api/v1`) e padronizar erros (problem+json).
 - Criar camada anti-corrupção para não quebrar Thymeleaf no curto prazo.
 - Habilitar CORS, rate-limit e política de segurança para APIs públicas.
 
-## Fase 2 — Identidade e conta (2 sprints)
+### Fase 2 — Identidade e conta (2 sprints)
 - Entregar endpoints de perfil do usuário.
 - Entregar fluxo de reset/recuperação de senha com token e auditoria.
 - Entregar cadastro externo + CAPTCHA + ativação por e-mail.
 - Cobrir fluxos com testes unitários, integração e E2E.
 
-## Fase 3 — Frontend Angular desacoplado (2 sprints)
+### Fase 3 — Frontend Angular desacoplado (2 sprints)
 - Migrar telas críticas para consumo exclusivo de API.
 - Implementar guards/interceptors para autenticação/autorização.
 - Remover dependências de páginas server-side dos fluxos migrados.
 
-## Fase 4 — Multi-cloud e operação (1–2 sprints)
+### Fase 4 — Multi-cloud e operação (1–2 sprints)
 - Consolidar manifests/Helm para deploy em múltiplos provedores.
 - Externalizar configs e segredos por ambiente.
 - Implementar estratégia de deploy progressivo (blue/green ou canary).
 
-## Fase 5 — Descomissionamento MVC integrado (1 sprint)
+### Fase 5 — Descomissionamento MVC integrado (1 sprint)
 - Desativar rotas/views Thymeleaf remanescentes.
 - Atualizar documentação operacional e de suporte.
 
