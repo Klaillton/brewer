@@ -1,20 +1,19 @@
-# Plano de Modernização — MVC acoplado para Backend/Frontend desacoplado
+# Plano de Arquitetura Greenfield — referência para novo repositório
 
 ## 1) Objetivo
 
-Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), com operação **multi-cloud**, adicionando:
+Definir um plano **para criação do zero em outro repositório**, com arquitetura desacoplada (**Spring Boot + Angular**) e operação **multi-cloud**, incluindo:
 - gerenciamento de perfil do usuário;
 - reset/recuperação de senha;
 - cadastro externo com CAPTCHA;
 - ativação de conta por e-mail;
 - estratégia de testes com meta de cobertura de **98% como objetivo aspiracional**.
 
-## 2) Estado atual (AS-IS)
+## 2) Contexto de origem (repositório atual)
 
-- Backend Spring Boot com MVC + Thymeleaf e APIs REST coexistindo.
-- Frontend Angular já existe, porém o projeto ainda mantém fluxo integrado server-side.
-- Build backend configurado para **Java 25** (`pom.xml`).
-- Testes já têm plano evolutivo em `docs/test-coverage-plan.md`.
+- O repositório atual serve apenas como base de requisitos funcionais e regras de negócio.
+- A implementação alvo deste documento deve nascer **do zero** em novo repositório (sem migração incremental de código legado).
+- A stack alvo permanece **Angular + Spring Boot Java 25**, com APIs como contrato principal.
 
 ## 3) Requisitos levantados
 
@@ -42,7 +41,7 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
 
 ## 4) Stack sugerida (TO-BE)
 
-- **Frontend**: Angular (atual), Angular Material, RxJS, testes com Jest/Karma + Playwright E2E.
+- **Frontend**: Angular, Angular Material, RxJS, testes com Jest/Karma + Playwright E2E.
 - **Backend**: Spring Boot 3.5+, Java 25, Spring Security, Spring Data JPA, Flyway.
 - **Autenticação**: JWT access + refresh token (ou sessão segura se houver exigência de compatibilidade), BCrypt/Argon2.
 - **Captcha**: Cloudflare Turnstile (preferencial) ou Google reCAPTCHA v3 via feature toggle.
@@ -55,16 +54,16 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
 - **Observabilidade**: OpenTelemetry + Prometheus/Grafana + logs centralizados.
 - **CI/CD**: GitHub Actions com gates de testes, segurança e cobertura.
 
-## 5) Planejamento de execução por fases
+## 5) Planejamento de execução por fases (novo repositório)
 
-### Fase 0 — Descoberta e contratos (1 sprint)
-- Mapear jornadas atuais MVC e SPA.
-- Publicar contrato OpenAPI inicial dos recursos já existentes.
+### Fase 0 — Inception e contratos (1 sprint)
+- Levantar jornadas e regras de negócio no repositório de origem.
+- Publicar contrato OpenAPI inicial dos recursos prioritários.
 - Definir NFRs (latência, disponibilidade, segurança, cobertura).
 
-### Fase 1 — Base de desacoplamento (1–2 sprints)
+### Fase 1 — Foundation backend/frontend (1–2 sprints)
+- Criar estrutura base do novo monorepo/repositórios (backend + frontend + IaC).
 - Versionar APIs (`/api/v1`) e padronizar erros (problem+json).
-- Criar camada anti-corrupção para não quebrar Thymeleaf no curto prazo.
 - Habilitar CORS, rate-limit e política de segurança para APIs públicas.
 
 ### Fase 2 — Identidade e conta (2 sprints)
@@ -73,19 +72,19 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
 - Entregar cadastro externo + CAPTCHA + ativação por e-mail.
 - Cobrir fluxos com testes unitários, integração e E2E.
 
-### Fase 3 — Frontend Angular desacoplado (2 sprints)
-- Migrar telas críticas para consumo exclusivo de API.
+### Fase 3 — Frontend Angular (2 sprints)
+- Implementar telas críticas com consumo exclusivo de API.
 - Implementar guards/interceptors para autenticação/autorização.
-- Remover dependências de páginas server-side dos fluxos migrados.
 
 ### Fase 4 — Multi-cloud e operação (1–2 sprints)
 - Consolidar manifests/Helm para deploy em múltiplos provedores.
 - Externalizar configs e segredos por ambiente.
 - Implementar estratégia de deploy progressivo (blue/green ou canary).
 
-### Fase 5 — Descomissionamento MVC integrado (1 sprint)
-- Desativar rotas/views Thymeleaf remanescentes.
-- Atualizar documentação operacional e de suporte.
+### Fase 5 — Handoff, hardening e go-live (1 sprint)
+- Consolidar documentação operacional e de suporte.
+- Publicar runbooks e checklist de readiness para produção.
+- Realizar handoff formal para o time do novo repositório.
 
 ## 6) Plano de testes e validação (meta 98%)
 
@@ -105,7 +104,7 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
 
 ## 7) Critérios de aceite
 
-- Frontend Angular opera sem dependência de renderização Thymeleaf.
+- Frontend Angular opera sem dependência de renderização server-side.
 - Fluxos de perfil, recuperação/reset e cadastro externo com ativação por e-mail disponíveis e testados.
 - Deploy reproduzível em pelo menos dois provedores cloud (ou ambientes equivalentes).
 - Métricas e logs permitindo diagnóstico de ponta a ponta.
@@ -117,5 +116,13 @@ Transformar o Brewer para arquitetura desacoplada (**Spring Boot + Angular**), c
   **Mitigação**: gate de 98% em código novo/alterado + plano incremental no legado.
 - **Risco**: lock-in de serviços cloud.  
   **Mitigação**: abstrações por interface + padrões portáveis (K8s, S3-compatible, SMTP/API).
-- **Risco**: regressão durante migração híbrida MVC+SPA.  
-  **Mitigação**: rollout por feature flags e testes E2E por jornada.
+- **Risco**: divergência de escopo entre repositório origem e novo repositório.  
+  **Mitigação**: gestão por backlog rastreável (epic → história → critério de aceite) e handoff por marcos.
+
+## 9) Entregáveis para transferência ao novo repositório
+
+- Documento de visão e escopo (este plano).
+- Backlog inicial por épicos (arquitetura, identidade, segurança, multi-cloud, qualidade).
+- Contrato OpenAPI inicial versionado.
+- Matriz de ambientes (dev/hml/prod) e variáveis.
+- Critérios de pronto e critérios de aceite por fase.

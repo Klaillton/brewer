@@ -105,7 +105,7 @@ brewer/
 
 ## Planejamento de modernização
 
-- `docs/modernization-plan.md` — plano para evolução de MVC acoplado para arquitetura backend/frontend desacoplada com Angular + Spring Boot (Java 25), estratégia multi-cloud, identidade de usuário (perfil/reset/cadastro externo com CAPTCHA e ativação por e-mail) e validação de cobertura de testes.
+- `docs/modernization-plan.md` — plano greenfield para **novo repositório**, com arquitetura backend/frontend desacoplada (Angular + Spring Boot Java 25), estratégia multi-cloud, identidade de usuário (perfil/reset/cadastro externo com CAPTCHA e ativação por e-mail) e validação de cobertura de testes.
 
 ## Executando com Docker (recomendado)
 
