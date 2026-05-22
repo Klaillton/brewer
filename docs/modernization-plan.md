@@ -41,7 +41,7 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
 
 ## 4) Stack sugerida (TO-BE)
 
-- **Frontend**: Angular, Angular Material, RxJS, testes com Jest/Karma + Playwright E2E.
+- **Frontend**: Angular, Angular Material, RxJS, **Jest como runner padrão** para testes unitários/componente, **Karma apenas para cenários legados/excepcionais** que dependam de infraestrutura específica; Playwright para E2E.
 - **Backend**: Spring Boot 3.5+, Java 25, Spring Security, Spring Data JPA, Flyway.
 - **Autenticação**: JWT access + refresh token (ou sessão segura se houver exigência de compatibilidade), BCrypt/Argon2.
 - **Captcha**: Cloudflare Turnstile (preferencial) ou Google reCAPTCHA v3 via feature toggle.
@@ -50,7 +50,7 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
   - containers Docker;
   - Kubernetes + Helm/Kustomize;
   - banco gerenciado com estratégia de backup/restore portável;
-  - storage S3-compatible (AWS S3, GCS interop, MinIO em dev).
+  - storage com porta de abstração por interface: implementação nativa para **AWS S3**, implementação nativa para **GCS**, e **MinIO** em dev/testes locais.
 - **Observabilidade**: OpenTelemetry + Prometheus/Grafana + logs centralizados.
 - **CI/CD**: GitHub Actions com gates de testes, segurança e cobertura.
 
@@ -113,9 +113,9 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
 ## 8) Riscos e mitigação
 
 - **Risco**: meta de 98% global inviável no curto prazo.  
-  **Mitigação**: gate de 98% em código novo/alterado + plano incremental no legado.
+  **Mitigação**: gates progressivos aplicados ao **novo código do repositório greenfield** (90% → 95% → 98% nos fluxos críticos), sem dependência de migração incremental de código legado.
 - **Risco**: lock-in de serviços cloud.  
-  **Mitigação**: abstrações por interface + padrões portáveis (K8s, S3-compatible, SMTP/API).
+  **Mitigação**: abstrações por interface + padrões portáveis (K8s, storage por adaptadores S3/GCS, SMTP/API).
 - **Risco**: divergência de escopo entre repositório origem e novo repositório.  
   **Mitigação**: gestão por backlog rastreável (epic → história → critério de aceite) e handoff por marcos.
 
@@ -126,3 +126,18 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
 - Contrato OpenAPI inicial versionado.
 - Matriz de ambientes (dev/hml/prod) e variáveis.
 - Critérios de pronto e critérios de aceite por fase.
+
+## 10) Passos práticos recomendados para adoção (execução no novo repositório)
+
+1. **Kickoff técnico (semana 1)**  
+   Consolidar escopo funcional, NFRs e decisões arquiteturais; aprovar template de ADR e Definition of Done.
+2. **Estrutura inicial (semana 1–2)**  
+   Criar repositórios (backend/frontend/infra), convenções de branch, padrão de versionamento e pipelines mínimos (build + testes + segurança).
+3. **Contrato primeiro (semana 2)**  
+   Publicar OpenAPI v1 para perfil/reset/cadastro/ativação e gerar stubs cliente/servidor para reduzir retrabalho.
+4. **MVP de identidade (semanas 3–6)**  
+   Entregar backend + frontend dos fluxos críticos (perfil, reset, cadastro com CAPTCHA e ativação por e-mail) com testes automatizados.
+5. **Endurecimento operacional (semanas 6–8)**  
+   Fechar observabilidade, gestão de segredos, política de backup/restore e readiness para incidentes (runbooks).
+6. **Multi-cloud e handoff (semanas 8–10)**  
+   Validar deploy em dois provedores/ambientes equivalentes, registrar evidências de portabilidade e executar transferência formal para o time responsável.
