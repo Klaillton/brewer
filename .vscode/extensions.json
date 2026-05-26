@@ -7,6 +7,11 @@
     "angular.ng-template",
     "ms-playwright.playwright",
     "ms-azuretools.vscode-docker",
-    "editorconfig.editorconfig"
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "github.vscode-github-actions",
+    "github.vscode-pull-request-github",
+    "sonarsource.sonarlint-vscode"
   ]
 }

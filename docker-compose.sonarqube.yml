@@ -1,0 +1,91 @@
+# Stack SonarQube — análise estática de código (uso local / desenvolvimento)
+#
+# Pré-requisito: ajuste vm.max_map_count no host (necessário para o Elasticsearch
+# embutido no SonarQube):
+#   sudo sysctl -w vm.max_map_count=524288
+#   # Para persistir após reboot, adicione ao /etc/sysctl.conf:
+#   echo "vm.max_map_count=524288" | sudo tee -a /etc/sysctl.conf
+#
+# Iniciar:
+#   docker compose -f docker-compose.sonarqube.yml up -d
+#
+# Parar (sem remover dados):
+#   docker compose -f docker-compose.sonarqube.yml down
+#
+# Remover tudo (inclusive volumes):
+#   docker compose -f docker-compose.sonarqube.yml down -v
+#
+# Primeiro acesso: http://localhost:9000  →  admin / admin
+# Após o login, o SonarQube solicitará a troca de senha.
+#
+# Para gerar um token de análise:
+#   ./scripts/setup-sonarqube.sh
+# Ou acesse: http://localhost:9000/account/security
+
+services:
+  sonar-db:
+    image: postgres:17-alpine
+    container_name: sonar-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sonar
+      POSTGRES_PASSWORD: sonar
+      POSTGRES_DB: sonar
+    volumes:
+      - sonar_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sonar -d sonar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - sonarqube-net
+
+  sonarqube:
+    image: sonarqube:lts-community
+    container_name: sonarqube
+    restart: unless-stopped
+    depends_on:
+      sonar-db:
+        condition: service_healthy
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://sonar-db:5432/sonar
+      SONAR_JDBC_USERNAME: sonar
+      SONAR_JDBC_PASSWORD: sonar
+      # Aumenta heap da JVM interna (ajuste conforme RAM disponível)
+      SONAR_WEB_JAVAOPTS: "-Xmx512m -Xms128m"
+      SONAR_CE_JAVAOPTS: "-Xmx512m -Xms128m"
+      SONAR_SEARCH_JAVAOPTS: "-Xmx512m -Xms512m"
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'wget -qO- http://localhost:9000/api/system/status 2>/dev/null | grep -q ''"status":"UP"''',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 15
+      start_period: 120s
+    networks:
+      - sonarqube-net
+
+volumes:
+  sonarqube_data:
+    name: sonarqube_data
+  sonarqube_extensions:
+    name: sonarqube_extensions
+  sonarqube_logs:
+    name: sonarqube_logs
+  sonar_db_data:
+    name: sonar_db_data
+
+networks:
+  sonarqube-net:
+    name: sonarqube-net
