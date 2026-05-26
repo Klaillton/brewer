@@ -1,10 +1,15 @@
 {
-  "java.jdt.ls.java.home": "/home/dante/.sdkman/candidates/java/21-tem",
+  // ── Java ─────────────────────────────────────────────────────────────
+  "java.jdt.ls.java.home": "/home/dante/.sdkman/candidates/java/25.0.3-amzn",
   "java.configuration.runtimes": [
     {
-      "name": "JavaSE-21",
-      "path": "/home/dante/.sdkman/candidates/java/21-tem",
+      "name": "JavaSE-25",
+      "path": "/home/dante/.sdkman/candidates/java/25.0.3-amzn",
       "default": true
+    },
+    {
+      "name": "JavaSE-21",
+      "path": "/home/dante/.sdkman/candidates/java/21-tem"
     }
   ],
   "java.configuration.updateBuildConfiguration": "automatic",
@@ -12,5 +17,51 @@
   "java.import.gradle.enabled": false,
   "java.compile.nullAnalysis.mode": "automatic",
   "maven.executable.path": "mvn",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+
+  // ── GitLens ──────────────────────────────────────────────────────────
+  "gitlens.defaultDateFormat": "DD/MM/YYYY HH:mm",
+  "gitlens.defaultDateShortFormat": "DD/MM/YYYY",
+  "gitlens.currentLine.enabled": true,
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.blame.highlight.enabled": true,
+  "gitlens.statusBar.enabled": true,
+
+  // ── Docker ───────────────────────────────────────────────────────────
+  "docker.host": "unix:///var/run/docker.sock",
+  "docker.compose.files": [
+    "${workspaceFolder}/docker-compose.yml",
+    "${workspaceFolder}/docker-compose.observability.yml"
+  ],
+  "docker.dockerfileLanguage.enable": true,
+  "docker.containers.label": "com.docker.compose.project",
+
+  // ── Kubernetes ───────────────────────────────────────────────────────
+  "vs-kubernetes.kubeconfig": "/home/dante/.kube/config",
+  "vs-kubernetes.knownKubeconfigs": ["/home/dante/.kube/config"],
+
+  // ── SonarLint ────────────────────────────────────────────────────────
+  "sonarlint.pathToNodeExecutable": "/usr/bin/node",
+  "sonarlint.rules": {
+    "java:S1135": { "level": "on" },
+    "java:S2095": { "level": "on" },
+    "java:S3776": { "level": "on" }
+  },
+  "sonarlint.analysisExcludesStandalone": "target/**,node_modules/**,.github/**",
+  // URL pública do SonarQube local; token adicionado via Command Palette (fora do git)
+  "sonarlint.connectedMode.connections.sonarqube": [
+    {
+      "connectionId": "sonarqube-local",
+      "serverUrl": "http://localhost:9000"
+    }
+  ],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "sonarqube-local",
+    "projectKey": "Klaillton_brewer"
+  },
+  // ── GitHub Actions ───────────────────────────────────────────────────
+  "github-actions.workflows.pinned.workflows": [
+    ".github/workflows/dependency-check.yml",
+    ".github/workflows/ossar-analysis.yml"
+  ]
 }
