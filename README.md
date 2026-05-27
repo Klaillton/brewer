@@ -103,6 +103,10 @@ brewer/
 | Estatísticas de vendas | `/api/vendas/stats/por-origem` | GET |
 | Usuários | `/api/usuarios` | GET, POST, PUT |
 
+## Planejamento de modernização
+
+- `docs/modernization-plan.md` — plano greenfield para **novo repositório**, com arquitetura backend/frontend desacoplada (Angular + Spring Boot Java 25), estratégia multi-cloud, identidade de usuário (perfil/reset/cadastro externo com CAPTCHA e ativação por e-mail) e validação de cobertura de testes.
+
 ## Executando com Docker (recomendado)
 
 > Pré-requisito: Docker e Docker Compose instalados. Compatível com AMD64 e **ARM64 (Raspberry Pi)**.

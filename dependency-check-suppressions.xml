@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+  <suppress>
+    <notes><![CDATA[
+    CVE-2026-42154 impacts Prometheus server remote-read endpoint memory allocation handling.
+    This project consumes Java metrics client libraries only (Micrometer/Prometheus), not the vulnerable server component.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.micrometer/micrometer-registry-prometheus@.*$</packageUrl>
+    <cve>CVE-2026-42154</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    CVE-2026-42154 false positive on Prometheus Java metrics core library due CPE mapping to Prometheus server.
+    ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.prometheus/prometheus-metrics-core@.*$</packageUrl>
+    <cve>CVE-2026-42154</cve>
+  </suppress>
+</suppressions>
