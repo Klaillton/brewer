@@ -1,3 +1,7 @@
+#######################################################################
+# DEPRECATED: Este arquivo é legado. Não utilize em servidores.
+# Use apenas para desenvolvimento local. Veja docs/LEGACY_DOCKER_COMPOSE_DECOMMISSIONING.md
+#######################################################################
 # Stack SonarQube — análise estática de código (uso local / desenvolvimento)
 #
 # Pré-requisito: ajuste vm.max_map_count no host (necessário para o Elasticsearch
@@ -7,13 +11,13 @@
 #   echo "vm.max_map_count=524288" | sudo tee -a /etc/sysctl.conf
 #
 # Iniciar:
-#   docker compose -f docker-compose.sonarqube.yml up -d
+#   docker compose -f legacy/docker-compose/docker-compose.sonarqube.yml up -d
 #
 # Parar (sem remover dados):
-#   docker compose -f docker-compose.sonarqube.yml down
+#   docker compose -f legacy/docker-compose/docker-compose.sonarqube.yml down
 #
 # Remover tudo (inclusive volumes):
-#   docker compose -f docker-compose.sonarqube.yml down -v
+#   docker compose -f legacy/docker-compose/docker-compose.sonarqube.yml down -v
 #
 # Primeiro acesso: http://localhost:9000  →  admin / admin
 # Após o login, o SonarQube solicitará a troca de senha.

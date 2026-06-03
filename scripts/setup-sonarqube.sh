@@ -47,7 +47,7 @@ TIMEOUT=300
 ELAPSED=0
 until curl -sf "$SONAR_URL/api/system/status" 2>/dev/null | grep -q '"status":"UP"'; do
   if [[ $ELAPSED -ge $TIMEOUT ]]; then
-    error "SonarQube não ficou disponível em ${TIMEOUT}s. Verifique: docker compose -f docker-compose.sonarqube.yml logs sonarqube"
+    error "SonarQube não ficou disponível em ${TIMEOUT}s. Verifique: docker compose -f legacy/docker-compose/docker-compose.sonarqube.yml logs sonarqube"
     exit 1
   fi
   sleep 5

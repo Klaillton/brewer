@@ -1,3 +1,31 @@
+# ⚠️ Atenção: Ambiente de Deploy
+
+**No servidor devserverpi, o deploy deve ser feito exclusivamente via Kubernetes (K3s).**
+O uso de Docker Compose é permitido apenas para desenvolvimento local em máquinas de desenvolvedores.
+
+Consulte o documento [docs/LEGACY_DOCKER_COMPOSE_DECOMMISSIONING.md](docs/LEGACY_DOCKER_COMPOSE_DECOMMISSIONING.md) para detalhes do plano de descomissionamento do Docker Compose legado.
+
+## Guardrails e Validações
+
+O script de deploy (`deploy.sh`) executa validações automáticas:
+
+- Bloqueia o uso de Docker Compose no servidor devserverpi.
+- Alerta se containers Docker Compose legados do Brewer estiverem rodando.
+- A validação também roda em CI pelo workflow `Deployment Guardrails`.
+
+Para uso manual ou integração em CI/CD, execute:
+
+```bash
+scripts/validate-no-docker-compose-on-server.sh
+scripts/validate-deployment-environment.sh
+```
+
+Em cenários excepcionais de diagnóstico, é possível ignorar temporariamente o bloqueio de servidor com:
+
+```bash
+ALLOW_DOCKER_COMPOSE_ON_SERVER=true scripts/validate-no-docker-compose-on-server.sh
+```
+
 # Brewer — Sistema de Gerenciamento de Cervejaria
 
 Sistema web para gestão de cervejaria: cadastro de cervejas, clientes, vendas, relatórios e controle de usuários. Desenvolvido com Spring Boot 3 (MVC + REST) e Angular, com suporte a deploy via Docker e Kubernetes (K3s).
@@ -5,47 +33,51 @@ Sistema web para gestão de cervejaria: cadastro de cervejas, clientes, vendas, 
 ## Tecnologias
 
 ### Backend
-| Tecnologia | Versão | Função |
-|---|---|---|
-| Java | 17 | Linguagem de programação |
-| Spring Boot | 3.2.5 | Framework principal |
-| Spring Security 6 | — | Autenticação e autorização (form login) |
-| Spring Data JPA + Hibernate 6 | — | ORM e persistência |
-| Thymeleaf | — | Templates server-side (views MVC) |
-| Flyway | 10.10.0 | Migrations de banco de dados |
-| MariaDB | 11.3 (prod) / H2 (dev) | Banco de dados |
-| EhCache 3 | — | Cache de segundo nível |
-| JasperReports / OpenHTMLtoPDF | — | Geração de relatórios PDF |
-| Spring Mail | — | Envio de e-mails transacionais |
+
+| Tecnologia                    | Versão                 | Função                                  |
+| ----------------------------- | ---------------------- | --------------------------------------- |
+| Java                          | 17                     | Linguagem de programação                |
+| Spring Boot                   | 3.2.5                  | Framework principal                     |
+| Spring Security 6             | —                      | Autenticação e autorização (form login) |
+| Spring Data JPA + Hibernate 6 | —                      | ORM e persistência                      |
+| Thymeleaf                     | —                      | Templates server-side (views MVC)       |
+| Flyway                        | 10.10.0                | Migrations de banco de dados            |
+| MariaDB                       | 11.3 (prod) / H2 (dev) | Banco de dados                          |
+| EhCache 3                     | —                      | Cache de segundo nível                  |
+| JasperReports / OpenHTMLtoPDF | —                      | Geração de relatórios PDF               |
+| Spring Mail                   | —                      | Envio de e-mails transacionais          |
 
 ### Frontend (SPA)
-| Tecnologia | Versão | Função |
-|---|---|---|
-| Angular | 21.2.7 | Framework SPA |
-| TypeScript | 5.9 | Linguagem tipada |
-| RxJS | — | Programação reativa |
+
+| Tecnologia | Versão | Função              |
+| ---------- | ------ | ------------------- |
+| Angular    | 21.2.7 | Framework SPA       |
+| TypeScript | 5.9    | Linguagem tipada    |
+| RxJS       | —      | Programação reativa |
 
 ### Infraestrutura
-| Tecnologia | Versão | Função |
-|---|---|---|
-| Docker | — | Containerização |
-| Docker Compose | — | Orquestração local |
-| Kubernetes (K3s) | — | Orquestração em cluster (manifests em `k8s/`) |
-| Kustomize | — | Gestão declarativa dos manifests Kubernetes |
-| eclipse-temurin:17-jre | — | Imagem base de runtime (suporta ARM64) |
+
+| Tecnologia             | Versão | Função                                        |
+| ---------------------- | ------ | --------------------------------------------- |
+| Docker                 | —      | Containerização                               |
+| Docker Compose         | —      | Orquestração local                            |
+| Kubernetes (K3s)       | —      | Orquestração em cluster (manifests em `k8s/`) |
+| Kustomize              | —      | Gestão declarativa dos manifests Kubernetes   |
+| eclipse-temurin:17-jre | —      | Imagem base de runtime (suporta ARM64)        |
 
 ### Testes
-| Ferramenta | Escopo |
-|---|---|
-| JUnit 5 | Unitários (backend) |
-| Playwright | E2E (web + API) |
+
+| Ferramenta | Escopo              |
+| ---------- | ------------------- |
+| JUnit 5    | Unitários (backend) |
+| Playwright | E2E (web + API)     |
 
 ## Estrutura do Projeto
 
 ```
 brewer/
 ├── Dockerfile                  # Imagem Docker multi-stage (UID 10001, read-only FS)
-├── docker-compose.yml          # Orquestração app + MariaDB (hardened)
+├── legacy/docker-compose/      # Compose legado (histórico/local; não usar em servidor)
 ├── deploy.sh                   # Build + deploy no K3s (kubectl apply + rollout)
 ├── .env.example                # Template de variáveis de ambiente
 ├── Procfile                    # Deploy Heroku/Render
@@ -92,48 +124,27 @@ brewer/
 
 ## API REST
 
-| Recurso | Endpoint base | Métodos disponíveis |
-|---|---|---|
-| Cervejas | `/api/cervejas` | GET, POST, PUT, DELETE |
-| Estilos | `/api/estilos` | GET, POST, PUT, DELETE |
-| Clientes | `/api/clientes` | GET, POST, PUT, DELETE |
-| Cidades | `/api/cidades` | GET, POST, PUT |
-| Estados | `/api/estados` | GET |
-| Vendas | `/api/vendas` | GET |
-| Estatísticas de vendas | `/api/vendas/stats/por-origem` | GET |
-| Usuários | `/api/usuarios` | GET, POST, PUT |
+| Recurso                | Endpoint base                  | Métodos disponíveis    |
+| ---------------------- | ------------------------------ | ---------------------- |
+| Cervejas               | `/api/cervejas`                | GET, POST, PUT, DELETE |
+| Estilos                | `/api/estilos`                 | GET, POST, PUT, DELETE |
+| Clientes               | `/api/clientes`                | GET, POST, PUT, DELETE |
+| Cidades                | `/api/cidades`                 | GET, POST, PUT         |
+| Estados                | `/api/estados`                 | GET                    |
+| Vendas                 | `/api/vendas`                  | GET                    |
+| Estatísticas de vendas | `/api/vendas/stats/por-origem` | GET                    |
+| Usuários               | `/api/usuarios`                | GET, POST, PUT         |
 
 ## Planejamento de modernização
 
 - `docs/modernization-plan.md` — plano greenfield para **novo repositório**, com arquitetura backend/frontend desacoplada (Angular + Spring Boot Java 25), estratégia multi-cloud, identidade de usuário (perfil/reset/cadastro externo com CAPTCHA e ativação por e-mail) e validação de cobertura de testes.
 
-## Executando com Docker (recomendado)
+## Docker Compose legado
 
-> Pré-requisito: Docker e Docker Compose instalados. Compatível com AMD64 e **ARM64 (Raspberry Pi)**.
+O Brewer deve ser executado oficialmente apenas via Kubernetes.
+Os arquivos Compose foram removidos da raiz e arquivados em `legacy/docker-compose/` somente para referência histórica/local.
 
-```bash
-# 1. Copie o arquivo de variáveis de ambiente
-cp .env.example .env
-# Edite .env se necessário (senhas, e-mail, S3)
-
-# 2. Build e inicialização
-docker compose up --build
-
-# 3. Acesse a aplicação
-# http://localhost:8081
-```
-
-O Flyway aplica automaticamente as migrations V01–V16 na primeira inicialização, incluindo dados de demonstração (2 vendedores, 3 clientes, 10 cervejas e 24 vendas).
-
-Por hardening de segurança, não há mais credencial administrativa padrão ativa após as migrations.
-Para criar um admin local manualmente, use o script `docs/sql/bootstrap-local-admin.sql`.
-
-### Serviços Docker
-
-| Serviço | Container | Porta host | Porta interna |
-|---|---|---|---|
-| Aplicação | `brewer-app` | `8081` | `8080` |
-| MariaDB | `brewer-db` | `3306` | `3306` |
+No `devserverpi`, o uso de Docker Compose permanece bloqueado pelos guardrails.
 
 ## Executando no Kubernetes (K3s)
 
@@ -155,6 +166,7 @@ cp k8s/.secret.env.example k8s/.secret.env
 ```
 
 O script `deploy.sh` faz:
+
 - Build da imagem Docker `brewer:latest`
 - Cria/atualiza o K8s Secret a partir de `k8s/.secret.env` via `scripts/rotate-k8s-secret.sh`
 - Aplica os manifests com `kubectl apply -k k8s/`
@@ -171,6 +183,7 @@ O script atualiza o K8s Secret e executa `ALTER USER` no MariaDB em execução.
 ## Executando Localmente (sem Docker)
 
 ### Pré-requisitos
+
 - Java 17+
 - Maven 3.9+
 - (opcional) MariaDB 11+ para usar perfil `prod`
@@ -213,7 +226,7 @@ O diretório E2E agora mantém lockfile para auditorias reproduzíveis de depend
 Para provisionar o schema de testes e permissões em um servidor novo:
 
 ```bash
-docker compose exec -T db mariadb -uroot -proot < docs/sql/bootstrap-test-db.sql
+docker compose -f legacy/docker-compose/docker-compose.yml exec -T db mariadb -uroot -proot < docs/sql/bootstrap-test-db.sql
 ```
 
 Depois execute os testes do backend:
@@ -227,66 +240,66 @@ mvn test
 Para ambientes locais, gere um hash BCrypt, ajuste nome/e-mail e execute:
 
 ```bash
-docker compose exec -T db mariadb -uroot -proot brewer < docs/sql/bootstrap-local-admin.sql
+docker compose -f legacy/docker-compose/docker-compose.yml exec -T db mariadb -uroot -proot brewer < docs/sql/bootstrap-local-admin.sql
 ```
 
 ## Configuração
 
 ### Perfis de Aplicação
 
-| Perfil | Banco | Descrição |
-|---|---|---|
-| `default` | H2 (memória) | Desenvolvimento local, sem configuração externa |
-| `prod` | MariaDB | Produção via variáveis de ambiente ou `application-prod.properties` |
-| `docker` | MariaDB (container) | Composição com `docker-compose.yml` |
+| Perfil    | Banco               | Descrição                                                           |
+| --------- | ------------------- | ------------------------------------------------------------------- |
+| `default` | H2 (memória)        | Desenvolvimento local, sem configuração externa                     |
+| `prod`    | MariaDB             | Produção via variáveis de ambiente ou `application-prod.properties` |
+| `docker`  | MariaDB (container) | Composição legada em `legacy/docker-compose/docker-compose.yml`     |
 
 ### Variáveis de Ambiente (Docker / prod)
 
-| Variável | Padrão | Descrição |
-|---|---|---|
-| `DB_HOST` | `db` | Host do MariaDB |
-| `DB_PORT` | `3306` | Porta do MariaDB |
-| `DB_NAME` | `brewer` | Nome do banco |
-| `DB_USER` | `brewer` | Usuário do banco |
-| `DB_PASSWORD` | `brewer` | Senha do banco |
-| `DB_ROOT_PASSWORD` | `root` | Senha root do MariaDB |
-| `MAIL_HOST` | `smtp.sendgrid.net` | Servidor SMTP |
-| `MAIL_PORT` | `587` | Porta SMTP |
-| `MAIL_USERNAME` | — | Usuário SMTP |
-| `MAIL_PASSWORD` | — | Senha SMTP |
-| `AWS_ACCESS_KEY_ID` | — | AWS Access Key (upload S3) |
-| `AWS_SECRET_ACCESS_KEY` | — | AWS Secret Key |
-| `AWS_S3_BUCKET` | — | Bucket S3 para fotos de cervejas |
+| Variável                | Padrão              | Descrição                        |
+| ----------------------- | ------------------- | -------------------------------- |
+| `DB_HOST`               | `db`                | Host do MariaDB                  |
+| `DB_PORT`               | `3306`              | Porta do MariaDB                 |
+| `DB_NAME`               | `brewer`            | Nome do banco                    |
+| `DB_USER`               | `brewer`            | Usuário do banco                 |
+| `DB_PASSWORD`           | `brewer`            | Senha do banco                   |
+| `DB_ROOT_PASSWORD`      | `root`              | Senha root do MariaDB            |
+| `MAIL_HOST`             | `smtp.sendgrid.net` | Servidor SMTP                    |
+| `MAIL_PORT`             | `587`               | Porta SMTP                       |
+| `MAIL_USERNAME`         | —                   | Usuário SMTP                     |
+| `MAIL_PASSWORD`         | —                   | Senha SMTP                       |
+| `AWS_ACCESS_KEY_ID`     | —                   | AWS Access Key (upload S3)       |
+| `AWS_SECRET_ACCESS_KEY` | —                   | AWS Secret Key                   |
+| `AWS_S3_BUCKET`         | —                   | Bucket S3 para fotos de cervejas |
 
 ### Controle de Acesso
 
 O sistema usa grupos e permissões granulares:
 
-| Grupo | Descrição |
-|---|---|
-| `Administrador` | Acesso total |
-| `Vendedor` | Acesso a vendas e consultas |
+| Grupo           | Descrição                   |
+| --------------- | --------------------------- |
+| `Administrador` | Acesso total                |
+| `Vendedor`      | Acesso a vendas e consultas |
 
-| Role | Descrição |
-|---|---|
-| `ROLE_CADASTRAR_CIDADE` | Cadastrar e editar cidades |
+| Role                     | Descrição                   |
+| ------------------------ | --------------------------- |
+| `ROLE_CADASTRAR_CIDADE`  | Cadastrar e editar cidades  |
 | `ROLE_CADASTRAR_USUARIO` | Cadastrar e editar usuários |
-| `ROLE_CANCELAR_VENDA` | Cancelar vendas emitidas |
+| `ROLE_CANCELAR_VENDA`    | Cancelar vendas emitidas    |
 
 ## Migrações de Banco (Flyway)
 
-| Migration | Descrição |
-|---|---|
-| V01 | Tabelas `estilo` e `cerveja` + estilos iniciais |
-| V02–V03 | Colunas `quantidade_estoque`, `foto`, `content_type` em `cerveja` |
-| V04 | Tabelas `estado` e `cidade` |
-| V05–V06 | Tabela `cliente` |
-| V07–V11 | Tabelas `usuario`, `grupo`, `permissao`; usuário admin; permissões |
-| V12 | Tabelas `venda` e `item_venda` |
-| V13 | Role `ROLE_CANCELAR_VENDA` |
-| V14 | Estados e cidades do Brasil |
-| V15 | Dados de demonstração: 2 vendedores, 3 clientes, 10 cervejas, 24 vendas |
-| V16 | Desativa usuário admin padrão legado e remove vínculo administrativo (hardening) |
+| Migration | Descrição                                                                        |
+| --------- | -------------------------------------------------------------------------------- |
+| V01       | Tabelas `estilo` e `cerveja` + estilos iniciais                                  |
+| V02–V03   | Colunas `quantidade_estoque`, `foto`, `content_type` em `cerveja`                |
+| V04       | Tabelas `estado` e `cidade`                                                      |
+| V05–V06   | Tabela `cliente`                                                                 |
+| V07–V11   | Tabelas `usuario`, `grupo`, `permissao`; usuário admin; permissões               |
+| V12       | Tabelas `venda` e `item_venda`                                                   |
+| V13       | Role `ROLE_CANCELAR_VENDA`                                                       |
+| V14       | Estados e cidades do Brasil                                                      |
+| V15       | Dados de demonstração: 2 vendedores, 3 clientes, 10 cervejas, 24 vendas          |
+| V16       | Desativa usuário admin padrão legado e remove vínculo administrativo (hardening) |
 
 ## CI/CD
 
@@ -304,8 +317,9 @@ mvn -B -DskipTests dependency-check:check
 
 Para melhor desempenho e menos rate limiting, configure a variável de ambiente `NVD_API_KEY` localmente ou o secret `NVD_API_KEY` no GitHub Actions.
 O relatório HTML é gerado em `target/dependency-check-report.html`.
+
 - Spring MVC 5.x → Spring Boot 3.2.5
-- javax.* → jakarta.* (Jakarta EE)
+- javax._ → jakarta._ (Jakarta EE)
 - Hibernate Criteria API → JPA Criteria API
 - Spring Security 5 → Spring Security 6
 

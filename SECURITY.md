@@ -4,10 +4,10 @@
 
 Este é um projeto de estudo/portfólio. Apenas o branch `master` recebe correções de segurança.
 
-| Versão / Branch | Suportada |
-|---|---|
-| `master` | ✅ Sim |
-| Branches antigas ou forks | ❌ Não |
+| Versão / Branch           | Suportada |
+| ------------------------- | --------- |
+| `master`                  | ✅ Sim    |
+| Branches antigas ou forks | ❌ Não    |
 
 ## Reportando uma Vulnerabilidade
 
@@ -20,6 +20,7 @@ Use o fluxo de **reporte privado** do GitHub:
 3. Descreva o problema com o máximo de detalhes
 
 Ao reportar, inclua:
+
 - Descrição clara da vulnerabilidade e área afetada
 - Passos para reprodução ou prova de conceito
 - Avaliação de impacto (se conhecida)
@@ -34,6 +35,7 @@ Por favor, evite divulgação pública até que o problema tenha sido revisado e
 ## Práticas de Segurança do Projeto
 
 ### Autenticação e Autorização
+
 - Autenticação via **form login** com Spring Security 6
 - Senhas armazenadas com **BCrypt** (fator de custo padrão do Spring Security)
 - Controle de acesso baseado em **roles** (`ROLE_CADASTRAR_CIDADE`, `ROLE_CADASTRAR_USUARIO`, `ROLE_CANCELAR_VENDA`) e **grupos** (Administrador, Vendedor)
@@ -41,27 +43,32 @@ Por favor, evite divulgação pública até que o problema tenha sido revisado e
 - Cabeçalhos de segurança HTTP configurados via Spring Security (X-Content-Type-Options, X-Frame-Options, etc.)
 
 ### Banco de Dados
+
 - Migrations versionadas com **Flyway** — sem DDL automático em produção
 - Queries parametrizadas via **Spring Data JPA / JPQL** — sem SQL concatenado (proteção contra SQL Injection)
 - Credenciais do banco injetadas por **variáveis de ambiente** (nunca em código ou no repositório)
 - Arquivo `.env` listado no `.gitignore`
 
 ### Upload de Arquivos
+
 - Validação de tipo MIME em uploads de fotos de cervejas
 - Tamanho máximo configurado (10 MB)
 - Armazenamento em **AWS S3** (produção) ou diretório local — sem execução de arquivos enviados
 
 ### Docker / Infraestrutura
+
 - Container da aplicação executa com **usuário não-root** (`brewer`)
 - Jar com permissões `644` (não executável diretamente pelo sistema)
 - Imagem de runtime baseada em `eclipse-temurin:17-jre` (Debian) — sem ferramentas de build na imagem final
-- Secrets via variáveis de ambiente no `docker-compose.yml` com suporte a arquivo `.env`
+- Secrets via variáveis de ambiente (inclusive no Compose legado em `legacy/docker-compose/`) com suporte a arquivo `.env`
 
 ### Dependências
+
 - **Dependabot** configurado para atualização automática de dependências Maven e npm
 - **GitHub Actions OSSAR** (análise estática de segurança) executa em cada push/PR para `master`
 
 ### O que NÃO está implementado (escopo de estudo)
+
 - HTTPS / TLS (esperado ser terminado no load balancer/proxy reverso)
 - Rate limiting / proteção contra brute force no login
 - Auditoria de ações (log de quem fez o quê)

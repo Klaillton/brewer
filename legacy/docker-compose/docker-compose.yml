@@ -1,3 +1,7 @@
+#######################################################################
+# DEPRECATED: Este arquivo é legado. Não utilize em servidores.
+# Use apenas para desenvolvimento local. Veja docs/LEGACY_DOCKER_COMPOSE_DECOMMISSIONING.md
+#######################################################################
 services:
 
   nginx:
