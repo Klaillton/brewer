@@ -71,9 +71,9 @@ This is not a "Pi is weak" problem — it is a **process and repository hygiene*
 - Uses Kustomize (`kustomization.yaml`)
 
 **Legacy files that must be retired**:
-- `docker-compose.yml` (main — runs app + db + nginx)
-- `docker-compose.observability.yml`
-- `docker-compose.sonarqube.yml`
+- `legacy/docker-compose/docker-compose.yml` (main — runs app + db + nginx)
+- `legacy/docker-compose/docker-compose.observability.yml`
+- `legacy/docker-compose/docker-compose.sonarqube.yml`
 - `Dockerfile` (still needed for image build, but usage must be only via k8s)
 
 **Observations**:
@@ -202,9 +202,9 @@ set -euo pipefail
 echo "Stopping legacy Docker Compose stacks for brewer + observability..."
 
 # Brewer legacy stacks
-docker compose -f docker-compose.yml down --remove-orphans 2>/dev/null || true
-docker compose -f docker-compose.observability.yml down 2>/dev/null || true
-docker compose -f docker-compose.sonarqube.yml down 2>/dev/null || true
+docker compose -f legacy/docker-compose/docker-compose.yml down --remove-orphans 2>/dev/null || true
+docker compose -f legacy/docker-compose/docker-compose.observability.yml down 2>/dev/null || true
+docker compose -f legacy/docker-compose/docker-compose.sonarqube.yml down 2>/dev/null || true
 
 # Observability-epo legacy stack
 cd ../observability-epo

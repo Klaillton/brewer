@@ -20,6 +20,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
 K8S_DIR="$PROJECT_ROOT/k8s"
 
+"$PROJECT_ROOT/scripts/validate-no-docker-compose-on-server.sh"
+"$PROJECT_ROOT/scripts/validate-deployment-environment.sh"
+
 IMAGE_NAME="brewer"
 IMAGE_TAG="latest"
 NAMESPACE="brewer"

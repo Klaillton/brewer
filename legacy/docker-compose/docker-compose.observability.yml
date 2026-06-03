@@ -1,10 +1,14 @@
+#######################################################################
+# DEPRECATED: Este arquivo é legado. Não utilize em servidores.
+# Use apenas para desenvolvimento local. Veja docs/LEGACY_DOCKER_COMPOSE_DECOMMISSIONING.md
+#######################################################################
 # Override para integrar a stack Brewer com uma rede de observabilidade compartilhada.
 #
 # Pré-requisito: crie a rede antes de iniciar:
 #   docker network create observability-shared
 #
 # Uso:
-#   docker compose -f docker-compose.yml -f docker-compose.observability.yml up
+#   docker compose -f legacy/docker-compose/docker-compose.yml -f legacy/docker-compose/docker-compose.observability.yml up
 #
 # Isso conecta o serviço 'app' à rede 'observability-shared', permitindo
 # que ele alcance o OTel Collector em http://otel-collector:4318.

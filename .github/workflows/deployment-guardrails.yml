@@ -1,0 +1,28 @@
+name: Deployment Guardrails
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-guardrails:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ensure scripts are executable
+        run: chmod +x scripts/validate-no-docker-compose-on-server.sh scripts/validate-deployment-environment.sh scripts/cleanup-legacy-docker.sh
+
+      - name: Validate server guardrail
+        run: scripts/validate-no-docker-compose-on-server.sh
+
+      - name: Validate legacy compose runtime
+        run: scripts/validate-deployment-environment.sh
