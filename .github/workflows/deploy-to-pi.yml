@@ -29,7 +29,7 @@ jobs:
           username: ${{ secrets.DEVPI_USER }}
           key: ${{ secrets.DEVPI_SSH_PRIVATE_KEY }}
           script: |
-            set -euo pipefail
+            bash -euo pipefail <<'BASH'
             echo "Deploying brewer app via k3s on Pi..."
             cd /home/dante/brewer
 
@@ -42,3 +42,4 @@ jobs:
 
             echo "Brewer deploy completed at $(date)"
             kubectl get pods -n brewer
+            BASH
