@@ -1,0 +1,41 @@
+name: Deploy brewer to devserverpi (k3s)
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - "Dockerfile"
+      - "src/**"
+      - "pom.xml"
+      - "k8s/**"
+      - "scripts/**"
+      - ".github/workflows/deploy-to-pi.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Raspberry Pi (run existing deploy.sh)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEVPI_HOST }}
+          username: ${{ secrets.DEVPI_USER }}
+          key: ${{ secrets.DEVPI_SSH_PRIVATE_KEY }}
+          script: |
+            set -euo pipefail
+            echo "Deploying brewer app via k3s on Pi..."
+            cd /home/dante/brewer
+
+            git fetch origin
+            git checkout master
+            git pull --ff-only origin master
+
+            # Run the official deploy script (builds image on Pi + applies k8s)
+            ./deploy.sh
+
+            echo "Brewer deploy completed at $(date)"
+            kubectl get pods -n brewer
