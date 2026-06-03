@@ -63,7 +63,7 @@ Sistema web para gestão de cervejaria: cadastro de cervejas, clientes, vendas, 
 | Docker Compose         | —      | Orquestração local                            |
 | Kubernetes (K3s)       | —      | Orquestração em cluster (manifests em `k8s/`) |
 | Kustomize              | —      | Gestão declarativa dos manifests Kubernetes   |
-| eclipse-temurin:17-jre | —      | Imagem base de runtime (suporta ARM64)        |
+| eclipse-temurin:25-jre | —      | Imagem base de runtime (suporta ARM64)        |
 
 ### Testes
 
