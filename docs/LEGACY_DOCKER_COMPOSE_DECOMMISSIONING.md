@@ -202,9 +202,9 @@ set -euo pipefail
 echo "Stopping legacy Docker Compose stacks for brewer + observability..."
 
 # Brewer legacy stacks
-docker compose -f docker-compose.yml down --remove-orphans 2>/dev/null || true
-docker compose -f docker-compose.observability.yml down 2>/dev/null || true
-docker compose -f docker-compose.sonarqube.yml down 2>/dev/null || true
+docker compose -f legacy/docker-compose/docker-compose.yml down --remove-orphans 2>/dev/null || true
+docker compose -f legacy/docker-compose/docker-compose.observability.yml down 2>/dev/null || true
+docker compose -f legacy/docker-compose/docker-compose.sonarqube.yml down 2>/dev/null || true
 
 # Observability-epo legacy stack
 cd ../observability-epo
