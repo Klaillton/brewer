@@ -184,7 +184,7 @@ O script atualiza o K8s Secret e executa `ALTER USER` no MariaDB em execução.
 
 ### Pré-requisitos
 
-- Java 17+
+- Java 25+
 - Maven 3.9+
 - (opcional) MariaDB 11+ para usar perfil `prod`
 
