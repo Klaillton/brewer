@@ -36,8 +36,8 @@ Sistema web para gestão de cervejaria: cadastro de cervejas, clientes, vendas, 
 
 | Tecnologia                    | Versão                 | Função                                  |
 | ----------------------------- | ---------------------- | --------------------------------------- |
-| Java                          | 17                     | Linguagem de programação                |
-| Spring Boot                   | 3.2.5                  | Framework principal                     |
+| Java                          | 25                     | Linguagem de programação                |
+| Spring Boot                   | 3.5.14                 | Framework principal                     |
 | Spring Security 6             | —                      | Autenticação e autorização (form login) |
 | Spring Data JPA + Hibernate 6 | —                      | ORM e persistência                      |
 | Thymeleaf                     | —                      | Templates server-side (views MVC)       |
