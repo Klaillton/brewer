@@ -319,7 +319,7 @@ Para melhor desempenho e menos rate limiting, configure a variável de ambiente 
 O relatório HTML é gerado em `target/dependency-check-report.html`.
 
 - Spring MVC 5.x → Spring Boot 3.2.5
-- javax._ → jakarta._ (Jakarta EE)
+- javax.* → jakarta.* (Jakarta EE)
 - Hibernate Criteria API → JPA Criteria API
 - Spring Security 5 → Spring Security 6
 
