@@ -17,6 +17,7 @@ jobs:
       - name: Generate or update triage issue
         uses: actions/github-script@v8
         with:
+          github-token: ${{ secrets.DEPENDABOT_ALERTS_TOKEN != '' && secrets.DEPENDABOT_ALERTS_TOKEN || github.token }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
