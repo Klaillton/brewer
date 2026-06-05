@@ -7,8 +7,7 @@ on:
 
 permissions:
   contents: read
-  security-events: read
-  dependabot-alerts: read
+  security-events: write
   issues: write
 
 jobs:
