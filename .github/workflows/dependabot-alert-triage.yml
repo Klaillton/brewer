@@ -48,17 +48,23 @@ jobs:
             await ensureLabel("triage", "0e8a16", "Operational triage");
 
             let alerts = [];
-            for (let page = 1; page <= 10; page++) {
-              const response = await github.request("GET /repos/{owner}/{repo}/dependabot/alerts", {
-                owner,
-                repo,
-                state: "open",
-                per_page: 100,
-                page
-              });
-              const batch = response.data || [];
-              alerts = alerts.concat(batch);
-              if (batch.length < 100) break;
+            let alertsAccessWarning = null;
+            try {
+              for (let page = 1; page <= 10; page++) {
+                const response = await github.request("GET /repos/{owner}/{repo}/dependabot/alerts", {
+                  owner,
+                  repo,
+                  state: "open",
+                  per_page: 100,
+                  page
+                });
+                const batch = response.data || [];
+                alerts = alerts.concat(batch);
+                if (batch.length < 100) break;
+              }
+            } catch (error) {
+              alertsAccessWarning = `Dependabot alerts API indisponivel para o token atual (${error?.status || "n/a"}: ${error?.message || "erro desconhecido"}). Configure um token com escopo de leitura de Dependabot alerts e use-o no workflow para habilitar a coleta completa.`;
+              core.warning(alertsAccessWarning);
             }
 
             const counts = {
@@ -109,6 +115,8 @@ jobs:
               `- Medium: **${counts.medium}**`,
               `- Low: **${counts.low}**`,
               `- Unknown: **${counts.unknown}**`,
+              "",
+              ...(alertsAccessWarning ? ["### Aviso de Acesso", "", `- ${alertsAccessWarning}`, ""] : []),
               "",
               "### Prioritized Top Alerts (max 25)",
               "",
