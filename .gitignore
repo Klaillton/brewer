@@ -58,3 +58,7 @@ k8s/.secret.*.env
 
 # Certificados TLS de desenvolvimento (gerados por scripts/generate-dev-certs.sh)
 nginx/certs/
+
+# Configurações locais do VS Code e instruções pessoais do Copilot
+.vscode/settings.json
+.github/instructions/personas/
