@@ -1,0 +1,156 @@
+name: Dependabot Alert Triage
+
+on:
+  schedule:
+    - cron: "15 7 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: read
+  issues: write
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate or update triage issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issueTitle = "SecurityOps: Dependabot alerts triage";
+            const issueLabels = ["security", "dependabot", "triage"];
+
+            function normalizeSeverity(value) {
+              const sev = (value || "unknown").toLowerCase();
+              if (["critical", "high", "moderate", "medium", "low", "unknown"].includes(sev)) {
+                return sev === "moderate" ? "medium" : sev;
+              }
+              return "unknown";
+            }
+
+            async function ensureLabel(name, color, description) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name });
+              } catch (error) {
+                if (error.status === 404) {
+                  await github.rest.issues.createLabel({ owner, repo, name, color, description });
+                } else {
+                  throw error;
+                }
+              }
+            }
+
+            await ensureLabel("security", "d73a4a", "Security tracking");
+            await ensureLabel("dependabot", "5319e7", "Dependabot related tracking");
+            await ensureLabel("triage", "0e8a16", "Operational triage");
+
+            let alerts = [];
+            for (let page = 1; page <= 10; page++) {
+              const response = await github.request("GET /repos/{owner}/{repo}/dependabot/alerts", {
+                owner,
+                repo,
+                state: "open",
+                per_page: 100,
+                page
+              });
+              const batch = response.data || [];
+              alerts = alerts.concat(batch);
+              if (batch.length < 100) break;
+            }
+
+            const counts = {
+              critical: 0,
+              high: 0,
+              medium: 0,
+              low: 0,
+              unknown: 0
+            };
+
+            for (const alert of alerts) {
+              const sev = normalizeSeverity(alert?.security_vulnerability?.severity);
+              counts[sev] = (counts[sev] || 0) + 1;
+            }
+
+            const prioritized = alerts
+              .slice()
+              .sort((a, b) => {
+                const order = { critical: 5, high: 4, medium: 3, low: 2, unknown: 1 };
+                const sa = order[normalizeSeverity(a?.security_vulnerability?.severity)] || 0;
+                const sb = order[normalizeSeverity(b?.security_vulnerability?.severity)] || 0;
+                if (sb !== sa) return sb - sa;
+                return new Date(b.updated_at || 0) - new Date(a.updated_at || 0);
+              })
+              .slice(0, 25);
+
+            const rows = prioritized.map((alert) => {
+              const severity = normalizeSeverity(alert?.security_vulnerability?.severity);
+              const dependency = alert?.dependency?.package?.name || "unknown";
+              const ecosystem = alert?.dependency?.package?.ecosystem || "unknown";
+              const manifest = alert?.dependency?.manifest_path || "n/a";
+              const advisory = alert?.security_advisory?.ghsa_id || "n/a";
+              const url = alert?.html_url || "";
+              return `| ${severity} | ${ecosystem} | ${dependency} | ${manifest} | ${advisory} | [link](${url}) |`;
+            });
+
+            const now = new Date().toISOString();
+            const body = [
+              "## SecurityOps Triage Snapshot",
+              "",
+              `Updated at: ${now}`,
+              "",
+              "### Open Dependabot Alerts",
+              "",
+              `- Total: **${alerts.length}**`,
+              `- Critical: **${counts.critical}**`,
+              `- High: **${counts.high}**`,
+              `- Medium: **${counts.medium}**`,
+              `- Low: **${counts.low}**`,
+              `- Unknown: **${counts.unknown}**`,
+              "",
+              "### Prioritized Top Alerts (max 25)",
+              "",
+              "| Severity | Ecosystem | Dependency | Manifest | Advisory | Alert |",
+              "|---|---|---|---|---|---|",
+              ...(rows.length ? rows : ["| n/a | n/a | n/a | n/a | n/a | n/a |"]),
+              "",
+              "### Action Plan",
+              "",
+              "1. Treat critical/high first (same day).",
+              "2. Batch patch/minor updates with green checks.",
+              "3. Schedule majors with dedicated validation.",
+              "",
+              "_This issue is managed automatically by workflow `Dependabot Alert Triage`._"
+            ].join("\n");
+
+            const existingIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: "open",
+              labels: issueLabels.join(","),
+              per_page: 100
+            });
+
+            const existing = existingIssues.find((i) => i.title === issueTitle);
+
+            if (existing) {
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: existing.number,
+                title: issueTitle,
+                body
+              });
+              core.notice(`Updated issue #${existing.number}`);
+            } else {
+              const created = await github.rest.issues.create({
+                owner,
+                repo,
+                title: issueTitle,
+                body,
+                labels: issueLabels
+              });
+              core.notice(`Created issue #${created.data.number}`);
+            }
