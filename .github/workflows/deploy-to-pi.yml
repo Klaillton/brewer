@@ -1,8 +1,8 @@
-name: Deploy brewer to devserverpi (k3s)
+name: Notify devstack-infra to deploy Brewer
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
     paths:
       - "Dockerfile"
       - "src/**"
@@ -14,35 +14,33 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
-  deploy:
+  trigger-infra-deploy:
     runs-on: ubuntu-latest
     concurrency:
-      group: deploy-to-pi
+      group: notify-devstack-infra-brewer
       cancel-in-progress: true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Deploy to Raspberry Pi (run existing deploy.sh)
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Trigger devstack-infra orchestrator workflow
+        uses: peter-evans/repository-dispatch@v3
         with:
-          host: ${{ secrets.DEVPI_HOST }}
-          username: ${{ secrets.DEVPI_USER }}
-          key: ${{ secrets.DEVPI_SSH_PRIVATE_KEY }}
-          script: |
-            bash -euo pipefail <<'BASH'
-            echo "Deploying brewer app via k3s on Pi..."
-            cd /home/dante/brewer
+          token: ${{ github.token }}
+          repository: Klaillton/devstack-infra
+          event-type: brewer-updated
+          client-payload: |
+            {
+              "source_repository": "${{ github.repository }}",
+              "source_ref": "${{ github.ref }}",
+              "source_sha": "${{ github.sha }}",
+              "source_workflow": "${{ github.workflow }}",
+              "triggered_by": "${{ github.actor }}"
+            }
 
-            git fetch origin
-            git checkout master
-            git pull --ff-only origin master
-
-            # Run the official deploy script (builds image on Pi + applies k8s)
-            ./deploy.sh
-
-            echo "Brewer deploy completed at $(date)"
-            kubectl get pods -n brewer
-            BASH
+      - name: Deployment handoff summary
+        run: |
+          echo "Brewer update dispatched to devstack-infra."
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Ref:        $GITHUB_REF"
+          echo "SHA:        $GITHUB_SHA"

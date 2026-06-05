@@ -305,6 +305,7 @@ O sistema usa grupos e permissões granulares:
 
 - **GitHub Actions** — análise estática de segurança (OSSAR) em push/PR para `master`
 - **GitHub Actions** — auditoria Java com OWASP Dependency-Check em push/PR/schedule
+- **GitHub Actions** — push em `master` notifica o repositório `devstack-infra`, que passa a orquestrar o deploy no `devserverpi`
 - **Dependabot** — atualizações automáticas de dependências Maven e npm
 
 ### Auditoria Java de dependências
