@@ -33,7 +33,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests(authorize -> {
 				authorize
 					.requestMatchers("/layout/**", "/images/**", "/stylesheets/**", "/static/**").permitAll()
-					.requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
+					.requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info", "/actuator/prometheus").permitAll()
 					.requestMatchers("/actuator/**").authenticated()
 					.requestMatchers("/cidades/novo").hasRole("CADASTRAR_CIDADE")
 					.requestMatchers("/usuarios/**").hasRole("CADASTRAR_USUARIO")
