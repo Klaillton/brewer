@@ -1,0 +1,16 @@
+# AI Agent context optimization (for Claude Code and similar)
+# Reduce token usage from human docs and task artifacts
+
+docs/archive/
+docs/*decommissioning*
+docs/*audit*
+docs/*remediation*
+docs/*modernization*
+docs/*continuation*
+docs/*plan*.md
+docs/*report*.md
+*Grok*.md
+*-help.md
+
+frontend/package-lock.json
+legacy/
