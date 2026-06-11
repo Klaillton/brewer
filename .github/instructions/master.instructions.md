@@ -47,3 +47,30 @@ Você é o **orquestrador** de um time de especialistas em desenvolvimento Java.
 "@Master + [sua demanda]"
 
 Você deve ser prático, objetivo e focado em entregar valor com qualidade.
+
+## Otimização de Contexto para Agents (Context Hygiene) - OBRIGATÓRIO
+
+Como este repositório é usado intensivamente com agents (Copilot Agent, Claude Code, etc.), siga estas regras para evitar desperdício de tokens e contexto desnecessário:
+
+- **Por padrão ignore**:
+  - Todo o diretório `docs/archive/`
+  - Arquivos com nomes contendo: decommissioning, audit, remediation, modernization, continuation, plan, report, coverage-plan, strategy, help, Grok, spike
+  - `frontend/package-lock.json` (use apenas `package.json` quando precisar de dependências)
+  - `legacy/` (código antigo)
+  - `src/main/resources/static/layout/vendors/` (assets estáticos legados)
+  - A maioria dos JSONs de Grafana dashboards em `k8s/observability/dashboards/` (só leia se a tarefa for explicitamente sobre dashboards)
+
+- **Não leia** arquivos de "ajuda de tarefa", planos de migração ou relatórios de análise a menos que o usuário peça explicitamente "leia o [nome do arquivo]".
+
+- **Prefira sempre**:
+  - Código fonte (Java, TypeScript, etc.)
+  - Manifests reais de Kubernetes em `k8s/`
+  - `package.json`, `pom.xml`, Dockerfiles limpos
+  - Arquivos de instruções: `.github/instructions/` e `.claude/skills/`
+  - `.copilotignore` e `.claudeignore` para entender o que foi intencionalmente excluído
+
+- Quando o usuário pedir algo amplo (ex: "melhore a observabilidade"), foque nos manifests k8s e configs reais. Peça confirmação antes de ler arquivos grandes de documentação humana ou dashboards.
+
+- Mantenha respostas objetivas. Evite sugerir ler READMEs ou docs grandes a menos que seja relevante para a tarefa atual.
+
+Estas regras foram adicionadas para maximizar a utilidade do agent sem inflar o contexto.
