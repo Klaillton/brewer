@@ -1,4 +1,4 @@
-name: Trigger Devstack Deploy (PR + Merge)
+name: Trigger Devstack Deploy
 
 on:
   pull_request:
@@ -16,14 +16,14 @@ on:
         options: [brewer, observability]
 
 jobs:
-  trigger:
+  dispatch:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       actions: write
 
     steps:
-      - name: Determine payload
+      - name: Build payload
         id: payload
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
@@ -48,20 +48,17 @@ jobs:
         with:
           github-token: ${{ secrets.DEVSTACK_INFRA_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
-            const payload = {
-              project_key: '${{ steps.payload.outputs.project_key }}',
-              source_sha: '${{ steps.payload.outputs.source_sha }}',
-              source_ref: '${{ steps.payload.outputs.source_ref }}',
-              source_repo: 'Klaillton/brewer',
-              triggered_by: '${{ steps.payload.outputs.triggered_by }}'
-            };
-
-            console.log('Dispatching to devstack-infra:', payload);
-
             await github.rest.repos.createDispatchEvent({
               owner: 'Klaillton',
               repo: 'devstack-infra',
               event_type: 'brewer-updated',
-              client_payload: payload
+              client_payload: {
+                project_key: '${{ steps.payload.outputs.project_key }}',
+                source_sha: '${{ steps.payload.outputs.source_sha }}',
+                source_ref: '${{ steps.payload.outputs.source_ref }}',
+                source_repo: 'Klaillton/brewer',
+                triggered_by: '${{ steps.payload.outputs.triggered_by }}'
+              }
             });
 
+            
