@@ -1,0 +1,67 @@
+name: Trigger Devstack Deploy (PR + Merge)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      project_key:
+        description: Project key
+        required: true
+        default: brewer
+        type: choice
+        options: [brewer, observability]
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+
+    steps:
+      - name: Determine payload
+        id: payload
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "project_key=brewer" >> $GITHUB_OUTPUT
+            echo "source_sha=${{ github.event.pull_request.head.sha }}" >> $GITHUB_OUTPUT
+            echo "source_ref=${{ github.head_ref }}" >> $GITHUB_OUTPUT
+            echo "triggered_by=pr-${{ github.event.number }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "project_key=brewer" >> $GITHUB_OUTPUT
+            echo "source_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+            echo "source_ref=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            echo "triggered_by=push-main" >> $GITHUB_OUTPUT
+          else
+            echo "project_key=${{ github.event.inputs.project_key }}" >> $GITHUB_OUTPUT
+            echo "source_sha=${{ github.sha }}" >> $GITHUB_OUTPUT
+            echo "source_ref=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            echo "triggered_by=manual" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trigger devstack-infra
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.DEVSTACK_INFRA_DISPATCH_TOKEN || secrets.GITHUB_TOKEN }}
+          script: |
+            const payload = {
+              project_key: '${{ steps.payload.outputs.project_key }}',
+              source_sha: '${{ steps.payload.outputs.source_sha }}',
+              source_ref: '${{ steps.payload.outputs.source_ref }}',
+              source_repo: 'Klaillton/brewer',
+              triggered_by: '${{ steps.payload.outputs.triggered_by }}'
+            };
+
+            console.log('Dispatching to devstack-infra:', payload);
+
+            await github.rest.repos.createDispatchEvent({
+              owner: 'Klaillton',
+              repo: 'devstack-infra',
+              event_type: 'brewer-updated',
+              client_payload: payload
+            });
+
