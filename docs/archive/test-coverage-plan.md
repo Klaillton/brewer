@@ -21,7 +21,9 @@
 **Total de classes de produção**: 123  
 **Classes sem cobertura estimadas**: ~43
 
----
+**Total de métodos de teste pré-existentes**: 14  
+**Total de classes de produção**: 123  
+**Classes sem cobertura estimadas**: ~43
 
 ## Fase 1 — Domínio, helpers e utilitários puros ✅ CONCLUÍDA
 
@@ -51,8 +53,6 @@
 **Novos métodos de teste**: 42  
 **Total acumulado de métodos**: 56 (14 pré-existentes + 42 novos)
 
----
-
 ## Fase 2 — Service layer (lógica de negócio) ✅ CONCLUÍDA
 
 **Estratégia**: testes unitários com Mockito — sem Spring context, sem banco.  
@@ -79,13 +79,12 @@
 | `CadastroClienteServiceTest.java` | `Service` | 3 | `CadastroClienteService` |
 | `CadastroUsuarioServiceTest.java` | `Service` | 6 | `CadastroUsuarioService` |
 | `CadastroCervejaServiceTest.java` | `Service` | 3 | `CadastroCervejaService` |
+| `CadastroCervejaService` | `Service` | 3 | `CadastroCervejaService` |
 | `CadastroVendaServiceTest.java` | `Service` | 7 | `CadastroVendaService` |
 | `VendaListenerTest.java` | `Service.event.venda` | 2 | `VendaListener` |
 | `AppUserDetailsServiceTest.java` | `security` | 2 | `AppUserDetailsService` |
 
 **Novos métodos de teste na fase 2**: 29
-
----
 
 ## Fase 3 — REST Controllers (api/) ✅ CONCLUÍDA
 
@@ -117,8 +116,6 @@
 
 **Novos métodos de teste na fase 3**: 14
 
----
-
 ## Fase 4 — repository.helper.* (queries customizadas) ⏳ PLANEJADA
 
 **Estratégia**: `@DataJpaTest` com banco MariaDB via perfil `test` ou Testcontainers.  
@@ -149,8 +146,6 @@
 | 3 | REST Controllers | ✅ | +14 | PR atual |
 | 4 | repository.helper.* | ⏳ | +~35 | A criar |
 | **Total estimado** | | | **~146** | |
-
----
 
 ## Cobertura esperada ao final das 4 fases
 
