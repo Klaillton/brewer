@@ -26,7 +26,7 @@ This file tells agents how to work efficiently in this repository and avoid wast
 - Source code (Java, TypeScript, HTML templates)
 - Kubernetes manifests under `k8s/`
 - `deploy.sh`, `pom.xml`, `package.json`, Dockerfiles
-- `.github/instructions/master.instructions.md`
+- `.github/instructions/` and `.github/copilot-instructions.md`
 - `.claude/skills/` (when doing E2E/Playwright work)
 - Config files: `application*.properties`, `config/*.yaml` (prometheus, loki, tempo, otel)
 - Current `.copilotignore` and `.claudeignore`
@@ -38,6 +38,11 @@ This file tells agents how to work efficiently in this repository and avoid wast
 - Docker Compose files are legacy / local-dev only.
 - Frontend is Angular 21 + Playwright for E2E.
 - Use the multi-persona flow defined in `master.instructions.md` when the task is complex.
+
+**Dependabot / Bots**
+- Dependabot is configured with grouped updates and `open-pull-requests-limit` to keep noise reasonable.
+- **Important**: Standard GitHub Dependabot does **not** automatically close its own PRs after some time. This is a common misconception. PRs stay open until merged, closed manually, or a stale workflow acts on them.
+- The custom `Dependabot Alert Triage` workflow maintains a small issue (intentionally kept tiny) that links to the real dashboard instead of dumping large tables.
 
 **Observability (related stack)**
 - Source of truth for the observability platform is `k8s/observability/`.
@@ -60,5 +65,6 @@ This file tells agents how to work efficiently in this repository and avoid wast
 - Before reading any file in docs/ (except if it's clearly a code-related config).
 - Before touching legacy/ or old static assets.
 - If the task seems to require broad historical context (audit, old plans).
+- Before spending time on old Dependabot PRs — check the dashboard first.
 
 This file is meant to be read early by agents. Keep it updated as the project evolves.
