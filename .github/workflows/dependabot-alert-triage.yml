@@ -51,7 +51,7 @@ jobs:
             let alerts = [];
             let alertsAccessWarning = null;
             try {
-              for (let page = 1; page <= 10; page++) {
+              for (let page = 1; page <= 5; page++) {  // reduced from 10
                 const response = await github.request("GET /repos/{owner}/{repo}/dependabot/alerts", {
                   owner,
                   repo,
@@ -68,70 +68,49 @@ jobs:
               core.warning(alertsAccessWarning);
             }
 
-            const counts = {
-              critical: 0,
-              high: 0,
-              medium: 0,
-              low: 0,
-              unknown: 0
-            };
-
+            const counts = { critical: 0, high: 0, medium: 0, low: 0, unknown: 0 };
             for (const alert of alerts) {
               const sev = normalizeSeverity(alert?.security_vulnerability?.severity);
               counts[sev] = (counts[sev] || 0) + 1;
             }
 
-            const prioritized = alerts
-              .slice()
+            // Only Critical + High, max 10 items (much smaller issue body)
+            const criticalHigh = alerts
+              .filter(a => ["critical", "high"].includes(normalizeSeverity(a?.security_vulnerability?.severity)))
               .sort((a, b) => {
-                const order = { critical: 5, high: 4, medium: 3, low: 2, unknown: 1 };
-                const sa = order[normalizeSeverity(a?.security_vulnerability?.severity)] || 0;
-                const sb = order[normalizeSeverity(b?.security_vulnerability?.severity)] || 0;
-                if (sb !== sa) return sb - sa;
-                return new Date(b.updated_at || 0) - new Date(a.updated_at || 0);
+                const order = { critical: 2, high: 1 };
+                return (order[normalizeSeverity(b?.security_vulnerability?.severity)] || 0) -
+                       (order[normalizeSeverity(a?.security_vulnerability?.severity)] || 0);
               })
-              .slice(0, 25);
+              .slice(0, 10);
 
-            const rows = prioritized.map((alert) => {
+            const rows = criticalHigh.map((alert) => {
               const severity = normalizeSeverity(alert?.security_vulnerability?.severity);
               const dependency = alert?.dependency?.package?.name || "unknown";
-              const ecosystem = alert?.dependency?.package?.ecosystem || "unknown";
-              const manifest = alert?.dependency?.manifest_path || "n/a";
               const advisory = alert?.security_advisory?.ghsa_id || "n/a";
               const url = alert?.html_url || "";
-              return `| ${severity} | ${ecosystem} | ${dependency} | ${manifest} | ${advisory} | [link](${url}) |`;
+              return `- **${severity.toUpperCase()}** — ${dependency} — [${advisory}](${url})`;
             });
 
             const now = new Date().toISOString();
+            const dashboardUrl = `https://github.com/${owner}/${repo}/security/dependabot`;
+
             const body = [
-              "## SecurityOps Triage Snapshot",
+              "## SecurityOps Triage Snapshot (auto-updated)",
               "",
               `Updated at: ${now}`,
               "",
-              "### Open Dependabot Alerts",
+              "### Summary",
+              `- Total open: **${alerts.length}**  (Critical: **${counts.critical}**, High: **${counts.high}**, Medium: **${counts.medium}**, Low: **${counts.low}**)",
               "",
-              `- Total: **${alerts.length}**`,
-              `- Critical: **${counts.critical}**`,
-              `- High: **${counts.high}**`,
-              `- Medium: **${counts.medium}**`,
-              `- Low: **${counts.low}**`,
-              `- Unknown: **${counts.unknown}**`,
+              ...(alertsAccessWarning ? ["### Aviso", `- ${alertsAccessWarning}`, ""] : []),
               "",
-              ...(alertsAccessWarning ? ["### Aviso de Acesso", "", `- ${alertsAccessWarning}`, ""] : []),
+              "### Top Critical/High (max 10)",
+              ...(rows.length ? rows : ["- No critical or high alerts at the moment."]),
               "",
-              "### Prioritized Top Alerts (max 25)",
+              `**Full list + details:** [Dependabot Dashboard](${dashboardUrl})`,
               "",
-              "| Severity | Ecosystem | Dependency | Manifest | Advisory | Alert |",
-              "|---|---|---|---|---|---|",
-              ...(rows.length ? rows : ["| n/a | n/a | n/a | n/a | n/a | n/a |"]),
-              "",
-              "### Action Plan",
-              "",
-              "1. Treat critical/high first (same day).",
-              "2. Batch patch/minor updates with green checks.",
-              "3. Schedule majors with dedicated validation.",
-              "",
-              "_This issue is managed automatically by workflow `Dependabot Alert Triage`._"
+              "_This issue is managed automatically by the `Dependabot Alert Triage` workflow. It is intentionally kept small to reduce context bloat for agents and humans._"
             ].join("\n");
 
             const existingIssues = await github.paginate(github.rest.issues.listForRepo, {
@@ -139,7 +118,7 @@ jobs:
               repo,
               state: "open",
               labels: issueLabels.join(","),
-              per_page: 100
+              per_page: 50
             });
 
             const existing = existingIssues.find((i) => i.title === issueTitle);
