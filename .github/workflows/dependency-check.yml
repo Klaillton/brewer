@@ -15,7 +15,8 @@ permissions:
 jobs:
   dependency-check:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # Cold NVD downloads can exceed 45m when the cache misses; keep headroom once cache works.
+    timeout-minutes: 60
 
     steps:
       - name: Checkout repository
@@ -28,14 +29,24 @@ jobs:
           java-version: '17'
           cache: maven
 
+      # ISO week stamp so NVD data is refreshed about weekly without forcing a cold download every run.
+      - name: Compute NVD cache week key
+        id: nvd-week
+        run: echo "week=$(date -u +%Y-W%V)" >> "$GITHUB_OUTPUT"
+
       # Cache the actual Dependency-Check data (NVD cache + embedded DB).
-      # Caching Maven artifacts under ~/.m2 can preserve broken/incompatible DC internals.
-      # The key includes run_id so a corrupt DB from a failed run is never re-used.
+      # Do NOT put github.run_id in the key — that made every run a cold NVD download and caused
+      # frequent 45m cancellations after #94 traded reuse for crash-avoidance.
+      # save-always: CVSS gate failures (exit 1) must still persist a healthy NVD DB for the next run.
       - name: Cache Dependency-Check data
         uses: actions/cache@v4
         with:
           path: ~/.dependency-check/data
-          key: dependency-check-data-${{ runner.os }}-${{ hashFiles('pom.xml') }}-${{ github.run_id }}
+          key: dependency-check-data-${{ runner.os }}-${{ steps.nvd-week.outputs.week }}-${{ hashFiles('pom.xml') }}
+          restore-keys: |
+            dependency-check-data-${{ runner.os }}-${{ steps.nvd-week.outputs.week }}-
+            dependency-check-data-${{ runner.os }}-
+          save-always: true
 
       # If a previous run left a corrupt H2 MVStore file, remove it so the tool
       # starts fresh rather than crashing with ClosedChannelException / connectionPool null.
@@ -64,10 +75,10 @@ jobs:
             -DnvdApiKeyEnvironmentVariable=NVD_API_KEY \
             -DnvdApiDelay=2000
 
-      # If the scan failed, remove the data dir so the cache step does not persist a
-      # broken H2 database that would corrupt the next run.
-      - name: Clear dependency-check data on failure
-        if: failure()
+      # Only wipe the data dir when the scan failed BEFORE producing a report (infra/NVD/update
+      # crash). CVSS gate failures still produce HTML — keep that healthy DB for the next cache save.
+      - name: Clear dependency-check data on infra failure
+        if: failure() && hashFiles('target/dependency-check-report.html') == ''
         run: rm -rf "$HOME/.dependency-check/data"
 
       - name: Upload Dependency-Check report
