@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD032 MD036 MD047 MD060 -->
-
 # Legacy Docker Compose Decommissioning Plan
 
 **Date**: 2026-05-29  
@@ -187,7 +185,7 @@ This project appears to be the **source of truth** for the observability platfor
 
 **Improvements**:
 
-- Add resource requests/limits to the brewer deployment (critical on Pi 4).
+- Add resource requests/limits to brewer deployment (critical on Pi 4).
 - Add proper liveness/readiness probes (they seem partially present).
 
 ### Observability-epo
@@ -197,11 +195,9 @@ This project appears to be the **source of truth** for the observability platfor
 - Entire `k8s/observability/` folder (this should become the only way to deploy the stack on any cluster).
 
 **Retire / Archive**:
-
 - `docker-compose.yml`
 
 **Improvements**:
-
 - The Kubernetes manifests look quite complete. Consider making this repo the central "Observability Platform" that other projects depend on (via Helm or Kustomize bases).
 
 ---
@@ -292,5 +288,3 @@ docker stats --no-stream --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}"
 ## End of Document
 
 This file is the Brewer decommissioning record. The operational follow-up for observability lives in [docs/OBSERVABILITY_DEVSTACK_CONTINUATION.md](docs/OBSERVABILITY_DEVSTACK_CONTINUATION.md).
-
-<!-- markdownlint-enable MD032 MD036 MD047 MD060 -->

@@ -1,0 +1,20 @@
+# AI Agent / Copilot context optimization
+# Exclude human-only docs, task aids, analysis reports, large lockfiles and noisy artifacts
+
+ docs/archive/
+docs/*decommissioning*
+docs/*audit*
+docs/*remediation*
+docs/*modernization*
+docs/*continuation*
+docs/*plan*.md
+docs/*report*.md
+docs/*coverage-plan*
+docs/*strategy*.md
+docs/*help*
+*Grok*.md
+*-help.md
+
+frontend/package-lock.json
+legacy/
+src/main/resources/static/layout/vendors/

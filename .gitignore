@@ -62,3 +62,29 @@ nginx/certs/
 # Configurações locais do VS Code e instruções pessoais do Copilot
 .vscode/settings.json
 .github/instructions/personas/
+
+# ============================================================
+# AI / Agent Context Optimization (heavy agent usage)
+# Files stay in git for humans/history but are excluded from
+# agent context via .copilotignore / .claudeignore + editor settings
+# ============================================================
+docs/archive/
+docs/*decommissioning*
+docs/*audit*
+docs/*remediation*
+docs/*modernization*
+docs/*continuation*
+docs/*plan*.md
+docs/*report*.md
+docs/*coverage-plan*
+docs/*strategy*.md
+docs/*help*
+*Grok*.md
+*-help.md
+
+# Large/noisy files agents rarely need full
+frontend/package-lock.json
+
+# Legacy and static content rarely edited by agents
+legacy/
+src/main/resources/static/layout/vendors/

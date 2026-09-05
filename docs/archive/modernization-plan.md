@@ -35,7 +35,6 @@ Definir um plano **para criação do zero em outro repositório**, com arquitetu
 ### 3.2 Não funcionais
 - Stack alvo: **Angular + Spring Boot (Java 25)**.
 - Desacoplamento por contrato de API (OpenAPI).
-- Estratégia **multi-cloud** com portabilidade (evitar lock-in).
 - Segurança: OWASP ASVS baseline, proteção a abuso de endpoints públicos.
 - Observabilidade: logs estruturados, métricas e tracing.
 

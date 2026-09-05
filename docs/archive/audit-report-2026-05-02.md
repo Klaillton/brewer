@@ -237,7 +237,7 @@ public void run() {
 </dependency>
 ```
 
-AWS SDK v1 is in [maintenance mode](https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-2-x-is-now-generally-available/). AWS SDK v2 offers non-blocking I/O, a more idiomatic API, better performance, and ongoing security updates.
+AWS SDK v1 is in [maintenance mode](https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-2-x-is-now-generally-available()). AWS SDK v2 offers non-blocking I/O, a more idiomatic API, better performance, and ongoing security updates.
 
 **Recommendation:** Migrate to `software.amazon.awssdk:s3` (v2). The migration is a breaking API change. See the [migration guide](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/migration.html). This should be done as a dedicated PR.
 
@@ -396,12 +396,12 @@ AWS_S3_REGION=sa-east-1   # optional, defaults to us-east-1
 ### Health probe endpoints
 
 Kubernetes liveness/readiness probes and Docker healthchecks now hit:
-- `/actuator/health/liveness` (k8s liveness + startup)
-- `/actuator/health/readiness` (k8s readiness)
-- `/actuator/health` (Docker HEALTHCHECK)
+- `/actuator/health/liveness` and `/actuator/health/readiness`
 
-These endpoints are unauthenticated (via `SecurityConfig`) and require the application to have `management.endpoint.health.probes.enabled=true` (now set in both `application.properties` and `application-docker.properties`).
+See the updated deployment files for details.
 
 ---
 
-*Report generated: 2026-05-02 | Author: GitHub Copilot Coding Agent*
+**End of Report**
+
+> This document was an audit snapshot. For current state, check the actual code and recent PRs.
